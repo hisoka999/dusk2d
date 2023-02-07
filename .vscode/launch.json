@@ -1,0 +1,72 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Starten",
+            "request": "launch",
+            "type": "cppvsdbg",
+            "windows": {
+                "program": "${workspaceFolder}\\build\\Debug\\Dusk2D.exe",
+                //"MIMode": "cppvsdbg",
+            },
+            "linux": {
+                "program": "${workspaceFolder}/build/Dusk2D",
+                "type": "cppdbg",
+                //"MIMode": "gdb",
+            },
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "cmake_debug",
+            "setupCommands": [
+                {
+                    "description": "Automatische Strukturierung und Einrückung für \"gdb\" aktivieren",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Disassemblierungsvariante auf Intel festlegen",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+        },
+        {
+            "name": "(Release) Starten",
+            "request": "launch",
+            "type": "cppvsdbg",
+            "windows": {
+                "program": "${workspaceFolder}\\build\\Release\\Dusk2D.exe",
+                //"MIMode": "cppvsdbg",
+            },
+            "linux": {
+                "program": "${workspaceFolder}/build/Dusk2D",
+                "type": "cppdbg",
+                "MIMode": "gdb",
+            },
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "cmake",
+            "setupCommands": [
+                {
+                    "description": "Automatische Strukturierung und Einrückung für \"gdb\" aktivieren",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Disassemblierungsvariante auf Intel festlegen",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+        }
+    ]
+}

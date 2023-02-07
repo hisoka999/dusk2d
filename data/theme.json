@@ -1,0 +1,105 @@
+{
+    "window": {
+        "IconFontName": "fonts/fa-solid-900.ttf",
+        "IconFontSize": 16,
+        "TitleColor": "#C3812AFF",
+        "ForgroundColor": "#C3812AFF",
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "button": {
+        "BackgroundImage": "",
+        "Color": "#FFFFFFFF",
+        "HoverColor": "#AD676CFF",
+        "DisabledColor": "#CCCCCCFF",
+        "BackgroundColor": "#333333FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "SalesItemComponent": {
+        "IconFontName": "fonts/fa-solid-900.ttf",
+        "IconFontSize": 16
+    },
+    "RouteComponent": {
+        "IconFontName": "fonts/fa-solid-900.ttf",
+        "IconFontSize": 16
+    },
+    "checkbox": {
+        "IconFontName": "fonts/fa-solid-900.ttf",
+        "IconFontSize": 16,
+        "Color": "#FFFFFFFF",
+        "BackgroundColor": "#333333FF",
+        "BorderColor": "#FFFFFFFF"
+    },
+    "tabbar": {
+        "BackgroundImage": "",
+        "Color": "#FFFFFFFF",
+        "HoverColor": "#AD676CFF",
+        "DisabledColor": "#CCCCCCFF",
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "scrollarea": {
+        "BackgroundColor": "#222222FF",
+        "ForgroundColor": "#FFFFFFFF"
+    },
+    "label": {
+        "FontName": "fonts/arial.ttf",
+        "FontSize": 12,
+        "Color": "#FFFFFFFF"
+    },
+    "table": {
+        "BorderColor": "#5D676CFF",
+        "TitleColor": "#C3812AFF",
+        "FontName": "fonts/arial.ttf",
+        "FontSize": 12,
+        "Color": "#FFFFFFFF"
+    },
+    "combobox": {
+        "BackgroundImage": "",
+        "Color": "#FFFFFFFF",
+        "HoverColor": "#AD676CFF",
+        "DisabledColor": "#CCCCCCFF",
+        "BackgroundColor": "#333333FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "hint": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "ResearchButton": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF"
+    },
+    "BuildingSelectionComponent": {
+        "BackgroundColor": "#222222FF",
+        "HoverColor": "#AD676CFF"
+    },
+    "TextItem": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF",
+        "HoverColor": "#AD676CFF"
+    },
+    "NumberTextItem": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF",
+        "HoverColor": "#AD676CFF"
+    },
+    "KeyCodeInputItem": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF",
+        "HoverColor": "#AD676CFF"
+    },
+    "ProgressBar": {
+        "BackgroundColor": "#222222FF",
+        "BorderColor": "#5D676CFF",
+        "ForgroundColor": "#AD676CFF"
+    },
+    "BuildingSelectionWindow": {
+        "IconFontName": "fonts/fa-solid-900.ttf",
+        "IconFontSize": 16,
+        "TitleColor": "#C3812AFF",
+        "ForgroundColor": "#C3812AFF",
+        "BackgroundColor": "#333333FF",
+        "BorderColor": "#5D676CFF"
+    }
+}
