@@ -1,0 +1,257 @@
+{
+    "textureName": "images/walkcycle/BODY_male.png",
+    "subTextures": [
+        {
+            "name": "left1",
+            "x": 0.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left2",
+            "x": 64.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left3",
+            "x": 128.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left4",
+            "x": 192.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left5",
+            "x": 256.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left6",
+            "x": 320.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left7",
+            "x": 384.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left8",
+            "x": 448.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left9",
+            "x": 512.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right1",
+            "x": 0.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right2",
+            "x": 64.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right3",
+            "x": 128.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right4",
+            "x": 192.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right5",
+            "x": 256.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right6",
+            "x": 320.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right7",
+            "x": 384.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right8",
+            "x": 448.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right9",
+            "x": 512.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up1",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up2",
+            "x": 64.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up3",
+            "x": 128.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up4",
+            "x": 192.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up5",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up6",
+            "x": 320.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up7",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up8",
+            "x": 448.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up9",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down1",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down2",
+            "x": 64.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down3",
+            "x": 128.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down4",
+            "x": 192.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down5",
+            "x": 256.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down6",
+            "x": 320.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down7",
+            "x": 384.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down8",
+            "x": 448.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down9",
+            "x": 512.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        }
+    ]
+}

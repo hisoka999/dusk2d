@@ -1,0 +1,12 @@
+{
+    "textureName": "images/roguelikeitems.png",
+    "subTextures": [
+        {
+            "name": "wood",
+            "x": 32.0,
+            "y": 96.0,
+            "width": 16.0,
+            "height": 16.0
+        }
+    ]
+}

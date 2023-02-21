@@ -85,6 +85,8 @@ core::KeyMap initKeyMap(utils::IniBase *settings)
     keyMap.emplace("CONSOLE", settings->getValueI("keys", "CONSOLE_2", 0));
     keyMap.emplace("RESEARCH", settings->getValueI("keys", "RESEARCH_1", SDLK_r));
     keyMap.emplace("RESEARCH", settings->getValueI("keys", "RESEARCH_2", 0));
+    keyMap.emplace("INPUT", settings->getValueI("keys", "INPUT_1", SDLK_RETURN));
+    keyMap.emplace("INPUT", settings->getValueI("keys", "INPUT_2", SDLK_e));
 
     return keyMap;
 }

@@ -5,19 +5,22 @@
 #include <engine/core/SceneManager.h>
 #include <vector>
 #include <memory>
+#include "game/GameMap.h"
 
 namespace scenes
 {
     class WorldScene : public core::Scene
     {
     private:
-        /* data */
+        GameMap gameMap;
+
     public:
         WorldScene(core::Renderer *pRenderer);
         virtual ~WorldScene();
 
         void render() override;
         bool handleEvents(core::Input *pInput) override;
+        void fixedUpdate(uint32_t delta) override;
 
         virtual void load();
     };

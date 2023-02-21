@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(Dusk2D VERSION 0.2 DESCRIPTION "Capital World is a 2d isometric economy simulation game.")
+project(Dusk2D VERSION 0.1 DESCRIPTION "2D rpg.")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -80,7 +80,7 @@ file(GLOB_RECURSE SRC
     src/*.cpp)
 
 set (GAME_VERSION_MAJOR 0)
-set (GAME_VERSION_MINOR 2)
+set (GAME_VERSION_MINOR 1)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -196,6 +196,7 @@ elseif(UNIX)
     target_link_libraries(${PROJECT_NAME} SDL2_mixer)
     target_link_libraries(${PROJECT_NAME} SDL2_gfx)
     target_link_libraries(${PROJECT_NAME} pthread)
+    target_link_libraries(${PROJECT_NAME} box2d)
 endif()
 
 

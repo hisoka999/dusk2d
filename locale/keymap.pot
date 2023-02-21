@@ -1,6 +1,9 @@
 msgid "CONSOLE"
 msgstr ""
 
+msgid "INPUT"
+msgstr ""
+
 msgid "MENU"
 msgstr ""
 
