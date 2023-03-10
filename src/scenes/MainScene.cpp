@@ -85,7 +85,7 @@ namespace scenes
 
                 loadWindow.connect("saveAction", [&](std::string fileName)
                                    {
-                                           std::string saveGameFile = utils::os::get_pref_dir("", "capitalworld") + "/saves/" + fileName + ".save";
+                                           std::string saveGameFile = utils::os::get_pref_dir("", "dusk2d") + "/saves/" + fileName + ".save";
                                            std::ifstream file;
                                            std::istringstream is;
                                            std::string s;
@@ -101,8 +101,7 @@ namespace scenes
                                            utils::JSON::Parser parser;
                                            auto jsonObject = parser.parseObject(buffer);
 
-                                           file.close();
-                                   });
+                                           file.close(); });
         }
         void MainScene::render()
         {

@@ -95,7 +95,8 @@
         "numbers": "cpp",
         "semaphore": "cpp",
         "span": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "csignal": "cpp"
     },
     "cmakeExplorer.buildDir": "build/",
     "editor.formatOnSave": true,

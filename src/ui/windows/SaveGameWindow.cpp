@@ -29,7 +29,7 @@ namespace UI
             saveButton->setLabel("Save");
             saveButton->connect(UI::Button::buttonClickCallback(), [&]()
                                 {
-                                    std::string saveGameFolder = utils::os::get_pref_dir("", "capitalworld") + "saves/";
+                                    std::string saveGameFolder = utils::os::get_pref_dir("", "dusk2d") + "saves/";
                                     std::filesystem::path p(saveGameFolder);
                                     p /= "New Savegame.save";
 
@@ -50,7 +50,7 @@ namespace UI
 
     void SaveGameWindow::updateSaveGames()
     {
-        std::string saveGameFolder = utils::os::get_pref_dir("capitalworld", "") + "/saves/";
+        std::string saveGameFolder = utils::os::get_pref_dir("dusk2d", "") + "/saves/";
         std::filesystem::path p(saveGameFolder);
 
         if (!std::filesystem::exists(p))

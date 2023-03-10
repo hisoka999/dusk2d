@@ -49,7 +49,7 @@ namespace UI
 
         loadWindow.connect("saveAction", [&](std::string fileName)
                            {
-                               std::string saveGameFile = utils::os::get_pref_dir("", "capitalworld") + "/saves/" + fileName + ".save";
+                               std::string saveGameFile = utils::os::get_pref_dir("", "dusk2d") + "/saves/" + fileName + ".save";
                                std::ifstream file;
                                std::istringstream is;
                                std::string s;
@@ -67,14 +67,14 @@ namespace UI
 
                                file.close();
 
-                               //gameState = world::GameState::fromJson(jsonObject);
-                               //this->fireFuncionCall("stateChanged", gameState); 
-                               });
+                               // gameState = world::GameState::fromJson(jsonObject);
+                               // this->fireFuncionCall("stateChanged", gameState);
+                           });
 
         saveWindow.connect("saveAction", [&](std::string fileName)
                            {
                                setlocale(LC_ALL, "C");
-                               std::string saveGameFile = utils::os::get_pref_dir("", "capitalworld") + "/saves/" + fileName + ".save";
+                               std::string saveGameFile = utils::os::get_pref_dir("", "dusk2d") + "/saves/" + fileName + ".save";
                                APP_LOG_INFO("savegame: "+ saveGameFile);
                                std::ofstream ostream(saveGameFile, std::ios::trunc | std::ios::out);
 

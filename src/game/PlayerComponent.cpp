@@ -5,9 +5,10 @@ void PlayerComponent::onUpdate(size_t delta)
 {
 
     auto &rb2d = entity.findComponent<core::ecs::Rigidbody2DComponent>();
+    auto &transform = entity.findComponent<core::ecs::Transform>();
 
-    // auto camera = entity.getScene()->findEntityByName("mainCamera");
-    // auto &cameraComponent = camera->findComponent<core::ecs::CameraComponent>();
+    auto camera = entity.getScene()->findEntityByName("mainCamera");
+    auto &cameraComponent = camera->findComponent<core::ecs::CameraComponent>();
     //    transform.position += {1.0, 1.0};
 
     float moveX = 0.f;
@@ -38,7 +39,8 @@ void PlayerComponent::onUpdate(size_t delta)
 
     // body->SetTransform(b2Vec2(body->GetTransform().p.x + moveX, body->GetTransform().p.y + moveY), 0);
 
-    // cameraComponent.camera->move(moveX, moveY);
+    cameraComponent.camera->reset();
+    cameraComponent.camera->move(transform.position.getX() - (cameraComponent.camera->getWidth() / 2.0f), transform.position.getY() - (cameraComponent.camera->getHeight() / 2.0f));
     //  transform.position = utils::Vector2{cameraComponent.camera->getX() + (cameraComponent.camera->getWidth() / 2), cameraComponent.camera->getY() + (cameraComponent.camera->getHeight() / 2)}; //+= utils::Vector2{moveX, moveY};
     //  std::cout << "x: " << collider.body.position.getX() << " y: " << collider.body.position.getY() << std::endl;
 }

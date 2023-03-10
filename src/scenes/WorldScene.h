@@ -6,13 +6,14 @@
 #include <vector>
 #include <memory>
 #include "game/GameMap.h"
-
+#include "ui/windows/PlayerWindow.h"
 namespace scenes
 {
     class WorldScene : public core::Scene
     {
     private:
         GameMap gameMap;
+        std::shared_ptr<UI::PlayerWindow> playerWindow;
 
     public:
         WorldScene(core::Renderer *pRenderer);

@@ -27,8 +27,8 @@ bool TreeEntity::onHandleInput(core::Input *input)
         rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
 
         auto &collider = itemEntity.addComponent<core::ecs::BoxCollider2DComponent>();
-        collider.Offset = {0.5f, 0.5f};
-        collider.Size = {0.5, 0.5};
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
         collider.Density = 0.5;
         // collider.Friction = 0;
         // collider.RestitutionThreshold = 0;

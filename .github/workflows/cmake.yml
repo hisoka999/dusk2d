@@ -73,7 +73,7 @@ jobs:
       # Build the whole project with Ninja (which is spawn by CMake).
       - name: Build
         run: |
-          cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target CapitalWorld
+          cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target Dusk2D
       - name: Show content of workspace at its completion
         run: find $RUNNER_WORKSPACE
         shell: bash

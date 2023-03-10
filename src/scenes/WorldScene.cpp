@@ -13,6 +13,7 @@ namespace scenes
     WorldScene::WorldScene(core::Renderer *pRenderer)
         : core::Scene(pRenderer), gameMap(100, 100)
     {
+
         setPixelPerMeter(32.f);
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
@@ -62,9 +63,13 @@ namespace scenes
             script.Instance = script.InstantiateScript();
             script.Instance->setEntity(entity);
             entity.addComponent<Inventory>();
+
+            playerWindow = std::make_shared<UI::PlayerWindow>(entity);
+            winMgr->addWindow(playerWindow.get());
         }
 
         auto treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
+        auto rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
         for (size_t y = 0; y < gameMap.getHeight(); ++y)
         {
             for (size_t x = 0; x < gameMap.getWidth(); ++x)
@@ -96,8 +101,32 @@ namespace scenes
                     script.Instance = script.InstantiateScript();
                     script.Instance->setEntity(entity);
                 }
+                else if (tile == 3)
+                {
+                    auto entity = createEntity("rock_" + std::to_string(x) + "_" + "" + std::to_string(y));
+                    core::ecs::Transform transform;
+                    transform.position = {float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                    transform.width = TILE_SIZE / 2;
+                    transform.height = TILE_SIZE / 2;
+                    entity.addComponent<core::ecs::Transform>(transform);
+                    auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+                    rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
+
+                    auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+                    collider.Offset = {0.25f, 0.25f};
+                    collider.Size = {1.f, 1.0f};
+                    // collider.Friction = 0;
+                    // collider.RestitutionThreshold = 0;
+                    entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
+
+                    // auto &script = entity.addComponent<core::ecs::ScriptComponent>();
+                    // script.Bind<TreeEntity>();
+                    // script.Instance = script.InstantiateScript();
+                    // script.Instance->setEntity(entity);
+                }
             }
         }
+
         OnPhysics2DStart();
     }
 
@@ -109,11 +138,21 @@ namespace scenes
     {
         gameMap.render(renderer);
         renderEntities(renderer);
+        winMgr->render(renderer);
     }
 
     bool WorldScene::handleEvents(core::Input *pInput)
     {
-        return handleEventsEntities(pInput);
+        bool handled = winMgr->handleInput(pInput);
+        if (!handled)
+            handled = handleEventsEntities(pInput);
+
+        if (pInput->isKeyDown(SDLK_i))
+        {
+            playerWindow->setVisible(true);
+        }
+
+        return handled;
     }
 
     void WorldScene::fixedUpdate(uint32_t delta)

@@ -1,5 +1,5 @@
 # Dusk2D
-Dusk2D is a free economy simulation inspried by classics like capitalism. The game is written in C++ and is using SDL2 for graphics and sound.
+TODO
 
 # Libraries
 The game needs the following Libraries to build:

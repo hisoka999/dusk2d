@@ -69,15 +69,15 @@ jobs:
       # Build the whole project with Ninja (which is spawn by CMake).
       - name: Build
         run: |
-          cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target CapitalWorld
+          cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target Dusk2D
       - name: version linux
-        run: echo "::set-output name=version::$(/${{ env.CMAKE_BUILD_DIR }}/CapitalWorld --version)"
+        run: echo "::set-output name=version::$(/${{ env.CMAKE_BUILD_DIR }}/Dusk2D --version)"
         id: version-linux
         if: matrix.os == 'ubuntu-latest'
       - name: version windows
         run: |
           cd ${{ env.CMAKE_BUILD_DIR }}
-          echo "::set-output name=version::$(CapitalWorld.exe --version)"
+          echo "::set-output name=version::$(Dusk2D.exe --version)"
           id: version-windows
           if: matrix.os == 'windows-latest'
       - name: Build Packages
@@ -88,18 +88,18 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-              ${{ env.CMAKE_BUILD_DIR }}/CapitalWorld-${{ steps.version-linux.outputs.version }}-Linux.deb
-              ${{ env.CMAKE_BUILD_DIR }}/CapitalWorld-${{ steps.version-linux.outputs.version }}-Linux.tar.gz
+              ${{ env.CMAKE_BUILD_DIR }}/Dusk2D-${{ steps.version-linux.outputs.version }}-Linux.deb
+              ${{ env.CMAKE_BUILD_DIR }}/Dusk2D-${{ steps.version-linux.outputs.version }}-Linux.tar.gz
           token: ${{ github.token }}
         env:
-          GITHUB_REPOSITORY: hisoka999/CapitalWorld
+          GITHUB_REPOSITORY: hisoka999/Dusk2D
         if: matrix.os == 'ubuntu-latest'
       - name: upload windows artifact (zip)
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.CMAKE_BUILD_DIR }}/CapitalWorld-${{ steps.version-windows.outputs.version }}-Windows.zip
+          files: ${{ env.CMAKE_BUILD_DIR }}/Dusk2D-${{ steps.version-windows.outputs.version }}-Windows.zip
           token: ${{ github.token }}
         env:
-          GITHUB_REPOSITORY: hisoka999/CapitalWorld
+          GITHUB_REPOSITORY: hisoka999/Dusk2D
         if: matrix.os == 'windows-latest'
 
