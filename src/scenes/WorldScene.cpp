@@ -4,6 +4,7 @@
 #include "game/Sprite.h"
 #include "game/PlayerComponent.h"
 #include "game/TreeEntity.h"
+#include "game/RockEntity.h"
 #include <chrono>
 #include <random>
 #include "game/Inventory.h"
@@ -119,10 +120,10 @@ namespace scenes
                     // collider.RestitutionThreshold = 0;
                     entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
 
-                    // auto &script = entity.addComponent<core::ecs::ScriptComponent>();
-                    // script.Bind<TreeEntity>();
-                    // script.Instance = script.InstantiateScript();
-                    // script.Instance->setEntity(entity);
+                    auto &script = entity.addComponent<core::ecs::ScriptComponent>();
+                    script.Bind<RockEntity>();
+                    script.Instance = script.InstantiateScript();
+                    script.Instance->setEntity(entity);
                 }
             }
         }
