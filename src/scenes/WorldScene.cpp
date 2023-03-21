@@ -58,8 +58,8 @@ namespace scenes
             collider.Friction = 0;
             collider.Restitution = 0.0;
             collider.RestitutionThreshold = 0.0;
-            collider.Offset = {0.f, 0.5f};
-            collider.Size = {0.5f, 0.25f};
+            collider.Offset = {1.f, 1.5f};
+            collider.Size = {1.f, 1.f};
             script.Bind<PlayerComponent>();
             script.Instance = script.InstantiateScript();
             script.Instance->setEntity(entity);
@@ -91,8 +91,8 @@ namespace scenes
                     rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
 
                     auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
-                    collider.Offset = {1.0f, 3.1f};
-                    collider.Size = {0.25f, 0.25f};
+                    collider.Offset = {2.0f, 4.1f};
+                    collider.Size = {0.5f, 0.5f};
                     // collider.Friction = 0;
                     // collider.RestitutionThreshold = 0;
                     entity.addComponent<core::ecs::RenderComponent>(treeTexture);
@@ -114,7 +114,7 @@ namespace scenes
                     rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
 
                     auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
-                    collider.Offset = {0.25f, 0.25f};
+                    collider.Offset = {0.5f, 0.5f};
                     collider.Size = {1.f, 1.0f};
                     // collider.Friction = 0;
                     // collider.RestitutionThreshold = 0;
@@ -151,6 +151,10 @@ namespace scenes
         if (pInput->isKeyDown(SDLK_i))
         {
             playerWindow->setVisible(true);
+        }
+        else if (pInput->isKeyDown(SDLK_TAB))
+        {
+            setPhysicsDebug(!getPhysicsDebug());
         }
 
         return handled;

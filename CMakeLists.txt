@@ -196,7 +196,6 @@ elseif(UNIX)
     target_link_libraries(${PROJECT_NAME} SDL2_mixer)
     target_link_libraries(${PROJECT_NAME} SDL2_gfx)
     target_link_libraries(${PROJECT_NAME} pthread)
-    target_link_libraries(${PROJECT_NAME} box2d)
 endif()
 
 

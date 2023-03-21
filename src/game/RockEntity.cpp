@@ -14,7 +14,7 @@ bool RockEntity::onHandleInput(core::Input *input)
         auto childTexture = itemTextureMap->getChildTexture("stone");
         auto itemEntity = entity.getScene()->createEntity("stone");
         core::ecs::Transform itemTransform;
-        itemTransform.position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)};
+        itemTransform.position = transform.position;
         itemTransform.width = childTexture->getRect().width;
         itemTransform.height = childTexture->getRect().height;
         itemEntity.addComponent<core::ecs::Transform>(itemTransform);
