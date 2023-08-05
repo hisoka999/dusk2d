@@ -1,0 +1,49 @@
+[
+    {
+        "id": 1,
+        "title": "Stone Axe",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 3,
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 1
+            },
+            {
+                "itemId": 2,
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Planks",
+        "description": "TODO",
+        "amount": 5,
+        "outputId": 4,
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Stone Pick Axe",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 5,
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 1
+            },
+            {
+                "itemId": 2,
+                "amount": 2
+            }
+        ]
+    }
+]

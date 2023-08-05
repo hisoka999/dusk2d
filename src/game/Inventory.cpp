@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "services/ItemService.h"
 
 inline constexpr bool isItemTypeStackable(const ItemType itemType)
 {
@@ -13,21 +14,22 @@ Inventory::~Inventory()
 {
 }
 
-void Inventory::addItem(ItemType type, int amount)
+void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
 {
     ItemSlot *lastEmptySlot = nullptr;
     for (auto &slot : itemSlots)
     {
-        if (slot.itemType == type && isItemTypeStackable(type))
+
+        if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
         {
             slot.amount += amount;
             if (slot.amount == 0)
             {
-                slot.itemType = ItemType::NONE;
+                slot.item = nullptr;
             }
             return;
         }
-        else if (slot.itemType == ItemType::NONE && !lastEmptySlot)
+        else if (!slot.item && !lastEmptySlot)
         {
             lastEmptySlot = &slot;
         }
@@ -37,12 +39,80 @@ void Inventory::addItem(ItemType type, int amount)
         lastEmptySlot->amount += amount;
         if (lastEmptySlot->amount != 0)
         {
-            lastEmptySlot->itemType = type;
+            lastEmptySlot->item = item;
         }
     }
+}
+
+void Inventory::removeItemById(size_t itemId, int amount)
+{
+    size_t remainingAmount = amount;
+    for (auto &slot : itemSlots)
+    {
+        if (slot.item && slot.item->getId() == itemId)
+        {
+            if (slot.amount >= remainingAmount)
+            {
+                slot.amount -= amount;
+                remainingAmount = 0;
+            }
+            else
+            {
+                remainingAmount -= slot.amount;
+                slot.amount = 0;
+            }
+
+            if (slot.amount == 0)
+            {
+                slot.item = nullptr;
+            }
+        }
+
+        if (remainingAmount == 0)
+            break;
+    }
+}
+
+size_t Inventory::countItemsById(size_t id)
+{
+    size_t count = 0;
+    for (auto &slot : itemSlots)
+    {
+        if (slot.item && slot.item->getId() == id)
+            count += slot.amount;
+    }
+    return count;
+}
+
+bool Inventory::canCraftRecipe(const std::shared_ptr<ItemRecipe> &recipe)
+{
+    bool canCraft = true;
+
+    for (const auto &[itemId, amount] : recipe->getInput())
+    {
+        if (countItemsById(itemId) < amount)
+        {
+            canCraft = false;
+            break;
+        }
+    }
+    return canCraft;
 }
 
 ItemSlots &Inventory::getItemSlots()
 {
     return itemSlots;
+}
+void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
+{
+    if (!canCraftRecipe(recipe))
+        return;
+    for (const auto &[itemId, amount] : recipe->getInput())
+    {
+        removeItemById(itemId, amount);
+    }
+
+    auto item = services::ItemService::Instance().getItemById(recipe->getOutputId());
+
+    addItem(item, recipe->getAmount());
 }

@@ -99,6 +99,7 @@
         "csignal": "cpp"
     },
     "cmakeExplorer.buildDir": "build/",
+    "cmake.parallelJobs": 12,
     "editor.formatOnSave": true,
     "githubPullRequests.ignoredPullRequestBranches": [
         "master"

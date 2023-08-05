@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "type": "WOOD",
+        "name": "Wood",
+        "subTextureName": "wood"
+    },
+    {
+        "id": 2,
+        "type": "STONE",
+        "name": "Stone",
+        "subTextureName": "stone"
+    },
+    {
+        "id": 3,
+        "type": "EQUIPMENT",
+        "name": "Stone Axe",
+        "subTextureName": "stone_axe"
+    },
+    {
+        "id": 4,
+        "type": "WOOD",
+        "name": "Plank",
+        "subTextureName": "plank"
+    },
+    {
+        "id": 5,
+        "type": "EQUIPMENT",
+        "name": "Stone Pick Axe",
+        "subTextureName": "stone_pick_axe"
+    }
+]

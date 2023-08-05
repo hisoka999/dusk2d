@@ -22,18 +22,9 @@ namespace UI
         graphics::Rect rect = displayRect();
 
         backgroundTexture->render(renderer, rect.x, rect.y);
-        if (slot.itemType == ItemType::WOOD)
+        if (slot.item)
         {
-            auto childTexture = itemTextureMap->getChildTexture("wood");
-            childTexture->render(rect, renderer);
-            std::string text = std::to_string(slot.amount);
-            int textW, textH;
-            amountText->size(text, &textW, &textH);
-            amountText->render(renderer, text, {0, 255, 0, 255}, rect.x + rect.width - textW, rect.y + rect.height - textH);
-        }
-        else if (slot.itemType == ItemType::STONE)
-        {
-            auto childTexture = itemTextureMap->getChildTexture("stone");
+            auto childTexture = itemTextureMap->getChildTexture(slot.item->getSubTextureName());
             childTexture->render(rect, renderer);
             std::string text = std::to_string(slot.amount);
             int textW, textH;

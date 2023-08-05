@@ -14,6 +14,27 @@
             "y": 64.0,
             "width": 16.0,
             "height": 16.0
+        },
+        {
+            "name": "stone_axe",
+            "x": 128.0,
+            "y": 96.0,
+            "width": 16.0,
+            "height": 16.0
+        },
+        {
+            "name": "plank",
+            "x": 112.0,
+            "y": 96.0,
+            "width": 16.0,
+            "height": 16.0
+        },
+        {
+            "name": "stone_pick_axe",
+            "x": 80.0,
+            "y": 96.0,
+            "width": 16.0,
+            "height": 16.0
         }
     ]
 }

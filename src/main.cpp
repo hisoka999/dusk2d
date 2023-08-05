@@ -15,6 +15,8 @@
 #include <engine/core/gamewindow.h>
 #include <engine/core/input.h>
 #include <iostream>
+#include "game/services/ItemRecipeService.h"
+#include "game/services/ItemService.h"
 
 #include <magic_enum.hpp>
 
@@ -139,6 +141,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
         //     Localisation::Instance().detectLanguage("keymap");
         // }
         setlocale(LC_ALL, Localisation::Instance().getLocale().name().c_str());
+
+        services::ItemRecipeService::Instance().loadData("data/item_recipes.json");
+        services::ItemService::Instance().loadData("data/items.json");
 
         core::Renderer ren;
         graphics::TextureManager::Instance().setRenderer(&ren);

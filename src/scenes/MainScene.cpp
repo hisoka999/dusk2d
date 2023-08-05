@@ -25,7 +25,7 @@ namespace scenes
             : core::Scene(pRenderer), running(true), sceneManager(pSceneManager), settingsWindow(settings, input), loadWindow(true)
         {
 
-                bgTexture.loadTexture(renderer, "images/title_background.png");
+                bgTexture.loadTexture(renderer, "images/duskwall3_1600x1200.jpg");
 
                 int volume = settings->getValueI("Volume", "Music");
                 this->music->setVolume(volume);

@@ -16,7 +16,7 @@ void ItemEntity::beginCollision([[maybe_unused]] const core::ecs::Collision &col
     std::cout << "collision with tag: " << tag << std::endl;
     auto e = collider.entity;
     Inventory &inventory = e.findComponent<Inventory>();
-    inventory.addItem(type, 1);
+    inventory.addItem(item, 1);
 
     entity.getScene()->destoryEntity(entity);
 }
@@ -28,8 +28,7 @@ ItemEntity::ItemEntity() : core::ecs::ScriptableEntity()
 ItemEntity::~ItemEntity()
 {
 }
-
-void ItemEntity::setItemType(ItemType type)
+void ItemEntity::setItem(const std::shared_ptr<Item> &item)
 {
-    this->type = type;
+    this->item = item;
 }
