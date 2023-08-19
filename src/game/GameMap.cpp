@@ -1,6 +1,7 @@
 #include "GameMap.h"
 #include <engine/graphics/TextureManager.h>
 #include <engine/utils/perlinnoise.h>
+#include <cmath>
 
 GameMap::GameMap(size_t width, size_t height) : width(width), height(height)
 {
@@ -39,11 +40,17 @@ size_t GameMap::getTile(size_t x, size_t y)
 void GameMap::render(core::Renderer *renderer)
 {
     graphics::Rect srcRect = {0, 0, TILE_SIZE, TILE_SIZE};
-    for (size_t y = 0; y < height; ++y)
+    graphics::Rect targetRect;
+    auto viewPort = renderer->getMainCamera()->getViewPortRect();
+    int xOffset = std::max(int(viewPort.x / TILE_SIZE * 2), 0);
+    int yOffset = std::max(int(viewPort.y / TILE_SIZE * 2), 0);
+    int renderWidth = viewPort.width / TILE_SIZE * 2;
+    int renderHeight = viewPort.height / TILE_SIZE * 2;
+    for (int y = yOffset; y < yOffset + renderHeight + 2; ++y)
     {
-        for (size_t x = 0; x < width; ++x)
+        for (int x = xOffset; x < xOffset + renderWidth + 1; ++x)
         {
-            graphics::Rect targetRect;
+
             targetRect.width = TILE_SIZE / 2;
             targetRect.height = TILE_SIZE / 2;
 
@@ -52,15 +59,15 @@ void GameMap::render(core::Renderer *renderer)
             srcRect.y = 0;
             targetRect.x = (x * TILE_SIZE / 2);
             targetRect.y = (y * TILE_SIZE / 2);
-            if (!targetRect.intersects(renderer->getMainCamera()->getViewPortRect()))
+            if (!targetRect.intersects(viewPort))
                 continue;
             targetRect.x -= renderer->getMainCamera()->getX();
             targetRect.y -= renderer->getMainCamera()->getY();
             texture->render(renderer, srcRect, targetRect);
-            // renderer->setDrawColor(255, 255, 255, 255);
-            // renderer->fillRect(targetRect);
-            // renderer->setDrawColor(0, 255, 255, 255);
-            // renderer->drawRect(targetRect);
+            //  renderer->setDrawColor(255, 255, 255, 255);
+            //  renderer->fillRect(targetRect);
+            //  renderer->setDrawColor(0, 255, 255, 255);
+            //  renderer->drawRect(targetRect);
         }
     }
 }
