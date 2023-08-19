@@ -96,7 +96,8 @@
         "semaphore": "cpp",
         "span": "cpp",
         "coroutine": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "unordered_set": "cpp"
     },
     "cmakeExplorer.buildDir": "build/",
     "cmake.parallelJobs": 12,

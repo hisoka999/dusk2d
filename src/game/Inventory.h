@@ -13,19 +13,22 @@ struct ItemSlot
 };
 
 typedef std::array<ItemSlot, 25> ItemSlots;
+typedef std::array<ItemSlot, 6> HotBarSlots;
 
 class Inventory : public core::ecs::ScriptableEntity
 {
 
 private:
     ItemSlots itemSlots;
+    HotBarSlots hotbarSlots;
 
 public:
-    Inventory(/* args */);
+    Inventory();
     ~Inventory();
     void addItem(const std::shared_ptr<Item> &item, int amount);
     void removeItemById(size_t itemId, int amount);
     ItemSlots &getItemSlots();
+    HotBarSlots &getHotBarSlots();
     size_t countItemsById(size_t id);
     bool canCraftRecipe(const std::shared_ptr<ItemRecipe> &recipe);
     void craftItem(const std::shared_ptr<ItemRecipe> &recipe);

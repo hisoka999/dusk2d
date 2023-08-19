@@ -67,6 +67,8 @@ namespace scenes
 
             playerWindow = std::make_shared<UI::PlayerWindow>(entity);
             winMgr->addWindow(playerWindow.get());
+            hotBar = std::make_unique<UI::Hotbar>(entity);
+            winMgr->addContainer(hotBar.get());
         }
 
         auto treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");

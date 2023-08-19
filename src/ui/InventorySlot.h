@@ -12,10 +12,12 @@ namespace UI
         ItemSlot slot;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         std::shared_ptr<graphics::Text> amountText;
+        bool selected = false;
 
     public:
         InventorySlot(Object *parent, ItemSlot &slot);
         ~InventorySlot();
+        void setSelected(bool select);
 
         void render(core::Renderer *renderer) override;
         bool handleEvents(core::Input *pInput) override;

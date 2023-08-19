@@ -20,8 +20,12 @@ namespace UI
     void InventorySlot::render(core::Renderer *renderer)
     {
         graphics::Rect rect = displayRect();
-
+        if (selected)
+        {
+            backgroundTexture->setColorKey(255, 0, 255);
+        }
         backgroundTexture->render(renderer, rect.x, rect.y);
+        backgroundTexture->setColorKey(255, 255, 255);
         if (slot.item)
         {
             auto childTexture = itemTextureMap->getChildTexture(slot.item->getSubTextureName());
@@ -54,5 +58,10 @@ namespace UI
 
         Object::handleEvents(pInput);
         return eventHandled;
+    }
+
+    void InventorySlot::setSelected(bool select)
+    {
+        selected = select;
     }
 }

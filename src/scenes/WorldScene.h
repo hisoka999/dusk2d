@@ -7,6 +7,8 @@
 #include <memory>
 #include "game/GameMap.h"
 #include "ui/windows/PlayerWindow.h"
+#include "ui/Hotbar.h"
+
 namespace scenes
 {
     class WorldScene : public core::Scene
@@ -14,6 +16,7 @@ namespace scenes
     private:
         GameMap gameMap;
         std::shared_ptr<UI::PlayerWindow> playerWindow;
+        std::unique_ptr<UI::Hotbar> hotBar;
 
     public:
         WorldScene(core::Renderer *pRenderer);

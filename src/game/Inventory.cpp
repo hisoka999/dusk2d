@@ -34,6 +34,28 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
             lastEmptySlot = &slot;
         }
     }
+
+    if (!lastEmptySlot)
+    {
+        for (auto &slot : hotbarSlots)
+        {
+
+            if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
+            {
+                slot.amount += amount;
+                if (slot.amount == 0)
+                {
+                    slot.item = nullptr;
+                }
+                return;
+            }
+            else if (!slot.item && !lastEmptySlot)
+            {
+                lastEmptySlot = &slot;
+            }
+        }
+    }
+
     if (lastEmptySlot)
     {
         lastEmptySlot->amount += amount;
@@ -71,12 +93,46 @@ void Inventory::removeItemById(size_t itemId, int amount)
         if (remainingAmount == 0)
             break;
     }
+
+    if (remainingAmount > 0)
+    {
+        for (auto &slot : hotbarSlots)
+        {
+            if (slot.item && slot.item->getId() == itemId)
+            {
+                if (slot.amount >= remainingAmount)
+                {
+                    slot.amount -= amount;
+                    remainingAmount = 0;
+                }
+                else
+                {
+                    remainingAmount -= slot.amount;
+                    slot.amount = 0;
+                }
+
+                if (slot.amount == 0)
+                {
+                    slot.item = nullptr;
+                }
+            }
+
+            if (remainingAmount == 0)
+                break;
+        }
+    }
 }
 
 size_t Inventory::countItemsById(size_t id)
 {
     size_t count = 0;
     for (auto &slot : itemSlots)
+    {
+        if (slot.item && slot.item->getId() == id)
+            count += slot.amount;
+    }
+
+    for (auto &slot : hotbarSlots)
     {
         if (slot.item && slot.item->getId() == id)
             count += slot.amount;
@@ -103,6 +159,12 @@ ItemSlots &Inventory::getItemSlots()
 {
     return itemSlots;
 }
+
+HotBarSlots &Inventory::getHotBarSlots()
+{
+    return hotbarSlots;
+}
+
 void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
 {
     if (!canCraftRecipe(recipe))

@@ -48,6 +48,7 @@ namespace UI
         tabBar->setPos(300, 0);
         tabBar->setWidth(400);
         tabBar->setHeight(400);
+        tabBar->setTabWidth(80);
 
         inventoryComponent = std::make_shared<UI::InventoryComponent>(this, entity);
         inventoryComponent->setPos(16, 16);
