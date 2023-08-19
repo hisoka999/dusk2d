@@ -13,7 +13,7 @@ void PlayerComponent::onUpdate(size_t delta)
 
     float moveX = 0.f;
     float moveY = 0.f;
-    float speed = delta / 1000.f * 40.25f;
+    float speed = delta / 1000.f * 50.0f;
     // graphics::SpriteDirection spriteDirection = graphics::SpriteDirection::LEFT;
     MovementDirection collisionDirection;
 
