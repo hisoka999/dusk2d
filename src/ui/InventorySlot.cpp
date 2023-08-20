@@ -1,10 +1,13 @@
 #include "InventorySlot.h"
 #include <engine/graphics/TextureManager.h>
+#include <engine/utils/string.h>
+#include "game/services/ItemService.h"
 
 namespace UI
 {
     InventorySlot::InventorySlot(Object *parent, ItemSlot &slot) : UI::Object(parent), slot(slot)
     {
+        setObjectName("InventorySlot");
         backgroundTexture = graphics::TextureManager::Instance().loadTexture("images/Cell01.png");
         setWidth(backgroundTexture->getWidth());
         setHeight(backgroundTexture->getHeight());
@@ -46,7 +49,7 @@ namespace UI
         if (rect.intersects(pos))
         {
 
-            if (pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))
+            if (pInput->isMouseButtonUp(SDL_BUTTON_LEFT))
             {
 
                 eventHandled = this->fireFuncionCall("buttonClick");
@@ -54,6 +57,40 @@ namespace UI
                     eventHandled = this->fireFuncionCall("buttonClickPara",
                                                          utils::Vector2(pos.getX() - displayRect().x, pos.getY() - displayRect().y));
             }
+        }
+
+        if (!pInput->isDragActive() && rect.intersects(pos) && pInput->isMouseButtonPressed(SDL_BUTTON_LEFT) && slot.item)
+        {
+            std::string data = std::to_string(slot.item->getId()) + ":" + std::to_string(slot.amount);
+            core::DragCallBack dragCallback = [this]([[maybe_unused]] UI::Object *source, UI::Object *target, const std::string &data, bool failed)
+            {
+                if (failed)
+                {
+                    APP_LOG_ERROR("failed dragged data %s finished from type %s", data, target->getObjectName());
+                }
+                else if (target)
+                {
+                    APP_LOG_ERROR("dragged data %s finished from type %s", data, target->getObjectName());
+                    UI::InventorySlot *targetSlot = dynamic_cast<UI::InventorySlot *>(target);
+                    this->slot.amount = targetSlot->slot.amount;
+                    this->slot.item = targetSlot->slot.item;
+                    auto result = utils::split(data, ":");
+                    targetSlot->slot.amount = std::stoi(result[1]);
+                    int id = std::stoi(result[0]);
+                    targetSlot->slot.item = services::ItemService::Instance().getItemById(id);
+                }
+            };
+
+            core::CheckDropCallBack checkDropCallback = [](UI::Object *target) -> bool
+            {
+                return dynamic_cast<InventorySlot *>(target) != nullptr;
+            };
+
+            pInput->beginDrag(data, this, dragCallback, checkDropCallback);
+        }
+        if (pInput->isDragActive())
+        {
+            selected = pInput->canDropOnTarget(this);
         }
 
         Object::handleEvents(pInput);

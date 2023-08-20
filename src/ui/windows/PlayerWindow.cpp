@@ -31,12 +31,15 @@ namespace UI
             if (!inventory.canCraftRecipe(recipe))
                 button->disable();
             button->connect(UI::Button::buttonClickCallback(), [this, recipe]()
-                            { 
+                            {
                                 auto &_inventory = m_playerEntity.findComponent<Inventory>();
-                                _inventory.craftItem(recipe); });
+                                _inventory.craftItem(recipe);
+                                inventoryComponent->refresh();
+                            });
         }
 
         scrollArea->reset();
+        endRefresh();
     }
 
     PlayerWindow::PlayerWindow(core::ecs::Entity &entity)
