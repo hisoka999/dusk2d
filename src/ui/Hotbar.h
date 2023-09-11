@@ -10,6 +10,7 @@ namespace UI
     private:
         core::ecs::Entity entity;
         bool initSize = false;
+        int inventoryRefreshMsgId;
         void clearSelection();
 
     public:
@@ -18,6 +19,7 @@ namespace UI
         virtual void render(core::Renderer *pRender);
         // virtual void postRender(core::Renderer *pRender);
         virtual bool handleEvents(core::Input *pInput);
+        virtual void refresh();
     };
 
 } // namespace UI

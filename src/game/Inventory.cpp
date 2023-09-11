@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include "services/ItemService.h"
+#include "game/messages.h"
 
 inline constexpr bool isItemTypeStackable(const ItemType itemType)
 {
@@ -8,6 +9,18 @@ inline constexpr bool isItemTypeStackable(const ItemType itemType)
 
 Inventory::Inventory(/* args */)
 {
+    int slotId = 0;
+    for (auto &slot : itemSlots)
+    {
+        slot.slotId = slotId;
+        slotId++;
+    }
+    slotId = -1;
+    for (auto &slot : hotbarSlots)
+    {
+        slot.slotId = slotId;
+        slotId--;
+    }
 }
 
 Inventory::~Inventory()
@@ -46,6 +59,8 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
                 if (slot.amount == 0)
                 {
                     slot.item = nullptr;
+                    auto &msgSystem = core::MessageSystem<MessageType>::get();
+                    msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
                 }
                 return;
             }
@@ -63,6 +78,8 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
         {
             lastEmptySlot->item = item;
         }
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, lastEmptySlot);
     }
 }
 
@@ -88,6 +105,8 @@ void Inventory::removeItemById(size_t itemId, int amount)
             {
                 slot.item = nullptr;
             }
+            auto &msgSystem = core::MessageSystem<MessageType>::get();
+            msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
         }
 
         if (remainingAmount == 0)
@@ -115,6 +134,8 @@ void Inventory::removeItemById(size_t itemId, int amount)
                 {
                     slot.item = nullptr;
                 }
+                auto &msgSystem = core::MessageSystem<MessageType>::get();
+                msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
             }
 
             if (remainingAmount == 0)
@@ -164,6 +185,10 @@ HotBarSlots &Inventory::getHotBarSlots()
 {
     return hotbarSlots;
 }
+const HotBarSlots &Inventory::getHotBarSlots() const
+{
+    return hotbarSlots;
+}
 
 void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
 {
@@ -177,4 +202,16 @@ void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
     auto item = services::ItemService::Instance().getItemById(recipe->getOutputId());
 
     addItem(item, recipe->getAmount());
+}
+
+void Inventory::setItemBySlot(ItemSlot slotData)
+{
+    if (slotData.slotId >= 0)
+    {
+        itemSlots[slotData.slotId] = slotData;
+    }
+    else
+    {
+        hotbarSlots[(slotData.slotId * -1) - 1] = slotData;
+    }
 }

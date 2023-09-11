@@ -8,6 +8,7 @@
 #include <chrono>
 #include <random>
 #include "game/Inventory.h"
+#include "game/messages.h"
 
 namespace scenes
 {
@@ -165,6 +166,7 @@ namespace scenes
     void WorldScene::fixedUpdate(uint32_t delta)
     {
         fixedUpdateEntities(delta);
+        core::MessageSystem<MessageType>::get().processMessages();
     }
 
     void WorldScene::load()

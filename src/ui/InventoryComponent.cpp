@@ -37,7 +37,7 @@ namespace UI
         {
             for (int x = 0; x < 5; x++)
             {
-                auto uiSlot = std::make_shared<UI::InventorySlot>(this, slots[i]);
+                auto uiSlot = std::make_shared<UI::InventorySlot>(this, slots[i], entity);
                 uiSlot->setPos(x * uiSlot->getWidth(), y * uiSlot->getHeight());
                 addObject(uiSlot);
 

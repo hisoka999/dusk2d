@@ -5,7 +5,7 @@
 
 namespace UI
 {
-    InventorySlot::InventorySlot(Object *parent, ItemSlot &slot) : UI::Object(parent), slot(slot)
+    InventorySlot::InventorySlot(Object *parent, const ItemSlot &slot, core::ecs::Entity entity) : UI::Object(parent), slot(slot), entity(entity)
     {
         setObjectName("InventorySlot");
         backgroundTexture = graphics::TextureManager::Instance().loadTexture("images/Cell01.png");
@@ -70,6 +70,7 @@ namespace UI
                 }
                 else if (target)
                 {
+                    auto &inventory = entity.findComponent<Inventory>();
                     APP_LOG_ERROR("dragged data %s finished from type %s", data, target->getObjectName());
                     UI::InventorySlot *targetSlot = dynamic_cast<UI::InventorySlot *>(target);
                     this->slot.amount = targetSlot->slot.amount;
@@ -78,6 +79,8 @@ namespace UI
                     targetSlot->slot.amount = std::stoi(result[1]);
                     int id = std::stoi(result[0]);
                     targetSlot->slot.item = services::ItemService::Instance().getItemById(id);
+                    inventory.setItemBySlot(this->slot);
+                    inventory.setItemBySlot(targetSlot->slot);
                 }
             };
 

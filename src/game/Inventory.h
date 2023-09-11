@@ -10,6 +10,7 @@ struct ItemSlot
 {
     std::shared_ptr<Item> item = nullptr;
     size_t amount = 0;
+    int slotId = 0;
 };
 
 typedef std::array<ItemSlot, 25> ItemSlots;
@@ -29,7 +30,9 @@ public:
     void removeItemById(size_t itemId, int amount);
     ItemSlots &getItemSlots();
     HotBarSlots &getHotBarSlots();
+    const HotBarSlots &getHotBarSlots() const;
     size_t countItemsById(size_t id);
     bool canCraftRecipe(const std::shared_ptr<ItemRecipe> &recipe);
     void craftItem(const std::shared_ptr<ItemRecipe> &recipe);
+    void setItemBySlot(ItemSlot slotData);
 };

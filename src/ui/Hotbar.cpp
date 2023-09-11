@@ -1,23 +1,38 @@
 #include "Hotbar.h"
 #include "game/Inventory.h"
 #include "ui/InventorySlot.h"
+#include "game/messages.h"
 
 namespace UI
 {
     Hotbar::Hotbar(const core::ecs::Entity &entity) : entity(entity)
     {
-        auto inventory = entity.findComponent<Inventory>();
+        needsRefresh();
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        inventoryRefreshMsgId = msgSystem.registerForType(MessageType::INVENTORY_UPDATED, [this]([[maybe_unused]] ItemSlot *slot)
+                                                          { this->needsRefresh(); });
+    }
+
+    void Hotbar::refresh()
+    {
+        this->clear();
+        const auto &inventory = entity.findComponent<Inventory>();
 
         for (auto &itemSlot : inventory.getHotBarSlots())
         {
-            auto slot = std::make_shared<UI::InventorySlot>(nullptr, itemSlot);
+            auto slot = std::make_shared<UI::InventorySlot>(nullptr, itemSlot, entity);
 
             addObject(slot);
         }
         std::dynamic_pointer_cast<UI::InventorySlot>(objects[0])->setSelected(true);
+        initSize = false;
+        endRefresh();
     }
+
     Hotbar::~Hotbar()
     {
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        msgSystem.deregister(inventoryRefreshMsgId);
     }
     void Hotbar::render(core::Renderer *renderer)
     {

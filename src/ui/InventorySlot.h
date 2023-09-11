@@ -13,9 +13,10 @@ namespace UI
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         std::shared_ptr<graphics::Text> amountText;
         bool selected = false;
+        core::ecs::Entity entity;
 
     public:
-        InventorySlot(Object *parent, ItemSlot &slot);
+        InventorySlot(Object *parent, const ItemSlot &slot, core::ecs::Entity entity);
         ~InventorySlot();
         void setSelected(bool select);
 
