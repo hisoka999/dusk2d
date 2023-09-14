@@ -3,8 +3,9 @@
 Item::Item(size_t id,
            ItemType itemType,
            std::string name,
-           std::string subTextureName)
-    : m_id(id), m_itemType(itemType), m_name(name), m_subTextureName(subTextureName)
+           std::string subTextureName,
+           std::string prefab)
+    : m_id(id), m_itemType(itemType), m_name(name), m_subTextureName(subTextureName), m_prefab(prefab)
 {
 }
 
@@ -35,4 +36,8 @@ ItemType Item::getType()
 bool Item::operator==(const Item &other)
 {
     return this->m_id == other.m_id;
+}
+std::string &Item::getPrefab()
+{
+    return m_prefab;
 }

@@ -3,12 +3,12 @@
 #include <engine/utils/perlinnoise.h>
 #include <cmath>
 
-GameMap::GameMap(size_t width, size_t height) : width(width), height(height)
+GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width), height(height)
 {
 
     tiles = new TileType[width * height];
 
-    utils::PerlinNoise noise(0);
+    utils::PerlinNoise noise(seed);
 
     for (size_t y = 0; y < height; ++y)
     {

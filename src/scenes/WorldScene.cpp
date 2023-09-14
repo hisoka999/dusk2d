@@ -9,14 +9,17 @@
 #include <random>
 #include "game/Inventory.h"
 #include "game/messages.h"
+#include "game/prefabs/Prefab.h"
 
 namespace scenes
 {
     WorldScene::WorldScene(core::Renderer *pRenderer)
-        : core::Scene(pRenderer), gameMap(100, 100)
+        : core::Scene(pRenderer), gameMap(100, 100, std::chrono::system_clock::now().time_since_epoch().count())
     {
 
         setPixelPerMeter(32.f);
+        itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
         std::mt19937 gen(seed);
@@ -85,25 +88,8 @@ namespace scenes
                     std::cout << "random value: " << value << std::endl;
 
                     auto entity = createEntity("tree_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    core::ecs::Transform transform;
-                    transform.position = {float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                    transform.width = treeTexture->getWidth();
-                    transform.height = treeTexture->getHeight();
-                    entity.addComponent<core::ecs::Transform>(transform);
-                    auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
-                    rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
-
-                    auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
-                    collider.Offset = {2.0f, 4.1f};
-                    collider.Size = {0.5f, 0.5f};
-                    // collider.Friction = 0;
-                    // collider.RestitutionThreshold = 0;
-                    entity.addComponent<core::ecs::RenderComponent>(treeTexture);
-
-                    auto &script = entity.addComponent<core::ecs::ScriptComponent>();
-                    script.Bind<TreeEntity>();
-                    script.Instance = script.InstantiateScript();
-                    script.Instance->setEntity(entity);
+                    auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                    prefabs::instantiateFromPrefab(entity, "tree", pos);
                 }
                 else if (tile == 3)
                 {
@@ -143,10 +129,20 @@ namespace scenes
         gameMap.render(renderer);
         renderEntities(renderer);
         winMgr->render(renderer);
+
+        auto &slot = this->hotBar->selectedSlot();
+        if (slot.item != nullptr && slot.item->getType() == ItemType::PLACEABLE)
+        {
+            // render preview
+            auto childTexture = itemTextureMap->getChildTexture(slot.item->getSubTextureName());
+            graphics::Rect destRect{mousePos.getX(), mousePos.getY(), childTexture->getRect().width, childTexture->getRect().height};
+            childTexture->render(destRect, renderer);
+        }
     }
 
     bool WorldScene::handleEvents(core::Input *pInput)
     {
+        mousePos = pInput->getMousePostion();
         bool handled = winMgr->handleInput(pInput);
         if (!handled)
             handled = handleEventsEntities(pInput);
@@ -158,6 +154,26 @@ namespace scenes
         else if (pInput->isKeyDown(SDLK_TAB))
         {
             setPhysicsDebug(!getPhysicsDebug());
+        }
+
+        if (!handled && !pInput->isDragActive() && pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))
+        {
+            auto &slot = this->hotBar->selectedSlot();
+
+            if (slot.item != nullptr && slot.item->getType() == ItemType::PLACEABLE)
+            {
+                // TODO spawn item in world
+                auto entity = createEntity(slot.item->getName());
+                auto playerEntity = findEntityByName("player");
+                auto &transform = playerEntity->findComponent<core::ecs::Transform>();
+                APP_LOG_ERROR("position for new entity %.2f,%.2f", transform.position.getX(), transform.position.getY());
+                prefabs::instantiateFromPrefab(entity, slot.item->getPrefab(), transform.position);
+                auto &inventory = playerEntity->findComponent<Inventory>();
+                inventory.removeItemById(slot.item->getId(), slot.amount);
+            }
+        }
+        else if (!handled && pInput->isMouseButtonUp(SDL_BUTTON_RIGHT))
+        {
         }
 
         return handled;

@@ -94,4 +94,17 @@ namespace UI
             std::dynamic_pointer_cast<UI::InventorySlot>(object)->setSelected(false);
         }
     }
+
+    ItemSlot &Hotbar::selectedSlot()
+    {
+        for (auto &object : objects)
+        {
+            auto slot = std::dynamic_pointer_cast<UI::InventorySlot>(object);
+            if (slot->isSelected())
+            {
+                return slot->getSlot();
+            }
+        }
+        return std::dynamic_pointer_cast<UI::InventorySlot>(objects[0])->getSlot();
+    }
 } // namespace UI

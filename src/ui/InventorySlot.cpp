@@ -104,4 +104,14 @@ namespace UI
     {
         selected = select;
     }
+
+    bool InventorySlot::isSelected()
+    {
+        return selected;
+    }
+
+    ItemSlot &InventorySlot::getSlot()
+    {
+        return slot;
+    }
 }

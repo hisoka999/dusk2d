@@ -33,7 +33,7 @@ bool RockEntity::onHandleInput(core::Input *input)
         script.Bind<ItemEntity>();
         script.Instance = script.InstantiateScript();
         script.Instance->setEntity(itemEntity);
-        auto item = std::make_shared<Item>(2, ItemType::STONE, "Stone", "stone");
+        auto item = std::make_shared<Item>(2, ItemType::STONE, "Stone", "stone", "");
         ((ItemEntity *)script.Instance)->setItem(item);
 
         entity.getScene()->destoryEntity(entity);

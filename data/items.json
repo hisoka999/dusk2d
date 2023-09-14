@@ -28,5 +28,12 @@
         "type": "EQUIPMENT",
         "name": "Stone Pick Axe",
         "subTextureName": "stone_pick_axe"
+    },
+    {
+        "id": 6,
+        "type": "PLACEABLE",
+        "name": "Campfire",
+        "subTextureName": "campfire",
+        "prefab": "campfire"
     }
 ]

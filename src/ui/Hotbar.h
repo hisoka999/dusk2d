@@ -3,6 +3,8 @@
 #include "engine/ui/Container.h"
 #include "engine/core/ecs/Entity.h"
 
+struct ItemSlot;
+
 namespace UI
 {
     class Hotbar : public UI::Container
@@ -20,6 +22,7 @@ namespace UI
         // virtual void postRender(core::Renderer *pRender);
         virtual bool handleEvents(core::Input *pInput);
         virtual void refresh();
+        ItemSlot &selectedSlot();
     };
 
 } // namespace UI

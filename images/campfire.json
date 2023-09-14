@@ -1,0 +1,33 @@
+{
+    "textureName": "images/tileset.png",
+    "subTextures": [
+        {
+            "name": "animation1",
+            "x": 0.0,
+            "y": 160.0,
+            "width": 16.0,
+            "height": 32.0
+        },
+        {
+            "name": "animation2",
+            "x": 16.0,
+            "y": 160.0,
+            "width": 16.0,
+            "height": 32.0
+        },
+        {
+            "name": "animation3",
+            "x": 32.0,
+            "y": 160.0,
+            "width": 16.0,
+            "height": 32.0
+        },
+        {
+            "name": "animation4",
+            "x": 48.0,
+            "y": 160.0,
+            "width": 16.0,
+            "height": 32.0
+        }
+    ]
+}

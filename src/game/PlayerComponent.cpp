@@ -47,7 +47,7 @@ void PlayerComponent::onCollision(ScriptableEntity *entity)
 }
 void PlayerComponent::setAnimation(const std::string &direction)
 {
-    auto textureMap = graphics::TextureManager::Instance().loadTextureMap("images/character.json");
+    auto &textureMap = graphics::TextureManager::Instance().loadTextureMap("images/character.json");
     utils::Vector2 startPos = {0, 0};
     graphics::TextureMapAnimation animation(startPos, textureMap);
     animation.setRepeating(-1);
@@ -83,10 +83,6 @@ bool PlayerComponent::onHandleInput(core::Input *input)
             animation.animation.play();
         }
 
-        eventHandled = true;
-    }
-    else
-    {
         eventHandled = true;
     }
 

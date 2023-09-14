@@ -18,7 +18,7 @@ private:
     std::shared_ptr<graphics::Texture> texture;
 
 public:
-    GameMap(size_t width, size_t height);
+    GameMap(size_t width, size_t height, unsigned int seed);
     size_t getWidth();
     size_t getHeight();
     size_t getTile(size_t x, size_t y);

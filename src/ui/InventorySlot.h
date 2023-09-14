@@ -19,6 +19,8 @@ namespace UI
         InventorySlot(Object *parent, const ItemSlot &slot, core::ecs::Entity entity);
         ~InventorySlot();
         void setSelected(bool select);
+        bool isSelected();
+        ItemSlot &getSlot();
 
         void render(core::Renderer *renderer) override;
         bool handleEvents(core::Input *pInput) override;

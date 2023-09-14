@@ -45,5 +45,22 @@
                 "amount": 2
             }
         ]
+    },
+    {
+        "id": 5,
+        "title": "Campfire",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 6,
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 2
+            },
+            {
+                "itemId": 2,
+                "amount": 1
+            }
+        ]
     }
 ]
