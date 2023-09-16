@@ -23,6 +23,13 @@ struct DisplayMode
     }
 };
 
+enum class Language : long;
+
+namespace UI
+{
+    class ProgressBar;
+} // namespace UI
+
 class SettingsWindow : public UI::Window
 {
 public:
@@ -38,6 +45,7 @@ protected:
 private:
     std::shared_ptr<UI::TabBar> tabBar;
     std::shared_ptr<UI::ComboBox<core::FullScreenMode>> fullscreen;
+    std::shared_ptr<UI::ComboBox<Language>> comboboxLanguage;
     std::shared_ptr<UI::Checkbox> vsync;
     std::shared_ptr<UI::Button> saveButton;
     std::shared_ptr<UI::Button> cancelButton;
@@ -48,6 +56,8 @@ private:
     std::vector<DisplayMode> displayModes;
     std::shared_ptr<utils::IniBase> m_settings;
     std::shared_ptr<UI::ControlsTab> m_controlsTab;
+    std::shared_ptr<UI::ProgressBar> musicVolumeProgress;
+    std::shared_ptr<UI::ProgressBar> soundVolumeProgress;
 };
 
 #endif // SETTINGSWINDOW_H

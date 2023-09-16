@@ -3,8 +3,8 @@
 #include <engine/graphics/TextureManager.h>
 #include <engine/core/ecs/Component.h>
 #include <map>
-#include "game/CampfireEntity.h"
-#include "game/TreeEntity.h"
+#include "game/components/CampfireEntity.h"
+#include "game/components/TreeEntity.h"
 
 namespace prefabs
 {

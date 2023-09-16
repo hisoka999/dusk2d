@@ -2,9 +2,9 @@
 #include <engine/graphics/TextureManager.h>
 #include <engine/core/ecs/Component.h>
 #include "game/Sprite.h"
-#include "game/PlayerComponent.h"
-#include "game/TreeEntity.h"
-#include "game/RockEntity.h"
+#include "game/components/PlayerComponent.h"
+#include "game/components/TreeEntity.h"
+#include "game/components/RockEntity.h"
 #include <chrono>
 #include <random>
 #include "game/Inventory.h"
@@ -75,8 +75,8 @@ namespace scenes
             winMgr->addContainer(hotBar.get());
         }
 
-        auto treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
-        auto rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
+        auto &treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
+        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
         for (size_t y = 0; y < gameMap.getHeight(); ++y)
         {
             for (size_t x = 0; x < gameMap.getWidth(); ++x)

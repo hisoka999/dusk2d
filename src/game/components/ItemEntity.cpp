@@ -1,7 +1,7 @@
 #include "ItemEntity.h"
 #include <iostream>
 #include <engine/core/ecs/Entity.h>
-#include "Inventory.h"
+#include "game/Inventory.h"
 
 void ItemEntity::onUpdate([[maybe_unused]] size_t delta)
 {

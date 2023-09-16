@@ -1,6 +1,6 @@
 #pragma once
 #include <engine/core/ecs/Component.h>
-#include "MovementDirection.h"
+#include "game/MovementDirection.h"
 
 class PlayerComponent : public core::ecs::ScriptableEntity
 {

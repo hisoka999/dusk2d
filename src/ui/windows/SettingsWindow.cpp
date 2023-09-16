@@ -39,7 +39,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     vsync = std::make_shared<UI::Checkbox>(graphicsTab.get());
     this->cancelButton = std::make_shared<UI::Button>(this);
     this->saveButton = std::make_shared<UI::Button>(this);
-    auto comboboxLanguage = std::make_shared<UI::ComboBox<Language>>(generalTab.get());
+    comboboxLanguage = std::make_shared<UI::ComboBox<Language>>(generalTab.get());
 
     saveButton->setLabel(_("Save"));
     saveButton->setPos(30, 420);
@@ -163,7 +163,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     auto musicVolumeLabel = std::make_shared<UI::Label>(_("Music Volume"), soundTab.get());
     soundTab->addObject(musicVolumeLabel);
 
-    auto musicVolumeProgress = std::make_shared<UI::ProgressBar>(soundTab.get(), 200, 25);
+    musicVolumeProgress = std::make_shared<UI::ProgressBar>(soundTab.get(), 200, 25);
     if (!settings->getValue("Volume", "Music").empty())
     {
         musicVolumeProgress->setCurrentValue(settings->getValueI("Volume", "Music"));
@@ -173,7 +173,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     auto soundVolumeLabel = std::make_shared<UI::Label>(_("Sound Volume"), soundTab.get());
     soundTab->addObject(soundVolumeLabel);
 
-    auto soundVolumeProgress = std::make_shared<UI::ProgressBar>(soundTab.get(), 200, 25);
+    soundVolumeProgress = std::make_shared<UI::ProgressBar>(soundTab.get(), 200, 25);
     if (!settings->getValue("Volume", "Sound").empty())
     {
         soundVolumeProgress->setCurrentValue(settings->getValueI("Volume", "Sound"));
@@ -185,22 +185,22 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     layout->updateLayout(bounds);
     soundTabLayout->updateLayout(bounds);
 
-    saveButton->connect(UI::Button::buttonClickCallback(), [=]()
+    saveButton->connect(UI::Button::buttonClickCallback(), [this]()
                         {
-        settings->setAttrI("Base", "Fullscreen", int(fullscreen->getSelectionText()));
+        this->m_settings->setAttrI("Base", "Fullscreen", int(this->fullscreen->getSelectionText()));
         //core::GameWindow::Instance().setFullScreen(fullscreen->getSelectionText());
-        settings->setAttrB("Base", "VSync", vsync->isChecked());
+        this->m_settings->setAttrB("Base", "VSync", this->vsync->isChecked());
         int i = resolutions->getSelection();
 
-        settings->setAttrI("Base", "Height", displayModes[i].height);
-        settings->setAttrI("Base", "Width", displayModes[i].width);
-        settings->setAttr("Base", "Lang", std::string(magic_enum::enum_name(comboboxLanguage->getSelectionText())));
+        this->m_settings->setAttrI("Base", "Height", this->displayModes[i].height);
+        this->m_settings->setAttrI("Base", "Width", this->displayModes[i].width);
+        this->m_settings->setAttr("Base", "Lang", std::string(magic_enum::enum_name(this->comboboxLanguage->getSelectionText())));
 
-        settings->setAttrI("Volume", "Music", musicVolumeProgress->getCurrentValue());
-        settings->setAttrI("Volume", "Sound", soundVolumeProgress->getCurrentValue());
+        this->m_settings->setAttrI("Volume", "Music", this->musicVolumeProgress->getCurrentValue());
+        this->m_settings->setAttrI("Volume", "Sound", this->soundVolumeProgress->getCurrentValue());
 
-        settings->write();
-        closeWindow(); });
+        this->m_settings->write();
+        this->closeWindow(); });
 }
 
 SettingsWindow::~SettingsWindow()
