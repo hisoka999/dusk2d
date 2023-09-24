@@ -32,4 +32,15 @@ namespace services
     {
         return itemMap.at(id);
     }
+
+    std::shared_ptr<Item> ItemService::getItemByName(const std::string &name)
+    {
+        for (auto &item : getData())
+        {
+            if (item->getName() == name)
+                return item;
+        }
+        return nullptr;
+    }
+
 } // namespace services

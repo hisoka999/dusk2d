@@ -10,6 +10,7 @@
 #include "game/Inventory.h"
 #include "game/messages.h"
 #include "game/prefabs/Prefab.h"
+#include <engine/core/ecs/ScriptComponent.h>
 
 namespace scenes
 {
@@ -53,7 +54,7 @@ namespace scenes
             animation.createFrame<std::string>(startPos, 50, std::string{"left8"});
             animation.createFrame<std::string>(startPos, 50, std::string{"left9"});
             entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
-            auto &script = entity.addComponent<core::ecs::ScriptComponent>();
+            core::ecs::addScriptComponent<PlayerComponent>(entity);
             auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
             auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
             rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Dynamic;
@@ -64,9 +65,7 @@ namespace scenes
             collider.RestitutionThreshold = 0.0;
             collider.Offset = {1.f, 1.5f};
             collider.Size = {1.f, 1.f};
-            script.Bind<PlayerComponent>();
-            script.Instance = script.InstantiateScript();
-            script.Instance->setEntity(entity);
+
             entity.addComponent<Inventory>();
 
             playerWindow = std::make_shared<UI::PlayerWindow>(entity);
@@ -75,8 +74,6 @@ namespace scenes
             winMgr->addContainer(hotBar.get());
         }
 
-        auto &treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
-        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
         for (size_t y = 0; y < gameMap.getHeight(); ++y)
         {
             for (size_t x = 0; x < gameMap.getWidth(); ++x)
@@ -94,25 +91,8 @@ namespace scenes
                 else if (tile == 3)
                 {
                     auto entity = createEntity("rock_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    core::ecs::Transform transform;
-                    transform.position = {float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                    transform.width = TILE_SIZE / 2;
-                    transform.height = TILE_SIZE / 2;
-                    entity.addComponent<core::ecs::Transform>(transform);
-                    auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
-                    rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
-
-                    auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
-                    collider.Offset = {0.5f, 0.5f};
-                    collider.Size = {1.f, 1.0f};
-                    // collider.Friction = 0;
-                    // collider.RestitutionThreshold = 0;
-                    entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
-
-                    auto &script = entity.addComponent<core::ecs::ScriptComponent>();
-                    script.Bind<RockEntity>();
-                    script.Instance = script.InstantiateScript();
-                    script.Instance->setEntity(entity);
+                    auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                    prefabs::instantiateFromPrefab(entity, "rock", pos);
                 }
             }
         }

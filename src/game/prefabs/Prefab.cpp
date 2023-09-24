@@ -5,6 +5,11 @@
 #include <map>
 #include "game/components/CampfireEntity.h"
 #include "game/components/TreeEntity.h"
+#include "game/components/RockEntity.h"
+#include "game/components/ItemEntity.h"
+#include "game/GameMap.h"
+#include "game/services/ItemService.h"
+#include <engine/core/ecs/ScriptComponent.h>
 
 namespace prefabs
 {
@@ -39,10 +44,14 @@ namespace prefabs
         collider.RestitutionThreshold = 0.0;
         collider.Offset = {0.f, 0.5f};
         collider.Size = {1.f, 1.f};
-        auto &script = entity.addComponent<core::ecs::ScriptComponent>();
-        script.Bind<CampfireEntity>();
-        script.Instance = script.InstantiateScript();
-        script.Instance->setEntity(entity);
+
+        core::ecs::addScriptComponent<CampfireEntity>(entity);
+        core::ecs::addScriptComponent<ItemEntity>(entity);
+
+        auto &itemScript = core::ecs::addScriptComponent<ItemEntity>(entity);
+        ((ItemEntity *)itemScript.Instance)->setTypeOfItemDestruction(TypeOfItemDestruction::RightClick);
+        auto item = services::ItemService::Instance().getItemByName("Campfire");
+        ((ItemEntity *)itemScript.Instance)->setItem(item);
     }
 
     void createTree(core::ecs::Entity &entity, utils::Vector2 &position)
@@ -64,13 +73,82 @@ namespace prefabs
         // collider.RestitutionThreshold = 0;
         entity.addComponent<core::ecs::RenderComponent>(treeTexture);
 
-        auto &script = entity.addComponent<core::ecs::ScriptComponent>();
-        script.Bind<TreeEntity>();
-        script.Instance = script.InstantiateScript();
-        script.Instance->setEntity(entity);
+        core::ecs::addScriptComponent<TreeEntity>(entity);
     }
 
-    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {{"campfire"s, createCampfire}, {"tree"s, createTree}};
+    void createRock(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
+
+        core::ecs::Transform transform;
+        transform.position = position;
+        transform.width = TILE_SIZE / 2;
+        transform.height = TILE_SIZE / 2;
+        entity.addComponent<core::ecs::Transform>(transform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.5f, 0.5f};
+        collider.Size = {1.f, 1.0f};
+        // collider.Friction = 0;
+        // collider.RestitutionThreshold = 0;
+        entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
+
+        core::ecs::addScriptComponent<RockEntity>(entity);
+    }
+
+    void createWood(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture("wood");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+        // collider.Friction = 0;
+        // collider.RestitutionThreshold = 0;
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = std::make_shared<Item>(1, ItemType::WOOD, "Wood", "wood", "");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+
+    void createStone(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture("stone");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+        // collider.Friction = 0;
+        // collider.RestitutionThreshold = 0;
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = std::make_shared<Item>(2, ItemType::STONE, "Stone", "stone", "");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+
+    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {{"campfire"s, createCampfire}, {"tree"s, createTree}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}};
 
     void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
     {

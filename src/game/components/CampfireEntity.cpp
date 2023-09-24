@@ -1,5 +1,7 @@
 #include "CampfireEntity.h"
 #include "game/Inventory.h"
+#include <engine/core/input.h>
+#include <engine/core/ecs/Entity.h>
 
 CampfireEntity::CampfireEntity()
 {
@@ -25,7 +27,7 @@ bool CampfireEntity::onHandleInput([[maybe_unused]] core::Input *input)
         // auto &inventory = playerEntity.findComponent<Inventory>();
         //  inventory.addItem()
 
-        this->entity.getScene()->destoryEntity(entity);
+        // this->entity.getScene()->destoryEntity(entity);
     }
 
     return false;

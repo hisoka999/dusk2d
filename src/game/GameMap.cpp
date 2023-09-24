@@ -59,8 +59,8 @@ void GameMap::render(core::Renderer *renderer)
             srcRect.y = 0;
             targetRect.x = (x * TILE_SIZE / 2);
             targetRect.y = (y * TILE_SIZE / 2);
-            if (!targetRect.intersects(viewPort))
-                continue;
+            // if (!targetRect.intersects(viewPort))
+            //     continue;
             targetRect.x -= renderer->getMainCamera()->getX();
             targetRect.y -= renderer->getMainCamera()->getY();
             texture->render(renderer, srcRect, targetRect);

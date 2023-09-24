@@ -26,6 +26,7 @@ namespace services
         }
 
         std::shared_ptr<Item> &getItemById(size_t id);
+        std::shared_ptr<Item> getItemByName(const std::string &name);
     };
 
 } // namespace services
