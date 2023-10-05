@@ -9,6 +9,7 @@
 #include "ui/windows/PlayerWindow.h"
 #include "ui/Hotbar.h"
 #include <engine/graphics/texturemap.h>
+#include "ui/PlayerHUD.h"
 
 namespace scenes
 {
@@ -20,6 +21,7 @@ namespace scenes
         std::unique_ptr<UI::Hotbar> hotBar;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         utils::Vector2 mousePos;
+        std::unique_ptr<UI::PlayerHUD> playerHUD;
 
     public:
         WorldScene(core::Renderer *pRenderer);

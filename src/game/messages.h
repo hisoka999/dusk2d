@@ -3,5 +3,6 @@
 
 enum class MessageType
 {
-    INVENTORY_UPDATED
+    INVENTORY_UPDATED,
+    CHARACTER_UPDATED
 };

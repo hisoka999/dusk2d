@@ -11,6 +11,7 @@
 #include "game/messages.h"
 #include "game/prefabs/Prefab.h"
 #include <engine/core/ecs/ScriptComponent.h>
+#include "game/components/Character.h"
 
 namespace scenes
 {
@@ -57,6 +58,7 @@ namespace scenes
             core::ecs::addScriptComponent<PlayerComponent>(entity);
             auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
             auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+            entity.addComponent<Character>();
             rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Dynamic;
             rb2d.FixedRotation = true;
             collider.Density = 1.f;
@@ -72,6 +74,9 @@ namespace scenes
             winMgr->addWindow(playerWindow.get());
             hotBar = std::make_unique<UI::Hotbar>(entity);
             winMgr->addContainer(hotBar.get());
+
+            playerHUD = std::make_unique<UI::PlayerHUD>();
+            winMgr->addContainer(playerHUD.get());
         }
 
         for (size_t y = 0; y < gameMap.getHeight(); ++y)

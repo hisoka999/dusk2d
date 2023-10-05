@@ -1,11 +1,14 @@
 #include "PlayerComponent.h"
 #include <engine/core/ecs/Entity.h>
 #include <engine/graphics/TextureManager.h>
+#include "game/components/Character.h"
 void PlayerComponent::onUpdate(size_t delta)
 {
 
     auto &rb2d = entity.findComponent<core::ecs::Rigidbody2DComponent>();
     auto &transform = entity.findComponent<core::ecs::Transform>();
+    auto &character = entity.findComponent<Character>();
+    character.updateAttributes(delta);
 
     auto camera = entity.getScene()->findEntityByName("mainCamera");
     auto &cameraComponent = camera->findComponent<core::ecs::CameraComponent>();
