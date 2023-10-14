@@ -35,5 +35,16 @@
         "name": "Campfire",
         "subTextureName": "campfire",
         "prefab": "campfire"
+    },
+    {
+        "id": 7,
+        "type": "FOOD",
+        "name": "Apple",
+        "subTextureName": "apple",
+        "prefab": "apple",
+        "data": {
+            "hunger": "10",
+            "thirst": "5"
+        }
     }
 ]

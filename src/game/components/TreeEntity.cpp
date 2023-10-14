@@ -26,12 +26,22 @@ bool TreeEntity::onHandleInput(core::Input *input)
         std::mt19937 gen(device());
         std::uniform_real_distribution<double> posDist(-16.0, 16.0);
         std::uniform_int_distribution<int> numItems(1, 5);
+
+        std::uniform_int_distribution<int> itemChance(1, 100);
         for (int i = 1; i <= numItems(gen); ++i)
         {
             auto position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)} + utils::Vector2(posDist(gen), posDist(gen));
-            auto itemEntity = entity.getScene()->createEntity("wood");
-
-            prefabs::instantiateFromPrefab(itemEntity, "wood", position);
+            int chance = itemChance(gen);
+            if (chance > 15)
+            {
+                auto itemEntity = entity.getScene()->createEntity("wood");
+                prefabs::instantiateFromPrefab(itemEntity, "wood", position);
+            }
+            else
+            {
+                auto itemEntity = entity.getScene()->createEntity("apple");
+                prefabs::instantiateFromPrefab(itemEntity, "apple", position);
+            }
         }
 
         entity.getScene()->destoryEntity(entity);

@@ -6,5 +6,6 @@ enum class ItemType
     STONE,
     EQUIPMENT,
     PLACEABLE,
+    FOOD,
     NONE
 };

@@ -1,6 +1,6 @@
 #include "ItemService.h"
 #include <magic_enum.hpp>
-
+#include <map>
 namespace services
 {
     ItemService::ItemService()
@@ -18,7 +18,18 @@ namespace services
         std::string name = object->getStringValue("name");
         std::string subTextureName = object->getStringValue("subTextureName");
         std::string prefab = (object->hasAttribute("prefab")) ? object->getStringValue("prefab") : "";
-        return std::make_shared<Item>(id, itemType, name, subTextureName, prefab);
+
+        std::map<std::string, std::string> values;
+        if (object->hasAttribute("data"))
+        {
+            auto properties = object->getObjectValue("data");
+            for (auto key : properties->getAttributes())
+            {
+                values[key] = properties->getStringValue(key);
+            }
+        }
+
+        return std::make_shared<Item>(id, itemType, name, subTextureName, prefab, values);
     }
 
     void ItemService::afterLoad()

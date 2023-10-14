@@ -139,8 +139,7 @@ namespace prefabs
         collider.Offset = {0.25f, 0.25f};
         collider.Size = {0.25, 0.25};
         collider.Density = 0.5;
-        // collider.Friction = 0;
-        // collider.RestitutionThreshold = 0;
+
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
@@ -148,7 +147,32 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {{"campfire"s, createCampfire}, {"tree"s, createTree}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}};
+    void createApple(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture("apple");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = services::ItemService::Instance().getItemByName("Apple");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+
+    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {
+        {"campfire"s, createCampfire}, {"tree"s, createTree}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}};
 
     void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
     {
