@@ -14,6 +14,7 @@ namespace UI
         bool initSize = false;
         int inventoryRefreshMsgId;
         void clearSelection();
+        size_t getCurrentSelection();
 
     public:
         Hotbar(const core::ecs::Entity &entity);

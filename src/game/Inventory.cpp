@@ -30,6 +30,8 @@ Inventory::~Inventory()
 void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
 {
     ItemSlot *lastEmptySlot = nullptr;
+    auto &msgSystem = core::MessageSystem<MessageType>::get();
+
     for (auto &slot : itemSlots)
     {
 
@@ -40,6 +42,7 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
             {
                 slot.item = nullptr;
             }
+            msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
             return;
         }
         else if (!slot.item && !lastEmptySlot)
@@ -48,26 +51,22 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
         }
     }
 
-    if (!lastEmptySlot)
+    for (auto &slot : hotbarSlots)
     {
-        for (auto &slot : hotbarSlots)
-        {
 
-            if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
+        if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
+        {
+            slot.amount += amount;
+            if (slot.amount == 0)
             {
-                slot.amount += amount;
-                if (slot.amount == 0)
-                {
-                    slot.item = nullptr;
-                    auto &msgSystem = core::MessageSystem<MessageType>::get();
-                    msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
-                }
-                return;
+                slot.item = nullptr;
             }
-            else if (!slot.item && !lastEmptySlot)
-            {
-                lastEmptySlot = &slot;
-            }
+            msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
+            return;
+        }
+        else if (!slot.item && !lastEmptySlot)
+        {
+            lastEmptySlot = &slot;
         }
     }
 
@@ -78,7 +77,6 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
         {
             lastEmptySlot->item = item;
         }
-        auto &msgSystem = core::MessageSystem<MessageType>::get();
         msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, lastEmptySlot);
     }
 }
