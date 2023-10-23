@@ -59,7 +59,7 @@ namespace prefabs
         auto &treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
 
         core::ecs::Transform transform;
-        transform.position = position;
+        transform.position = position - utils::Vector2{54.f, 128.f};
         transform.width = treeTexture->getWidth();
         transform.height = treeTexture->getHeight();
         entity.addComponent<core::ecs::Transform>(transform);
