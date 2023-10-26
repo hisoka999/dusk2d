@@ -117,6 +117,8 @@ namespace scenes
             }
         }
 
+        addStaticBlockCollider(gameMap.generateCollisionMap());
+
         OnPhysics2DStart();
     }
 

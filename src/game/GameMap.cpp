@@ -16,10 +16,29 @@ GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width),
         {
             double base = 5;
             double value = 5 * noise.noise(base * x / width, base * y / height, 0.5);
-            tiles[(y * width) + x] = value;
+            tiles[(y * width) + x] = std::min(value, 3.0);
         }
     }
     texture = graphics::TextureManager::Instance().loadTexture("images/Tileset.png");
+}
+
+std::vector<graphics::Rect> GameMap::generateCollisionMap()
+{
+    std::vector<graphics::Rect> collider;
+    for (size_t y = 0; y < height; ++y)
+    {
+        for (size_t x = 0; x < width; ++x)
+        {
+            auto tile = tiles[(y * width) + x];
+            switch (tile)
+            {
+            case 0: // water
+                collider.push_back({float(x), float(y), 1, 1});
+                break;
+            }
+        }
+    }
+    return collider;
 }
 
 size_t GameMap::getWidth()
