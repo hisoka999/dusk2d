@@ -76,9 +76,9 @@ namespace prefabs
         core::ecs::addScriptComponent<TreeEntity>(entity);
     }
 
-    void createRock(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createMountain(core::ecs::Entity &entity, utils::Vector2 &position)
     {
-        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rock.json");
+        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/mountain.json");
 
         core::ecs::Transform transform;
         transform.position = position;
@@ -96,6 +96,30 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
 
         core::ecs::addScriptComponent<RockEntity>(entity);
+    }
+
+    void createRock(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rocks.json");
+
+        core::ecs::Transform transform;
+        transform.position = position;
+        transform.width = TILE_SIZE / 2;
+        transform.height = TILE_SIZE / 2;
+        entity.addComponent<core::ecs::Transform>(transform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.5f, 0.5f};
+        collider.Size = {1.f, 1.0f};
+        // collider.Friction = 0;
+        // collider.RestitutionThreshold = 0;
+        entity.addComponent<core::ecs::RenderComponent>(rockTextureMap->getChildTexture("rock"));
+
+        auto component = static_cast<RockEntity *>(core::ecs::addScriptComponent<RockEntity>(entity).Instance);
+        component->setMinItemSpawn(1);
+        component->setMaxItemSpawn(1);
     }
 
     void createWood(core::ecs::Entity &entity, utils::Vector2 &position)
@@ -172,7 +196,7 @@ namespace prefabs
     }
 
     static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {
-        {"campfire"s, createCampfire}, {"tree"s, createTree}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}};
+        {"campfire"s, createCampfire}, {"tree"s, createTree}, {"mountain"s, createMountain}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}};
 
     void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
     {

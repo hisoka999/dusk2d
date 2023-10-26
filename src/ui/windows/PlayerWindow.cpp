@@ -34,8 +34,7 @@ namespace UI
                             {
                                 auto &_inventory = m_playerEntity.findComponent<Inventory>();
                                 _inventory.craftItem(recipe);
-                                this->refresh();
-                            });
+                                this->needsRefresh(); });
         }
 
         scrollArea->reset();

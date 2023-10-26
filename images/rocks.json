@@ -1,0 +1,19 @@
+{
+    "textureName": "images/rocks.png",
+    "subTextures": [
+        {
+            "name": "rock",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "rock2",
+            "x": 32.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 32.0
+        }
+    ]
+}

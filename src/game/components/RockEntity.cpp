@@ -7,6 +7,10 @@
 #include <random>
 #include "game/prefabs/Prefab.h"
 
+RockEntity::RockEntity() : minItemSpawn(0), maxItemSpawn(2)
+{
+}
+
 RockEntity::~RockEntity()
 {
 }
@@ -20,7 +24,7 @@ bool RockEntity::onHandleInput(core::Input *input)
         std::random_device device;
         std::mt19937 gen(device());
         std::uniform_real_distribution<double> posDist(0.0, 16.0);
-        std::uniform_int_distribution<int> numItems(0, 2);
+        std::uniform_int_distribution<int> numItems(minItemSpawn, maxItemSpawn);
 
         for (int i = 1; i <= numItems(gen); ++i)
         {
@@ -49,6 +53,12 @@ void RockEntity::endCollision([[maybe_unused]] const core::ecs::Collision &colli
     playerEntity = core::ecs::Entity();
 }
 
-RockEntity::RockEntity()
+void RockEntity::setMinItemSpawn(int spawn)
 {
+    minItemSpawn = spawn;
+}
+
+void RockEntity::setMaxItemSpawn(int spawn)
+{
+    maxItemSpawn = spawn;
 }
