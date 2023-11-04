@@ -140,6 +140,30 @@ namespace scenes
             graphics::Rect destRect{mousePos.getX(), mousePos.getY(), childTexture->getRect().width, childTexture->getRect().height};
             childTexture->render(destRect, renderer);
         }
+
+        // render mouse pos
+        if (!winMgr->isWindowOpen())
+        {
+            const int tileSize = TILE_SIZE / 2;
+            auto camera = renderer->getMainCamera()->getPosition();
+            auto cameraOffset = utils::Vector2{camera.getX() - (std::floor(camera.getX() / tileSize) * tileSize), camera.getY() - (std::floor(camera.getY() / tileSize) * tileSize)};
+            graphics::Rect r{std::floor(mousePos.getX() / tileSize) * tileSize - cameraOffset.getX(), std::floor(mousePos.getY() / tileSize) * tileSize - cameraOffset.getY(), tileSize, tileSize};
+            renderer->drawRect(r);
+        }
+    }
+
+    utils::Vector2 WorldScene::getMouseMapPos()
+    {
+        const int tileSize = TILE_SIZE / 2;
+        auto camera = renderer->getMainCamera()->getPosition();
+        auto cameraOffset = utils::Vector2{(std::floor(camera.getX() / tileSize)), (std::floor(camera.getY() / tileSize))};
+        return {std::floor(mousePos.getX() / tileSize) + cameraOffset.getX(), std::floor(mousePos.getY() / tileSize) + cameraOffset.getY()};
+    }
+
+    TileType WorldScene::getTileOnMouse()
+    {
+        auto pos = getMouseMapPos();
+        return gameMap.getTile(static_cast<size_t>(pos.getX()), static_cast<size_t>(pos.getY()));
     }
 
     bool WorldScene::handleEvents(core::Input *pInput)
@@ -156,6 +180,11 @@ namespace scenes
         else if (pInput->isKeyDown(SDLK_TAB))
         {
             setPhysicsDebug(!getPhysicsDebug());
+        }
+
+        if (pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))
+        {
+            std::cout << "tile: " << getTileOnMouse() << std::endl;
         }
 
         if (!handled && !pInput->isDragActive() && pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))

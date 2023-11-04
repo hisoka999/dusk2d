@@ -9,6 +9,7 @@
 typedef uint32_t TileType;
 
 #define TILE_SIZE 64
+#define NUMBER_OF_TILES 4
 
 class GameMap
 {
@@ -22,7 +23,7 @@ public:
     GameMap(size_t width, size_t height, unsigned int seed);
     size_t getWidth();
     size_t getHeight();
-    size_t getTile(size_t x, size_t y);
+    TileType getTile(size_t x, size_t y);
     void render(core::Renderer *renderer);
     virtual ~GameMap();
     std::vector<graphics::Rect> generateCollisionMap();

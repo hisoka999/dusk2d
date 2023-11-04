@@ -22,6 +22,8 @@ namespace scenes
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         utils::Vector2 mousePos;
         std::unique_ptr<UI::PlayerHUD> playerHUD;
+        utils::Vector2 getMouseMapPos();
+        TileType getTileOnMouse();
 
     public:
         WorldScene(core::Renderer *pRenderer);

@@ -15,7 +15,7 @@ GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width),
         for (size_t x = 0; x < width; ++x)
         {
             double base = 5;
-            double value = 5 * noise.noise(base * x / width, base * y / height, 0.5);
+            double value = NUMBER_OF_TILES * noise.noise(base * x / width, base * y / height, 0.5);
             tiles[(y * width) + x] = std::min(value, 3.0);
         }
     }
@@ -51,7 +51,7 @@ size_t GameMap::getHeight()
     return height;
 }
 
-size_t GameMap::getTile(size_t x, size_t y)
+TileType GameMap::getTile(size_t x, size_t y)
 {
     return tiles[(y * width) + x];
 }
