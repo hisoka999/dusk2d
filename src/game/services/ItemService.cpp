@@ -15,6 +15,7 @@ namespace services
 
         size_t id = object->getIntValue("id");
         ItemType itemType = magic_enum::enum_cast<ItemType>(std::string_view(object->getStringValue("type"))).value();
+        ItemSubType itemSubType = magic_enum::enum_cast<ItemSubType>(std::string_view(object->getStringValue("subType"))).value();
         std::string name = object->getStringValue("name");
         std::string subTextureName = object->getStringValue("subTextureName");
         std::string prefab = (object->hasAttribute("prefab")) ? object->getStringValue("prefab") : "";
@@ -29,7 +30,7 @@ namespace services
             }
         }
 
-        return std::make_shared<Item>(id, itemType, name, subTextureName, prefab, values);
+        return std::make_shared<Item>(id, itemType, itemSubType, name, subTextureName, prefab, values);
     }
 
     void ItemService::afterLoad()

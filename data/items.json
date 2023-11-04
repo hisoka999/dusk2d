@@ -2,36 +2,42 @@
     {
         "id": 1,
         "type": "WOOD",
+        "subType": "ITEM",
         "name": "Wood",
         "subTextureName": "wood"
     },
     {
         "id": 2,
         "type": "STONE",
+        "subType": "ITEM",
         "name": "Stone",
         "subTextureName": "stone"
     },
     {
         "id": 3,
         "type": "EQUIPMENT",
+        "subType": "AXE",
         "name": "Stone Axe",
         "subTextureName": "stone_axe"
     },
     {
         "id": 4,
         "type": "WOOD",
+        "subType": "ITEM",
         "name": "Plank",
         "subTextureName": "plank"
     },
     {
         "id": 5,
         "type": "EQUIPMENT",
+        "subType": "PICK_AXE",
         "name": "Stone Pick Axe",
         "subTextureName": "stone_pick_axe"
     },
     {
         "id": 6,
         "type": "PLACEABLE",
+        "subType": "ITEM",
         "name": "Campfire",
         "subTextureName": "campfire",
         "prefab": "campfire"
@@ -39,6 +45,7 @@
     {
         "id": 7,
         "type": "FOOD",
+        "subType": "ITEM",
         "name": "Apple",
         "subTextureName": "apple",
         "prefab": "apple",

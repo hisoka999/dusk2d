@@ -143,7 +143,7 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
-        auto item = std::make_shared<Item>(1, ItemType::WOOD, "Wood", "wood", "");
+        auto item = services::ItemService::Instance().getItemByName("Wood");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
@@ -167,7 +167,7 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
-        auto item = std::make_shared<Item>(2, ItemType::STONE, "Stone", "stone", "");
+        auto item = services::ItemService::Instance().getItemByName("Stone");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 

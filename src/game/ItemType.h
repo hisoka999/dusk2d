@@ -9,3 +9,10 @@ enum class ItemType
     FOOD,
     NONE
 };
+
+enum class ItemSubType
+{
+    ITEM,
+    AXE,
+    PICK_AXE
+};

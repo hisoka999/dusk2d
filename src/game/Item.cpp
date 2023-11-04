@@ -2,19 +2,21 @@
 
 Item::Item(size_t id,
            ItemType itemType,
+           ItemSubType itemSubType,
            std::string name,
            std::string subTextureName,
            std::string prefab)
-    : m_id(id), m_itemType(itemType), m_name(name), m_subTextureName(subTextureName), m_prefab(prefab)
+    : m_id(id), m_itemType(itemType), m_itemSubType(itemSubType), m_name(name), m_subTextureName(subTextureName), m_prefab(prefab)
 {
 }
 
 Item::Item(size_t id,
            ItemType itemType,
+           ItemSubType itemSubType,
            std::string name,
            std::string subTextureName,
            std::string prefab,
-           std::map<std::string, std::string> &data) : m_id(id), m_itemType(itemType), m_name(name), m_subTextureName(subTextureName), m_prefab(prefab), m_properties(data)
+           std::map<std::string, std::string> &data) : m_id(id), m_itemType(itemType), m_itemSubType(itemSubType), m_name(name), m_subTextureName(subTextureName), m_prefab(prefab), m_properties(data)
 {
 }
 
@@ -40,6 +42,11 @@ std::string &Item::getSubTextureName()
 ItemType Item::getType()
 {
     return m_itemType;
+}
+
+ItemSubType Item::getItemSubType()
+{
+    return m_itemSubType;
 }
 
 bool Item::operator==(const Item &other)

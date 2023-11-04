@@ -213,3 +213,25 @@ void Inventory::setItemBySlot(ItemSlot slotData)
         hotbarSlots[(slotData.slotId * -1) - 1] = slotData;
     }
 }
+void Inventory::setSelectedHotbarSlot(size_t slot)
+{
+    if (slot < hotbarSlots.size())
+        selectedHotBarSlot = slot;
+}
+
+void Inventory::setSelectedHotbarSlotById(int slotId)
+{
+    for (size_t i = 0; i < hotbarSlots.size(); ++i)
+    {
+        if (hotbarSlots[i].slotId == slotId)
+        {
+            selectedHotBarSlot = i;
+            break;
+        }
+    }
+}
+
+ItemSlot &Inventory::getSelectedHotbarSlot()
+{
+    return hotbarSlots[selectedHotBarSlot];
+}

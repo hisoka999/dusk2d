@@ -10,6 +10,7 @@ class Item
 private:
     size_t m_id;
     ItemType m_itemType;
+    ItemSubType m_itemSubType;
     std::string m_name;
     std::string m_subTextureName;
     std::string m_prefab;
@@ -18,12 +19,14 @@ private:
 public:
     Item(size_t id,
          ItemType itemType,
+         ItemSubType itemSubType,
          std::string name,
          std::string subTextureName,
          std::string prefab);
 
     Item(size_t id,
          ItemType itemType,
+         ItemSubType itemSubType,
          std::string name,
          std::string subTextureName,
          std::string prefab,
@@ -35,6 +38,7 @@ public:
 
     size_t getId();
     ItemType getType();
+    ItemSubType getItemSubType();
     std::string &getName();
     std::string &getSubTextureName();
     std::string &getPrefab();

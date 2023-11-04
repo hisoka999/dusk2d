@@ -103,6 +103,8 @@ namespace UI
     void InventorySlot::setSelected(bool select)
     {
         selected = select;
+        auto &inventory = entity.findComponent<Inventory>();
+        inventory.setSelectedHotbarSlotById(slot.slotId);
     }
 
     bool InventorySlot::isSelected()

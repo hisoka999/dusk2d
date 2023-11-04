@@ -22,6 +22,7 @@ class Inventory : public core::ecs::ScriptableEntity
 private:
     ItemSlots itemSlots;
     HotBarSlots hotbarSlots;
+    size_t selectedHotBarSlot = 0;
 
 public:
     Inventory();
@@ -35,4 +36,7 @@ public:
     bool canCraftRecipe(const std::shared_ptr<ItemRecipe> &recipe);
     void craftItem(const std::shared_ptr<ItemRecipe> &recipe);
     void setItemBySlot(ItemSlot slotData);
+    void setSelectedHotbarSlot(size_t slot);
+    void setSelectedHotbarSlotById(int slotId);
+    ItemSlot &getSelectedHotbarSlot();
 };
