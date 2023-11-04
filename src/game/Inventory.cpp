@@ -30,6 +30,7 @@ Inventory::~Inventory()
 void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
 {
     ItemSlot *lastEmptySlot = nullptr;
+    ItemSlot *lastEmptyHotbarSlot = nullptr;
     auto &msgSystem = core::MessageSystem<MessageType>::get();
 
     for (auto &slot : itemSlots)
@@ -64,13 +65,21 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
             msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
             return;
         }
-        else if (!slot.item && !lastEmptySlot)
+        else if (!slot.item && !lastEmptyHotbarSlot)
         {
-            lastEmptySlot = &slot;
+            lastEmptyHotbarSlot = &slot;
         }
     }
-
-    if (lastEmptySlot)
+    if (lastEmptyHotbarSlot)
+    {
+        lastEmptyHotbarSlot->amount += amount;
+        if (lastEmptyHotbarSlot->amount != 0)
+        {
+            lastEmptyHotbarSlot->item = item;
+        }
+        msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, lastEmptyHotbarSlot);
+    }
+    else if (lastEmptySlot)
     {
         lastEmptySlot->amount += amount;
         if (lastEmptySlot->amount != 0)
