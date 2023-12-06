@@ -7,6 +7,7 @@
 #include <memory>
 #include "game/GameMap.h"
 #include "ui/windows/PlayerWindow.h"
+#include "ui/windows/CraftingWindow.h"
 #include "ui/Hotbar.h"
 #include <engine/graphics/texturemap.h>
 #include "ui/PlayerHUD.h"
@@ -18,6 +19,7 @@ namespace scenes
     private:
         GameMap gameMap;
         std::shared_ptr<UI::PlayerWindow> playerWindow;
+        std::unique_ptr<UI::CraftingWindow> craftingWindow;
         std::unique_ptr<UI::Hotbar> hotBar;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         utils::Vector2 mousePos;

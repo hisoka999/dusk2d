@@ -216,10 +216,14 @@ void Inventory::setItemBySlot(ItemSlot slotData)
     if (slotData.slotId >= 0)
     {
         itemSlots[slotData.slotId] = slotData;
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &itemSlots[slotData.slotId]);
     }
     else
     {
         hotbarSlots[(slotData.slotId * -1) - 1] = slotData;
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &hotbarSlots[(slotData.slotId * -1) - 1]);
     }
 }
 void Inventory::setSelectedHotbarSlot(size_t slot)

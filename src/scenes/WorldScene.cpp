@@ -79,6 +79,9 @@ namespace scenes
             winMgr->addContainer(playerHUD.get());
         }
 
+        craftingWindow = std::make_unique<UI::CraftingWindow>(10, 200, "Crafting Window");
+        winMgr->addWindow(craftingWindow.get());
+
         for (size_t y = 0; y < gameMap.getHeight(); ++y)
         {
             for (size_t x = 0; x < gameMap.getWidth(); ++x)
@@ -99,6 +102,26 @@ namespace scenes
                     else if (value <= 3)
                     {
                         type = "tree";
+                    }
+
+                    if (!type.empty())
+                    {
+                        auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
+                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                        prefabs::instantiateFromPrefab(entity, type, pos);
+                    }
+                }
+                else if (tile == 1)
+                {
+                    int value = dist(gen);
+                    std::string type = "";
+                    if (value > 5 && value <= 7)
+                    {
+                        type = "rock";
+                    }
+                    else if (value > 7 && value <= 10)
+                    {
+                        type = "wood";
                     }
 
                     if (!type.empty())

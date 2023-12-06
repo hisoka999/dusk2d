@@ -16,7 +16,7 @@ namespace UI
         int yOffset = 0;
         auto &inventory = m_playerEntity.findComponent<Inventory>();
 
-        for (auto &recipe : services::ItemRecipeService::Instance().getData())
+        for (auto &recipe : services::ItemRecipeService::Instance().findByRecipeTarget(RecipeTarget::INVENTORY))
         {
 
             auto button = std::make_shared<UI::Button>(scrollArea.get());

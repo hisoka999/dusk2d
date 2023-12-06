@@ -1,4 +1,5 @@
 #include "ItemRecipeService.h"
+#include <magic_enum.hpp>
 
 namespace services
 {
@@ -21,9 +22,24 @@ namespace services
         }
 
         size_t outputId = object->getIntValue("outputId");
+        size_t craftingTime = object->getIntValue("craftingTime");
         size_t amount = object->getIntValue("amount");
         std::string title = object->getStringValue("title");
+        RecipeTarget recipeTarget = magic_enum::enum_cast<RecipeTarget>(object->getStringValue("recipeTarget")).value();
         std::string description = object->getStringValue("description");
-        return std::make_shared<ItemRecipe>(input, outputId, amount, title, description);
+        return std::make_shared<ItemRecipe>(input, outputId, craftingTime, amount, title, description);
+    }
+
+    std::vector<std::shared_ptr<ItemRecipe>> ItemRecipeService::findByRecipeTarget(RecipeTarget target)
+    {
+        std::vector<std::shared_ptr<ItemRecipe>> result;
+        for (auto recipe : getData())
+        {
+            if (recipe->getRecipeTarget() == target)
+            {
+                result.push_back(recipe);
+            }
+        }
+        return result;
     }
 } // namespace services

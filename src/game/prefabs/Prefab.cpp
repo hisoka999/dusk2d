@@ -8,6 +8,7 @@
 #include "game/components/RockEntity.h"
 #include "game/components/ItemEntity.h"
 #include "game/GameMap.h"
+#include "game/Inventory.h"
 #include "game/services/ItemService.h"
 #include <engine/core/ecs/ScriptComponent.h>
 
@@ -44,6 +45,8 @@ namespace prefabs
         collider.RestitutionThreshold = 0.0;
         collider.Offset = {0.f, 0.5f};
         collider.Size = {1.f, 1.f};
+
+        entity.addComponent<Inventory>();
 
         core::ecs::addScriptComponent<CampfireEntity>(entity);
         core::ecs::addScriptComponent<ItemEntity>(entity);

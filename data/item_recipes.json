@@ -5,6 +5,8 @@
         "description": "TODO",
         "amount": 1,
         "outputId": 3,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
         "input": [
             {
                 "itemId": 1,
@@ -22,6 +24,8 @@
         "description": "TODO",
         "amount": 5,
         "outputId": 4,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
         "input": [
             {
                 "itemId": 1,
@@ -35,6 +39,8 @@
         "description": "TODO",
         "amount": 1,
         "outputId": 5,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
         "input": [
             {
                 "itemId": 1,
@@ -52,6 +58,8 @@
         "description": "TODO",
         "amount": 1,
         "outputId": 6,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
         "input": [
             {
                 "itemId": 1,

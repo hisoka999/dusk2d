@@ -22,6 +22,8 @@ namespace services
             static ItemRecipeService instance;
             return instance;
         }
+
+        std::vector<std::shared_ptr<ItemRecipe>> findByRecipeTarget(RecipeTarget target);
     };
 
 } // namespace services

@@ -70,16 +70,29 @@ namespace UI
                 }
                 else if (target)
                 {
-                    auto &inventory = entity.findComponent<Inventory>();
-                    APP_LOG_ERROR("dragged data %s finished from type %s", data, target->getObjectName());
+                    APP_LOG_TRACE("dragged data %s finished from type %s", data, target->getObjectName());
                     UI::InventorySlot *targetSlot = dynamic_cast<UI::InventorySlot *>(target);
-                    this->slot.amount = targetSlot->slot.amount;
-                    this->slot.item = targetSlot->slot.item;
+                    auto &srcInventory = entity.findComponent<Inventory>();
+
+                    auto &inventory = targetSlot->entity.findComponent<Inventory>();
+
                     auto result = utils::split(data, ":");
-                    targetSlot->slot.amount = std::stoi(result[1]);
                     int id = std::stoi(result[0]);
+                    if (targetSlot->slot.item && targetSlot->slot.item->getId() == static_cast<size_t>(id))
+                    {
+                        targetSlot->slot.amount += std::stoi(result[1]);
+                        this->slot.amount = 0;
+                        this->slot.item = nullptr;
+                    }
+                    else
+                    {
+                        targetSlot->slot.amount = std::stoi(result[1]);
+                        this->slot.amount = targetSlot->slot.amount;
+                        this->slot.item = targetSlot->slot.item;
+                    }
                     targetSlot->slot.item = services::ItemService::Instance().getItemById(id);
-                    inventory.setItemBySlot(this->slot);
+
+                    srcInventory.setItemBySlot(this->slot);
                     inventory.setItemBySlot(targetSlot->slot);
                 }
             };
