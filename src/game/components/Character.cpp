@@ -3,11 +3,11 @@
 Character::Character() : hunger(100, 100), thirst(100, 100), hp(20, 20), level(1), timer(2000, -1)
 {
     update();
-    timer.setCallback([this]()
+    timer.setCallback([this]([[maybe_unused]] uint32_t execs)
                       {
             hunger.addValue(-1);
-    thirst.addValue(-1);
-    update(); });
+            thirst.addValue(-1);
+            update(); });
     timer.start();
 }
 

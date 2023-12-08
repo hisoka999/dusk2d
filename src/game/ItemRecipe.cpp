@@ -2,12 +2,12 @@
 
 ItemRecipe::ItemRecipe(std::map<size_t, size_t> input,
                        size_t outputId,
-                       size_t craftingTime,
                        size_t amount,
-                       std::string title,
+                       size_t craftingTime,
                        RecipeTarget recipeTarget,
+                       std::string title,
                        std::string description)
-    : m_input(input), m_outputId(outputId), m_craftingTime(craftingTime), m_amount(amount), m_title(title), m_recipeTarget(recipeTarget), m_description(description)
+    : m_input(input), m_outputId(outputId), m_amount(amount), m_craftingTime(craftingTime), m_recipeTarget(recipeTarget), m_title(title), m_description(description)
 {
 }
 

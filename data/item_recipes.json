@@ -70,5 +70,20 @@
                 "amount": 1
             }
         ]
+    },
+    {
+        "id": 2,
+        "title": "Charcoal",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 8,
+        "craftingTime": 10,
+        "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 2
+            }
+        ]
     }
 ]

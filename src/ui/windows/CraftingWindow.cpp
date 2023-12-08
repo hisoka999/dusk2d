@@ -3,6 +3,8 @@
 #include "translate.h"
 #include <engine/graphics/TextureManager.h>
 #include "game/services/ItemRecipeService.h"
+#include "game/components/CraftingEntity.h"
+#include <engine/core/ecs/ScriptComponent.h>
 
 namespace UI
 {
@@ -29,30 +31,42 @@ namespace UI
         fuelLabel->setText(_("Fuel"));
         addObject(fuelLabel);
 
-        auto craftingButton = std::make_shared<UI::Button>(this);
-        craftingButton->setFont("fonts/arial.ttf", 14);
-        craftingButton->setLabel(_("Craft"));
-        craftingButton->setPos(20, 260);
+        m_craftingButton = std::make_shared<UI::Button>(this);
+        m_craftingButton->setFont("fonts/arial.ttf", 14);
+        m_craftingButton->setLabel(_("Craft"));
+        m_craftingButton->setPos(20, 260);
 
-        addObject(craftingButton);
-        craftingButton->connect(UI::Button::buttonClickCallback(), [this]()
-                                {
-                                    auto &_inventory = m_entity.findComponent<Inventory>();
+        addObject(m_craftingButton);
+        m_craftingButton->connect(UI::Button::buttonClickCallback(), [this]()
+                                  {
+                                      auto crafting = core::ecs::findScriptComponent<CraftingEntity>(m_entity);
+                                      crafting->startCrafting();
+                                      m_craftingButton->disable();
+                                      crafting->progressCallBack([this](CraftingQueueEntry &entry, bool finished)
+                                                                 {
+                                        m_outputProgress->setMinValue(0);
+                                        m_outputProgress->setMaxValue(100);
+                                        m_outputProgress->setCurrentValue(float(entry.endTime -  entry.currentTime )/ float(entry.endTime - entry.startTime) *100.f); 
+                                        this->needsRefresh();
+                                        if(finished)
+                                            m_craftingButton->enable(); }); });
 
-                                    // TODO now craft
-                                    // move to timer
-                                    for(auto recipe : services::ItemRecipeService::Instance().findByRecipeTarget(RecipeTarget::CAMPFIRE)) {
-                                        if(_inventory.canCraftRecipe(recipe)) {
-                                            //add to queue
-                                        }
-                                    } });
         // add input
     }
 
     void CraftingWindow::setEntity(core::ecs::Entity entity)
     {
         m_entity = entity;
-        auto &inventory = entity.findComponent<Inventory>();
+        needsRefresh();
+    }
+
+    CraftingWindow::~CraftingWindow()
+    {
+    }
+
+    void CraftingWindow::refresh()
+    {
+        auto &inventory = m_entity.findComponent<Inventory>();
 
         for (size_t pos = 0; pos < m_input.size(); ++pos)
         {
@@ -60,8 +74,8 @@ namespace UI
             {
                 removeObject(m_input[pos]);
             }
-            auto &itemSlot = inventory.getItemSlots().at(pos);
-            m_input[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, entity);
+            auto &itemSlot = inventory.getHotBarSlots().at(pos);
+            m_input[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, m_entity);
             switch (pos)
             {
             case 0:
@@ -89,8 +103,8 @@ namespace UI
             {
                 removeObject(m_fuel[pos]);
             }
-            auto &itemSlot = inventory.getItemSlots().at(pos + m_input.size());
-            m_fuel[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, entity);
+            auto &itemSlot = inventory.getHotBarSlots().at(pos + m_input.size());
+            m_fuel[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, m_entity);
             switch (pos)
             {
             case 0:
@@ -105,13 +119,20 @@ namespace UI
 
             addObject(m_fuel[pos]);
         }
-    }
 
-    CraftingWindow::~CraftingWindow()
-    {
-    }
+        m_outputScrollArea->clear();
+        for (size_t pos = 0; pos < inventory.getItemSlots().size(); ++pos)
+        {
 
-    void CraftingWindow::refresh()
-    {
+            auto &itemSlot = inventory.getItemSlots().at(pos);
+
+            auto slot = std::make_shared<UI::InventorySlot>(m_outputScrollArea.get(), itemSlot, m_entity);
+            int x = 20 + ((pos % 2) ? 60 : 0);
+            int y = pos / 2 * 60;
+            slot->setPos(x, y);
+
+            m_outputScrollArea->addObject(slot);
+        }
+        endRefresh();
     }
 } // namespace UI

@@ -14,5 +14,6 @@ enum class ItemSubType
 {
     ITEM,
     AXE,
-    PICK_AXE
+    PICK_AXE,
+    FUEL
 };

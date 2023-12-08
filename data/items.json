@@ -2,7 +2,7 @@
     {
         "id": 1,
         "type": "WOOD",
-        "subType": "ITEM",
+        "subType": "FUEL",
         "name": "Wood",
         "subTextureName": "wood"
     },
@@ -53,5 +53,12 @@
             "hunger": "10",
             "thirst": "5"
         }
+    },
+    {
+        "id": 8,
+        "type": "NONE",
+        "subType": "FUEL",
+        "name": "Charcoal",
+        "subTextureName": "coal"
     }
 ]

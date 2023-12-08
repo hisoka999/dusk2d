@@ -17,6 +17,7 @@ namespace UI
         std::shared_ptr<UI::ScrollArea> m_outputScrollArea;
         std::shared_ptr<UI::ProgressBar> m_outputProgress;
         core::ecs::Entity m_entity;
+        std::shared_ptr<UI::Button> m_craftingButton;
 
     public:
         CraftingWindow(int x, int y, const std::string &title);

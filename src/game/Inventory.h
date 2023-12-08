@@ -16,6 +16,13 @@ struct ItemSlot
 typedef std::array<ItemSlot, 25> ItemSlots;
 typedef std::array<ItemSlot, 6> HotBarSlots;
 
+enum class SlotTarget
+{
+    INVENTORY,
+    HOTBAR,
+    BOTH
+};
+
 class Inventory : public core::ecs::ScriptableEntity
 {
 
@@ -28,6 +35,7 @@ public:
     Inventory();
     ~Inventory();
     void addItem(const std::shared_ptr<Item> &item, int amount);
+    void addItem(const std::shared_ptr<Item> &item,SlotTarget slotTarget, int amount);
     void removeItemById(size_t itemId, int amount);
     ItemSlots &getItemSlots();
     HotBarSlots &getHotBarSlots();
@@ -35,6 +43,7 @@ public:
     size_t countItemsById(size_t id);
     bool canCraftRecipe(const std::shared_ptr<ItemRecipe> &recipe);
     void craftItem(const std::shared_ptr<ItemRecipe> &recipe);
+    void craftItem(const std::shared_ptr<ItemRecipe> &recipe, SlotTarget slotTarget);
     void setItemBySlot(ItemSlot slotData);
     void setSelectedHotbarSlot(size_t slot);
     void setSelectedHotbarSlotById(int slotId);

@@ -89,6 +89,10 @@ namespace UI
                         targetSlot->slot.amount = std::stoi(result[1]);
                         this->slot.amount = targetSlot->slot.amount;
                         this->slot.item = targetSlot->slot.item;
+                        if (!this->slot.item)
+                        {
+                            this->slot.amount = 0;
+                        }
                     }
                     targetSlot->slot.item = services::ItemService::Instance().getItemById(id);
 

@@ -3,7 +3,7 @@
 #include <engine/graphics/TextureManager.h>
 #include <engine/core/ecs/Component.h>
 #include <map>
-#include "game/components/CampfireEntity.h"
+#include "game/components/CraftingEntity.h"
 #include "game/components/TreeEntity.h"
 #include "game/components/RockEntity.h"
 #include "game/components/ItemEntity.h"
@@ -48,7 +48,7 @@ namespace prefabs
 
         entity.addComponent<Inventory>();
 
-        core::ecs::addScriptComponent<CampfireEntity>(entity);
+        core::ecs::addScriptComponent<CraftingEntity>(entity);
         core::ecs::addScriptComponent<ItemEntity>(entity);
 
         auto &itemScript = core::ecs::addScriptComponent<ItemEntity>(entity);

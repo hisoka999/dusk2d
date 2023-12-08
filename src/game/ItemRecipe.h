@@ -25,10 +25,10 @@ private:
 public:
     ItemRecipe(std::map<size_t, size_t> input,
                size_t outputId,
-               size_t craftingTime,
                size_t amount,
-               std::string title,
+               size_t craftingTime,
                RecipeTarget recipeTarget,
+               std::string title,
                std::string description);
     ~ItemRecipe();
     const std::map<size_t, size_t> &getInput();

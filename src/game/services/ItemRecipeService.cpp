@@ -27,7 +27,7 @@ namespace services
         std::string title = object->getStringValue("title");
         RecipeTarget recipeTarget = magic_enum::enum_cast<RecipeTarget>(object->getStringValue("recipeTarget")).value();
         std::string description = object->getStringValue("description");
-        return std::make_shared<ItemRecipe>(input, outputId, craftingTime, amount, title, description);
+        return std::make_shared<ItemRecipe>(input, outputId, amount, craftingTime, recipeTarget, title, description);
     }
 
     std::vector<std::shared_ptr<ItemRecipe>> ItemRecipeService::findByRecipeTarget(RecipeTarget target)

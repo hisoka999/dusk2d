@@ -26,48 +26,52 @@ Inventory::Inventory(/* args */)
 Inventory::~Inventory()
 {
 }
-
-void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
+void Inventory::addItem(const std::shared_ptr<Item> &item, SlotTarget slotTarget, int amount)
 {
     ItemSlot *lastEmptySlot = nullptr;
     ItemSlot *lastEmptyHotbarSlot = nullptr;
     auto &msgSystem = core::MessageSystem<MessageType>::get();
 
-    for (auto &slot : itemSlots)
+    if (slotTarget == SlotTarget::BOTH || slotTarget == SlotTarget::INVENTORY)
     {
+        for (auto &slot : itemSlots)
+        {
 
-        if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
-        {
-            slot.amount += amount;
-            if (slot.amount == 0)
+            if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
             {
-                slot.item = nullptr;
+                slot.amount += amount;
+                if (slot.amount == 0)
+                {
+                    slot.item = nullptr;
+                }
+                msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
+                return;
             }
-            msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
-            return;
-        }
-        else if (!slot.item && !lastEmptySlot)
-        {
-            lastEmptySlot = &slot;
+            else if (!slot.item && !lastEmptySlot)
+            {
+                lastEmptySlot = &slot;
+            }
         }
     }
-
-    for (auto &slot : hotbarSlots)
+    if (slotTarget == SlotTarget::BOTH || slotTarget == SlotTarget::HOTBAR)
     {
+        for (auto &slot : hotbarSlots)
+        {
 
-        if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
-        {
-            slot.amount += amount;
-            if (slot.amount == 0)
+            if (slot.item && slot.item->getId() == item->getId() && isItemTypeStackable(item->getType()))
             {
-                slot.item = nullptr;
+                slot.amount += amount;
+                if (slot.amount == 0)
+                {
+                    slot.item = nullptr;
+                }
+                msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
+                return;
             }
-            msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, &slot);
-            return;
-        }
-        else if (!slot.item && !lastEmptyHotbarSlot)
-        {
-            lastEmptyHotbarSlot = &slot;
+            else if (!slot.item && !lastEmptyHotbarSlot)
+            {
+                lastEmptyHotbarSlot = &slot;
+            }
         }
     }
     if (lastEmptyHotbarSlot)
@@ -88,6 +92,10 @@ void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
         }
         msgSystem.sendMessage<ItemSlot *>(MessageType::INVENTORY_UPDATED, lastEmptySlot);
     }
+}
+void Inventory::addItem(const std::shared_ptr<Item> &item, int amount)
+{
+    addItem(item, SlotTarget::BOTH, amount);
 }
 
 void Inventory::removeItemById(size_t itemId, int amount)
@@ -199,6 +207,10 @@ const HotBarSlots &Inventory::getHotBarSlots() const
 
 void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
 {
+    craftItem(recipe, SlotTarget::BOTH);
+}
+void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe, SlotTarget slotTarget)
+{
     if (!canCraftRecipe(recipe))
         return;
     for (const auto &[itemId, amount] : recipe->getInput())
@@ -208,7 +220,7 @@ void Inventory::craftItem(const std::shared_ptr<ItemRecipe> &recipe)
 
     auto item = services::ItemService::Instance().getItemById(recipe->getOutputId());
 
-    addItem(item, recipe->getAmount());
+    addItem(item, slotTarget, recipe->getAmount());
 }
 
 void Inventory::setItemBySlot(ItemSlot slotData)
