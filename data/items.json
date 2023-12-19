@@ -4,7 +4,10 @@
         "type": "WOOD",
         "subType": "FUEL",
         "name": "Wood",
-        "subTextureName": "wood"
+        "subTextureName": "wood",
+        "data": {
+            "fuel": "5"
+        }
     },
     {
         "id": 2,
@@ -23,9 +26,12 @@
     {
         "id": 4,
         "type": "WOOD",
-        "subType": "ITEM",
+        "subType": "FUEL",
         "name": "Plank",
-        "subTextureName": "plank"
+        "subTextureName": "plank",
+        "data": {
+            "fuel": "10"
+        }
     },
     {
         "id": 5,
@@ -56,9 +62,12 @@
     },
     {
         "id": 8,
-        "type": "NONE",
+        "type": "STONE",
         "subType": "FUEL",
         "name": "Charcoal",
-        "subTextureName": "coal"
+        "subTextureName": "coal",
+        "data": {
+            "fuel": "20"
+        }
     }
 ]

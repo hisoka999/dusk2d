@@ -103,6 +103,9 @@ void Inventory::removeItemById(size_t itemId, int amount)
     size_t remainingAmount = amount;
     for (auto &slot : itemSlots)
     {
+        if (slot.blockedForCrafting)
+            continue;
+
         if (slot.item && slot.item->getId() == itemId)
         {
             if (slot.amount >= remainingAmount)
@@ -132,6 +135,8 @@ void Inventory::removeItemById(size_t itemId, int amount)
     {
         for (auto &slot : hotbarSlots)
         {
+            if (slot.blockedForCrafting)
+                continue;
             if (slot.item && slot.item->getId() == itemId)
             {
                 if (slot.amount >= remainingAmount)
@@ -164,12 +169,16 @@ size_t Inventory::countItemsById(size_t id)
     size_t count = 0;
     for (auto &slot : itemSlots)
     {
+        if (slot.blockedForCrafting)
+            continue;
         if (slot.item && slot.item->getId() == id)
             count += slot.amount;
     }
 
     for (auto &slot : hotbarSlots)
     {
+        if (slot.blockedForCrafting)
+            continue;
         if (slot.item && slot.item->getId() == id)
             count += slot.amount;
     }

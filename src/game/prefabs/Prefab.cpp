@@ -32,7 +32,7 @@ namespace prefabs
         animation.createFrame<std::string>(startPos, 100, std::string{"animation2"});
         animation.createFrame<std::string>(startPos, 100, std::string{"animation3"});
         animation.createFrame<std::string>(startPos, 100, std::string{"animation4"});
-        animation.play();
+
         entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
 
         auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();

@@ -14,6 +14,7 @@ namespace UI
         std::shared_ptr<graphics::Text> amountText;
         bool selected = false;
         core::ecs::Entity entity;
+        core::CheckDropCallBack additionalCheckDropCallback = nullptr;
 
     public:
         InventorySlot(Object *parent, const ItemSlot &slot, core::ecs::Entity entity);
@@ -24,6 +25,7 @@ namespace UI
 
         void render(core::Renderer *renderer) override;
         bool handleEvents(core::Input *pInput) override;
+        void setDropCallBack(core::CheckDropCallBack callback);
     };
 
 } // namespace UI

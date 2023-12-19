@@ -11,6 +11,7 @@ struct ItemSlot
     std::shared_ptr<Item> item = nullptr;
     size_t amount = 0;
     int slotId = 0;
+    bool blockedForCrafting = false;
 };
 
 typedef std::array<ItemSlot, 25> ItemSlots;
@@ -35,7 +36,7 @@ public:
     Inventory();
     ~Inventory();
     void addItem(const std::shared_ptr<Item> &item, int amount);
-    void addItem(const std::shared_ptr<Item> &item,SlotTarget slotTarget, int amount);
+    void addItem(const std::shared_ptr<Item> &item, SlotTarget slotTarget, int amount);
     void removeItemById(size_t itemId, int amount);
     ItemSlots &getItemSlots();
     HotBarSlots &getHotBarSlots();

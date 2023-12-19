@@ -3,6 +3,7 @@
 #include "translate.h"
 #include <engine/graphics/TextureManager.h>
 #include "game/services/ItemRecipeService.h"
+#include "game/services/ItemService.h"
 #include "game/components/CraftingEntity.h"
 #include <engine/core/ecs/ScriptComponent.h>
 
@@ -13,6 +14,9 @@ namespace UI
         setTitle(title);
         m_outputProgress = std::make_shared<UI::ProgressBar>(this, 200, 20);
         m_outputProgress->setPos(200, 20);
+        m_outputProgress->setMinValue(0);
+        m_outputProgress->setMaxValue(100);
+
         addObject(m_outputProgress);
         m_outputScrollArea = std::make_shared<UI::ScrollArea>(200, 200, this);
         m_outputScrollArea->setPos(200, 40);
@@ -37,21 +41,19 @@ namespace UI
         m_craftingButton->setPos(20, 260);
 
         addObject(m_craftingButton);
-        m_craftingButton->connect(UI::Button::buttonClickCallback(), [this]()
-                                  {
-                                      auto crafting = core::ecs::findScriptComponent<CraftingEntity>(m_entity);
-                                      crafting->startCrafting();
-                                      m_craftingButton->disable();
-                                      crafting->progressCallBack([this](CraftingQueueEntry &entry, bool finished)
-                                                                 {
-                                        m_outputProgress->setMinValue(0);
-                                        m_outputProgress->setMaxValue(100);
-                                        m_outputProgress->setCurrentValue(float(entry.endTime -  entry.currentTime )/ float(entry.endTime - entry.startTime) *100.f); 
-                                        this->needsRefresh();
-                                        if(finished)
-                                            m_craftingButton->enable(); }); });
+        auto craftingCallback = [this](CraftingQueueEntry &entry, bool finished)
+        {
 
-        // add input
+            m_outputProgress->setCurrentValue(float(entry.endTime -  entry.currentTime )/ float(entry.endTime - entry.startTime) *100.f); 
+            this->needsRefresh();
+            if(finished)
+                m_craftingButton->enable(); };
+        m_craftingButton->connect(UI::Button::buttonClickCallback(), [this, craftingCallback]()
+                                  {
+            auto crafting = core::ecs::findScriptComponent<CraftingEntity>(m_entity);
+            crafting->startCrafting();
+            m_craftingButton->disable();
+            crafting->progressCallBack(craftingCallback); });
     }
 
     void CraftingWindow::setEntity(core::ecs::Entity entity)
@@ -97,6 +99,14 @@ namespace UI
             addObject(m_input[pos]);
         }
 
+        auto dropCallback = [this]([[maybe_unused]] UI::Object *target, std::string &data)
+        {
+            auto result = utils::split(data, ":");
+            int id = std::stoi(result[0]);
+            auto item = services::ItemService::Instance().getItemById(id);
+            return item->getItemSubType() == ItemSubType::FUEL;
+        };
+
         for (size_t pos = 0; pos < m_fuel.size(); ++pos)
         {
             if (m_fuel[pos] != nullptr)
@@ -104,6 +114,7 @@ namespace UI
                 removeObject(m_fuel[pos]);
             }
             auto &itemSlot = inventory.getHotBarSlots().at(pos + m_input.size());
+            itemSlot.blockedForCrafting = true;
             m_fuel[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, m_entity);
             switch (pos)
             {
@@ -116,6 +127,7 @@ namespace UI
             default:
                 break;
             }
+            m_fuel[pos]->setDropCallBack(dropCallback);
 
             addObject(m_fuel[pos]);
         }

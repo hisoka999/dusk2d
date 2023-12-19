@@ -1,6 +1,6 @@
 #pragma once
-
-enum class ItemType
+#include <cstdint>
+enum class ItemType : uint8_t
 {
     WOOD,
     STONE,
@@ -10,7 +10,7 @@ enum class ItemType
     NONE
 };
 
-enum class ItemSubType
+enum class ItemSubType : uint8_t
 {
     ITEM,
     AXE,

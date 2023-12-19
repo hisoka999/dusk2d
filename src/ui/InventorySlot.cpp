@@ -14,6 +14,18 @@ namespace UI
         itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
 
         amountText = graphics::TextureManager::Instance().loadFont("fonts/arial.ttf", 12);
+        additionalCheckDropCallback = [](UI::Object *, std::string &)
+        { return true; };
+
+        core::CheckDropCallBack checkDropCallback = [this](UI::Object *target, std::string &data) -> bool
+        {
+            bool result = dynamic_cast<InventorySlot *>(target) != nullptr;
+            if (!result)
+                return false;
+
+            return this->additionalCheckDropCallback(target, data);
+        };
+        setCheckDropCallBack(checkDropCallback);
     }
 
     InventorySlot::~InventorySlot()
@@ -101,12 +113,7 @@ namespace UI
                 }
             };
 
-            core::CheckDropCallBack checkDropCallback = [](UI::Object *target) -> bool
-            {
-                return dynamic_cast<InventorySlot *>(target) != nullptr;
-            };
-
-            pInput->beginDrag(data, this, dragCallback, checkDropCallback);
+            pInput->beginDrag(data, this, dragCallback);
         }
         if (pInput->isDragActive())
         {
@@ -115,6 +122,11 @@ namespace UI
 
         Object::handleEvents(pInput);
         return eventHandled;
+    }
+
+    void InventorySlot::setDropCallBack(core::CheckDropCallBack callback)
+    {
+        additionalCheckDropCallback = callback;
     }
 
     void InventorySlot::setSelected(bool select)

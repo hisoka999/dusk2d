@@ -45,6 +45,23 @@ bool CraftingEntity::onHandleInput([[maybe_unused]] core::Input *input)
     return false;
 }
 
+bool CraftingEntity::hasFuel()
+{
+    if (remainingFuel > 0)
+        return true;
+    auto &inventory = this->getEntity().findComponent<Inventory>();
+    auto &slots = inventory.getHotBarSlots();
+    for (size_t i = 4; i < slots.size(); ++i)
+    {
+        auto &itemSlot = slots.at(i);
+        if (itemSlot.item && itemSlot.item->getItemSubType() == ItemSubType::FUEL && itemSlot.amount > 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void CraftingEntity::onUpdate(size_t delta)
 {
     if (!isCrafting)
@@ -52,7 +69,38 @@ void CraftingEntity::onUpdate(size_t delta)
 
     auto &inventory = this->getEntity().findComponent<Inventory>();
     // TODO now craft
+    if (hasFuel())
+    {
+        if (remainingFuel == 0)
+        {
+            auto &slots = inventory.getHotBarSlots();
 
+            for (size_t i = 4; i < slots.size(); ++i)
+            {
+                auto &itemSlot = slots.at(i);
+                if (itemSlot.item && itemSlot.item->getItemSubType() == ItemSubType::FUEL && itemSlot.amount > 0)
+                {
+                    remainingFuel += std::atoi(itemSlot.item->getProperty("fuel").c_str());
+                    itemSlot.amount--;
+                    if (itemSlot.amount == 0)
+                        itemSlot.item = nullptr;
+                    break;
+                }
+            }
+            refuelTime = 20000;
+        }
+
+        refuelTime -= delta;
+        if (refuelTime <= 0)
+        {
+            remainingFuel--;
+            refuelTime = 20000;
+        }
+    }
+    else
+    {
+        return;
+    }
     // move to timer
     if (craftingQueue.empty())
     {
@@ -71,12 +119,14 @@ void CraftingEntity::onUpdate(size_t delta)
         if (!added)
         {
             isCrafting = false;
-            // TODO stop animation
+            CraftingQueueEntry empty{};
+            m_progressCallback(empty, !isCrafting);
+            entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>().animation.stop();
         }
     }
     else
     {
-        auto &current = craftingQueue[0];
+        auto &current = craftingQueue.front();
 
         current.currentTime += delta;
         if (current.currentTime >= current.endTime)
@@ -85,7 +135,7 @@ void CraftingEntity::onUpdate(size_t delta)
             inventory.craftItem(current.recipe, SlotTarget::INVENTORY);
             craftingQueue.erase(craftingQueue.begin());
         }
-        m_progressCallback(current, current.currentTime >= current.endTime);
+        m_progressCallback(current, !isCrafting);
     }
 }
 
@@ -97,6 +147,8 @@ void CraftingEntity::progressCallBack(std::function<void(CraftingQueueEntry &, b
 void CraftingEntity::startCrafting()
 {
     isCrafting = true;
+
+    entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>().animation.play();
 }
 
 CraftingEntity::~CraftingEntity()

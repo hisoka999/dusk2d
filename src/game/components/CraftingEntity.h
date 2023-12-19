@@ -26,8 +26,12 @@ public:
     void progressCallBack(std::function<void(CraftingQueueEntry &, bool)> callback);
 
 private:
+    bool hasFuel();
+
     core::ecs::Entity playerEntity;
     std::vector<CraftingQueueEntry> craftingQueue;
     bool isCrafting = false;
     std::function<void(CraftingQueueEntry &, bool)> m_progressCallback;
+    int32_t remainingFuel = 0;
+    int64_t refuelTime = 0;
 };
