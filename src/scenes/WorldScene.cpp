@@ -1,6 +1,7 @@
 #include "WorldScene.h"
 #include <engine/graphics/TextureManager.h>
 #include <engine/core/ecs/Component.h>
+#include <engine/utils/string.h>
 #include "game/Sprite.h"
 #include "game/components/PlayerComponent.h"
 #include "game/components/TreeEntity.h"
@@ -219,7 +220,18 @@ namespace scenes
                 }
                 else
                 {
+                    auto data = utils::split(hit.getCollisionBlock()->blockData, ":");
                     APP_LOG_INFO("CollisionBlock: " + hit.getCollisionBlock()->blockData);
+                    if (data[0] == "tile" && data[1] == "0")
+                    {
+                        auto playerEntity = findEntityByName("player");
+                        auto &transform = playerEntity->findComponent<core::ecs::Transform>();
+                        auto &character = playerEntity->findComponent<Character>();
+                        if (transform.position.distance(hit.getPosition()) < 200)
+                        {
+                            character.getThirst().addValue(20);
+                        }
+                    }
                 }
             }
         }
