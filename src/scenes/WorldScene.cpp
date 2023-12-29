@@ -12,7 +12,7 @@
 #include "game/prefabs/Prefab.h"
 #include <engine/core/ecs/ScriptComponent.h>
 #include "game/components/Character.h"
-
+#include <engine/core/RayCastResult.h>
 namespace scenes
 {
     WorldScene::WorldScene(core::Renderer *pRenderer)
@@ -207,7 +207,21 @@ namespace scenes
 
         if (pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))
         {
-            std::cout << "tile: " << getTileOnMouse() << std::endl;
+            APP_LOG_INFO("tile: " + std::to_string(static_cast<int>(getTileOnMouse())));
+            const int tileSize = TILE_SIZE / 2;
+            auto pos = getMouseMapPos() * utils::Vector2(tileSize, tileSize);
+            auto result = raycast(pos, pos + tileSize);
+            for (auto &hit : result.hits)
+            {
+                if (hit.getEntity().has_value())
+                {
+                    APP_LOG_INFO("Entity: " + hit.getEntity()->tagName());
+                }
+                else
+                {
+                    APP_LOG_INFO("CollisionBlock: " + hit.getCollisionBlock()->blockData);
+                }
+            }
         }
 
         if (!handled && !pInput->isDragActive() && pInput->isMouseButtonPressed(SDL_BUTTON_LEFT))

@@ -22,9 +22,9 @@ GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width),
     texture = graphics::TextureManager::Instance().loadTexture("images/Tileset.png");
 }
 
-std::vector<graphics::Rect> GameMap::generateCollisionMap()
+std::vector<core::StaticCollisionBlock> GameMap::generateCollisionMap()
 {
-    std::vector<graphics::Rect> collider;
+    std::vector<core::StaticCollisionBlock> collider;
     for (size_t y = 0; y < height; ++y)
     {
         for (size_t x = 0; x < width; ++x)
@@ -33,7 +33,8 @@ std::vector<graphics::Rect> GameMap::generateCollisionMap()
             switch (tile)
             {
             case 0: // water
-                collider.push_back({float(x), float(y), 1, 1});
+                std::string blockData = "tile:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
+                collider.push_back(core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
                 break;
             }
         }

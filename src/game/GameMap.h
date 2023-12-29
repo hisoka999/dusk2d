@@ -5,6 +5,7 @@
 #include <engine/core/renderer.h>
 #include <engine/graphics/texture.h>
 #include <vector>
+#include <engine/core/StaticCollisionBlock.h>
 
 typedef uint32_t TileType;
 
@@ -26,5 +27,5 @@ public:
     TileType getTile(size_t x, size_t y);
     void render(core::Renderer *renderer);
     virtual ~GameMap();
-    std::vector<graphics::Rect> generateCollisionMap();
+    std::vector<core::StaticCollisionBlock> generateCollisionMap();
 };
