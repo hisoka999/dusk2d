@@ -2,6 +2,7 @@
 #include <engine/graphics/TextureManager.h>
 #include <engine/utils/perlinnoise.h>
 #include <cmath>
+#include <algorithm>
 
 GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width), height(height)
 {
@@ -66,9 +67,9 @@ void GameMap::render(core::Renderer *renderer)
     int yOffset = std::max(int(viewPort.y / TILE_SIZE * 2), 0);
     int renderWidth = viewPort.width / TILE_SIZE * 2;
     int renderHeight = viewPort.height / TILE_SIZE * 2;
-    for (int y = yOffset; y < yOffset + renderHeight + 2; ++y)
+    for (int y = yOffset; y < std::min(yOffset + renderHeight + 2, int(height)); ++y)
     {
-        for (int x = xOffset; x < xOffset + renderWidth + 1; ++x)
+        for (int x = xOffset; x < std::min(xOffset + renderWidth + 1, int(width)); ++x)
         {
 
             targetRect.width = TILE_SIZE / 2;
