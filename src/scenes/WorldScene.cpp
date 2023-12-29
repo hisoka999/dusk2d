@@ -26,22 +26,93 @@ namespace scenes
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
         std::mt19937 gen(seed);
-        std::uniform_int_distribution<int> dist(0, 100);
+        std::uniform_int_distribution<int> entityDistribution(0, 100);
+
+        std::uniform_int_distribution<int> xPositionDistribution(0, gameMap.getWidth());
+        std::uniform_int_distribution<int> yPositionDistribution(0, gameMap.getHeight());
 
         {
             auto entity = createEntity("mainCamera");
             entity.addComponent<core::ecs::CameraComponent>(renderer->getMainCamera());
         }
+
+        for (size_t y = 0; y < gameMap.getHeight(); ++y)
+        {
+            for (size_t x = 0; x < gameMap.getWidth(); ++x)
+            {
+                TileType tile = gameMap.getTile(x, y);
+                if (tile == 2)
+                {
+                    int value = entityDistribution(gen);
+                    std::string type = "";
+                    if (value > 5 && value <= 7)
+                    {
+                        type = "rock";
+                    }
+                    else if (value > 7 && value <= 10)
+                    {
+                        type = "wood";
+                    }
+                    else if (value <= 3)
+                    {
+                        type = "tree";
+                    }
+
+                    if (!type.empty())
+                    {
+                        auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
+                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                        prefabs::instantiateFromPrefab(entity, type, pos);
+                    }
+                }
+                else if (tile == 1)
+                {
+                    int value = entityDistribution(gen);
+                    std::string type = "";
+                    if (value > 5 && value <= 7)
+                    {
+                        type = "rock";
+                    }
+                    else if (value > 7 && value <= 10)
+                    {
+                        type = "wood";
+                    }
+
+                    if (!type.empty())
+                    {
+                        auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
+                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                        prefabs::instantiateFromPrefab(entity, type, pos);
+                    }
+                }
+                else if (tile == 3)
+                {
+                    auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
+                    auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                    prefabs::instantiateFromPrefab(entity, "mountain", pos);
+                }
+            }
+        }
+
         auto playerSprite = std::make_shared<Sprite>("images/walkcycle/BODY_male.png", 4, 9);
-        playerSprite->setPosition(renderer->getMainCamera()->getWidth() / 2.0f, renderer->getMainCamera()->getHeight() / 2.0f);
         renderer->setZoomFactor(1);
+        core::ecs::Transform playerTransform;
         {
             auto entity = createEntity("player");
-            core::ecs::Transform transform;
-            transform.position = {playerSprite->getRect().x, playerSprite->getRect().y};
-            transform.width = playerSprite->getRect().width;
-            transform.height = playerSprite->getRect().height;
-            entity.addComponent<core::ecs::Transform>(transform);
+
+            bool positionInvalid = true;
+            do
+            {
+                playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2), yPositionDistribution(gen) * (TILE_SIZE / 2));
+                playerTransform.position = playerSprite->getRect().toVecto2();
+
+                auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2), playerTransform.position.getY() / (TILE_SIZE / 2));
+                positionInvalid = tile == 0 || tile == 3;
+            } while (positionInvalid);
+
+            playerTransform.width = playerSprite->getRect().width;
+            playerTransform.height = playerSprite->getRect().height;
+            playerTransform = entity.addComponent<core::ecs::Transform>(playerTransform);
             auto textureMap = graphics::TextureManager::Instance().loadTextureMap("images/character.json");
             utils::Vector2 startPos = {0, 0};
             graphics::TextureMapAnimation animation(startPos, textureMap);
@@ -82,64 +153,6 @@ namespace scenes
 
         craftingWindow = std::make_unique<UI::CraftingWindow>(10, 200, "Crafting Window");
         winMgr->addWindow(craftingWindow.get());
-
-        for (size_t y = 0; y < gameMap.getHeight(); ++y)
-        {
-            for (size_t x = 0; x < gameMap.getWidth(); ++x)
-            {
-                TileType tile = gameMap.getTile(x, y);
-                if (tile == 2)
-                {
-                    int value = dist(gen);
-                    std::string type = "";
-                    if (value > 5 && value <= 7)
-                    {
-                        type = "rock";
-                    }
-                    else if (value > 7 && value <= 10)
-                    {
-                        type = "wood";
-                    }
-                    else if (value <= 3)
-                    {
-                        type = "tree";
-                    }
-
-                    if (!type.empty())
-                    {
-                        auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                        prefabs::instantiateFromPrefab(entity, type, pos);
-                    }
-                }
-                else if (tile == 1)
-                {
-                    int value = dist(gen);
-                    std::string type = "";
-                    if (value > 5 && value <= 7)
-                    {
-                        type = "rock";
-                    }
-                    else if (value > 7 && value <= 10)
-                    {
-                        type = "wood";
-                    }
-
-                    if (!type.empty())
-                    {
-                        auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                        prefabs::instantiateFromPrefab(entity, type, pos);
-                    }
-                }
-                else if (tile == 3)
-                {
-                    auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                    prefabs::instantiateFromPrefab(entity, "mountain", pos);
-                }
-            }
-        }
 
         addStaticBlockCollider(gameMap.generateCollisionMap());
 
