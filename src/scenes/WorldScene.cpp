@@ -22,6 +22,8 @@ namespace scenes
 
         setPixelPerMeter(32.f);
         itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        mountainTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/mountain.json");
+        mountainLayer = std::make_unique<AutotileLayer>(gameMap.getWidth(), gameMap.getHeight(), mountainTextureMap);
 
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
@@ -89,7 +91,8 @@ namespace scenes
                 {
                     auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
                     auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
-                    prefabs::instantiateFromPrefab(entity, "mountain", pos);
+                    // prefabs::instantiateFromPrefab(entity, "mountain", pos);
+                    mountainLayer->setTile(x, y, 1);
                 }
             }
         }
@@ -155,6 +158,7 @@ namespace scenes
         winMgr->addWindow(craftingWindow.get());
 
         addStaticBlockCollider(gameMap.generateCollisionMap());
+        addStaticBlockCollider(mountainLayer->generateCollisionMap());
 
         OnPhysics2DStart();
     }
@@ -166,6 +170,7 @@ namespace scenes
     void WorldScene::render()
     {
         gameMap.render(renderer);
+        mountainLayer->render(renderer);
         renderEntities(renderer);
         winMgr->render(renderer);
 
@@ -225,6 +230,10 @@ namespace scenes
             const int tileSize = TILE_SIZE / 2;
             auto pos = getMouseMapPos() * utils::Vector2(tileSize, tileSize);
             auto result = raycast(pos, pos + tileSize);
+            auto playerEntity = findEntityByName("player");
+            auto &transform = playerEntity->findComponent<core::ecs::Transform>();
+            auto &character = playerEntity->findComponent<Character>();
+
             for (auto &hit : result.hits)
             {
                 if (hit.getEntity().has_value())
@@ -235,15 +244,35 @@ namespace scenes
                 {
                     auto data = utils::split(hit.getCollisionBlock()->blockData, ":");
                     APP_LOG_INFO("CollisionBlock: " + hit.getCollisionBlock()->blockData);
+                    APP_LOG_INFO("CollisionBlock ID: " + std::to_string(hit.getCollisionBlock()->blockId));
+
                     if (data[0] == "tile" && data[1] == "0")
                     {
-                        auto playerEntity = findEntityByName("player");
-                        auto &transform = playerEntity->findComponent<core::ecs::Transform>();
-                        auto &character = playerEntity->findComponent<Character>();
+
                         if (transform.position.distance(hit.getPosition()) < 200)
                         {
                             character.getThirst().addValue(20);
                         }
+                    }
+                    else if (data[0] == "mountain" && data[1] == "1")
+                    {
+                        int x = std::atoi(data[2].c_str());
+                        int y = std::atoi(data[3].c_str());
+                        mountainLayer->setTile(x, y, 0);
+
+                        std::random_device device;
+                        std::mt19937 gen(device());
+                        std::uniform_real_distribution<double> posDist(0.0, 16.0);
+                        std::uniform_int_distribution<int> numItems(2, 5);
+
+                        for (int i = 1; i <= numItems(gen); ++i)
+                        {
+                            auto position = hit.getPosition() + utils::Vector2(posDist(gen), posDist(gen));
+                            auto itemEntity = createEntity("stone");
+
+                            prefabs::instantiateFromPrefab(itemEntity, "stone", position);
+                        }
+                        removeStaticBlockCollider(hit.getCollisionBlock()->blockData);
                     }
                 }
             }

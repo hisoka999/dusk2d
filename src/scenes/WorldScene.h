@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include "game/GameMap.h"
+#include "game/AutotileLayer.h"
 #include "ui/windows/PlayerWindow.h"
 #include "ui/windows/CraftingWindow.h"
 #include "ui/Hotbar.h"
@@ -22,6 +23,8 @@ namespace scenes
         std::unique_ptr<UI::CraftingWindow> craftingWindow;
         std::unique_ptr<UI::Hotbar> hotBar;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
+        std::shared_ptr<graphics::TextureMap> mountainTextureMap;
+        std::unique_ptr<AutotileLayer> mountainLayer;
         utils::Vector2 mousePos;
         std::unique_ptr<UI::PlayerHUD> playerHUD;
         utils::Vector2 getMouseMapPos();
