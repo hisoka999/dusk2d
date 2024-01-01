@@ -14,6 +14,7 @@
 #include <engine/core/ecs/ScriptComponent.h>
 #include "game/components/Character.h"
 #include <engine/core/RayCastResult.h>
+#include "game/RockType.h"
 namespace scenes
 {
     WorldScene::WorldScene(core::Renderer *pRenderer)
@@ -23,12 +24,19 @@ namespace scenes
         setPixelPerMeter(32.f);
         itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         mountainTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/mountain.json");
-        mountainLayer = std::make_unique<AutotileLayer>(gameMap.getWidth(), gameMap.getHeight(), mountainTextureMap);
+        coalTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/coal.json");
+        ironTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/iron.json");
+        silverTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/silver.json");
+        goldTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/gold.json");
+        std::vector<std::shared_ptr<graphics::TextureMap>> textureMaps = {
+            mountainTextureMap, coalTextureMap, ironTextureMap, silverTextureMap, goldTextureMap};
+        mountainLayer = std::make_unique<AutotileLayer>(gameMap.getWidth(), gameMap.getHeight(), textureMaps);
 
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
         std::mt19937 gen(seed);
         std::uniform_int_distribution<int> entityDistribution(0, 100);
+        std::uniform_int_distribution<int> rockDistribution(1, 100);
 
         std::uniform_int_distribution<int> xPositionDistribution(0, gameMap.getWidth());
         std::uniform_int_distribution<int> yPositionDistribution(0, gameMap.getHeight());
@@ -92,7 +100,27 @@ namespace scenes
                     auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
                     auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
                     // prefabs::instantiateFromPrefab(entity, "mountain", pos);
-                    mountainLayer->setTile(x, y, 1);
+                    auto rockPercentage = rockDistribution(gen);
+                    if (rockPercentage < 85)
+                    {
+                        mountainLayer->setTile(x, y, 1);
+                    }
+                    else if (rockPercentage < 90)
+                    {
+                        mountainLayer->setTile(x, y, 2);
+                    }
+                    else if (rockPercentage < 95)
+                    {
+                        mountainLayer->setTile(x, y, 3);
+                    }
+                    else if (rockPercentage < 97)
+                    {
+                        mountainLayer->setTile(x, y, 4);
+                    }
+                    else if (rockPercentage < 100)
+                    {
+                        mountainLayer->setTile(x, y, 5);
+                    }
                 }
             }
         }
@@ -254,23 +282,44 @@ namespace scenes
                             character.getThirst().addValue(20);
                         }
                     }
-                    else if (data[0] == "mountain" && data[1] == "1")
+                    else if (data[0] == "mountain" && data[1] != "0")
                     {
                         int x = std::atoi(data[2].c_str());
                         int y = std::atoi(data[3].c_str());
                         mountainLayer->setTile(x, y, 0);
+                        RockType rockType = static_cast<RockType>(std::atoi(data[1].c_str()));
 
                         std::random_device device;
                         std::mt19937 gen(device());
                         std::uniform_real_distribution<double> posDist(0.0, 16.0);
                         std::uniform_int_distribution<int> numItems(2, 5);
+                        std::string entityName = "stone";
+                        switch (rockType)
+                        {
+                        case RockType::Rock:
+                            break;
+                        case RockType::Iron:
+                            entityName = "iron";
+                            break;
+                        case RockType::Coal:
+                            entityName = "coal";
+                            break;
+                        case RockType::Gold:
+                            entityName = "gold";
+                            break;
+                        case RockType::Silver:
+                            entityName = "silver";
+                            break;
+                        default:
+                            break;
+                        }
 
                         for (int i = 1; i <= numItems(gen); ++i)
                         {
                             auto position = hit.getPosition() + utils::Vector2(posDist(gen), posDist(gen));
-                            auto itemEntity = createEntity("stone");
+                            auto itemEntity = createEntity(entityName);
 
-                            prefabs::instantiateFromPrefab(itemEntity, "stone", position);
+                            prefabs::instantiateFromPrefab(itemEntity, entityName, position);
                         }
                         removeStaticBlockCollider(hit.getCollisionBlock()->blockData);
                     }

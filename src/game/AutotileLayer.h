@@ -13,12 +13,12 @@ private:
     size_t height;
     std::vector<uint8_t> tiles;
     std::vector<size_t> indexes;
-    std::shared_ptr<graphics::TextureMap> textureMap;
+    std::vector<std::shared_ptr<graphics::TextureMap>> textureMaps;
     size_t calculateIndex(size_t x, size_t y, uint8_t tile);
     constexpr size_t getTileId(const size_t x, const size_t y);
 
 public:
-    AutotileLayer(size_t width, size_t height, std::shared_ptr<graphics::TextureMap> &textureMap);
+    AutotileLayer(size_t width, size_t height, std::vector<std::shared_ptr<graphics::TextureMap>> &textureMaps);
     ~AutotileLayer();
     void setTile(size_t x, size_t y, uint8_t tile);
     uint8_t getTile(size_t x, size_t y);

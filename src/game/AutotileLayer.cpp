@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "GameMap.h"
 
-AutotileLayer::AutotileLayer(size_t width, size_t height, std::shared_ptr<graphics::TextureMap> &textureMap) : width(width), height(height), textureMap(textureMap)
+AutotileLayer::AutotileLayer(size_t width, size_t height, std::vector<std::shared_ptr<graphics::TextureMap>> &textureMaps) : width(width), height(height), textureMaps(textureMaps)
 {
     tiles.resize(width * height, 0);
     indexes.resize(width * height, 0);
@@ -121,10 +121,11 @@ void AutotileLayer::render(core::Renderer *renderer)
 
             targetRect.width = TILE_SIZE / 2;
             targetRect.height = TILE_SIZE / 2;
+            const auto tileId = tiles[(y * width) + x];
             if (tiles[(y * width) + x] == 0)
                 continue;
 
-            auto tile = indexes[(y * width) + x];
+            const auto tileIndice = indexes[(y * width) + x];
 
             targetRect.x = (x * TILE_SIZE / 2);
             targetRect.y = (y * TILE_SIZE / 2);
@@ -132,7 +133,7 @@ void AutotileLayer::render(core::Renderer *renderer)
             //     continue;
             targetRect.x -= renderer->getMainCamera()->getX();
             targetRect.y -= renderer->getMainCamera()->getY();
-            textureMap->render(tile, targetRect, renderer);
+            textureMaps[tileId - 1]->render(tileIndice, targetRect, renderer);
         }
     }
 }
@@ -148,6 +149,10 @@ std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap()
             switch (tile)
             {
             case 1: // filled
+            case 2:
+            case 3:
+            case 4:
+            case 5:
                 std::string blockData = "mountain:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
                 collider.push_back(core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
                 break;

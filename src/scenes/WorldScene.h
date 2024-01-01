@@ -24,6 +24,10 @@ namespace scenes
         std::unique_ptr<UI::Hotbar> hotBar;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         std::shared_ptr<graphics::TextureMap> mountainTextureMap;
+        std::shared_ptr<graphics::TextureMap> coalTextureMap;
+        std::shared_ptr<graphics::TextureMap> ironTextureMap;
+        std::shared_ptr<graphics::TextureMap> silverTextureMap;
+        std::shared_ptr<graphics::TextureMap> goldTextureMap;
         std::unique_ptr<AutotileLayer> mountainLayer;
         utils::Vector2 mousePos;
         std::unique_ptr<UI::PlayerHUD> playerHUD;

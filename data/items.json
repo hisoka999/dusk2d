@@ -69,5 +69,40 @@
         "data": {
             "fuel": "20"
         }
+    },
+    {
+        "id": 9,
+        "type": "STONE",
+        "subType": "FUEL",
+        "name": "Coal",
+        "subTextureName": "coal",
+        "prefab": "coal",
+        "data": {
+            "fuel": "20"
+        }
+    },
+    {
+        "id": 10,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Iron",
+        "subTextureName": "iron",
+        "prefab": "iron"
+    },
+    {
+        "id": 11,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Silver",
+        "subTextureName": "silver",
+        "prefab": "silver"
+    },
+    {
+        "id": 12,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Gold",
+        "subTextureName": "gold",
+        "prefab": "gold"
     }
 ]
