@@ -261,6 +261,8 @@ namespace scenes
             auto playerEntity = findEntityByName("player");
             auto &transform = playerEntity->findComponent<core::ecs::Transform>();
             auto &character = playerEntity->findComponent<Character>();
+            auto &inventory = playerEntity->findComponent<Inventory>();
+            auto &selectedHotbarSlot = inventory.getSelectedHotbarSlot();
 
             for (auto &hit : result.hits)
             {
@@ -282,7 +284,7 @@ namespace scenes
                             character.getThirst().addValue(20);
                         }
                     }
-                    else if (data[0] == "mountain" && data[1] != "0")
+                    else if (data[0] == "mountain" && data[1] != "0" && selectedHotbarSlot.item && selectedHotbarSlot.item->getItemSubType() == ItemSubType::PICK_AXE)
                     {
                         int x = std::atoi(data[2].c_str());
                         int y = std::atoi(data[3].c_str());

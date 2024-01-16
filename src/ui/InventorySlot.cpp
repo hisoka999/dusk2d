@@ -98,8 +98,8 @@ namespace UI
                     }
                     else
                     {
-                        targetSlot->slot.amount = std::stoi(result[1]);
                         this->slot.amount = targetSlot->slot.amount;
+                        targetSlot->slot.amount = std::stoi(result[1]);
                         this->slot.item = targetSlot->slot.item;
                         if (!this->slot.item)
                         {
