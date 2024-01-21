@@ -24,6 +24,8 @@ public:
     void onUpdate(size_t delta) override;
     void startCrafting();
     void progressCallBack(std::function<void(CraftingQueueEntry &, bool)> callback);
+    void setRecipeTarget(RecipeTarget target);
+    void onClick(int button) override;
 
 private:
     bool hasFuel();
@@ -34,4 +36,5 @@ private:
     std::function<void(CraftingQueueEntry &, bool)> m_progressCallback;
     int32_t remainingFuel = 0;
     int64_t refuelTime = 0;
+    RecipeTarget recipeTarget = RecipeTarget::CAMPFIRE;
 };

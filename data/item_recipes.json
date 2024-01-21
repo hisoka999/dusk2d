@@ -72,13 +72,88 @@
         ]
     },
     {
-        "id": 2,
+        "id": 6,
         "title": "Charcoal",
         "description": "TODO",
         "amount": 1,
         "outputId": 8,
         "craftingTime": 10,
         "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 1,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Furnace",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 13,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
+        "input": [
+            {
+                "itemId": 2,
+                "amount": 10
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Iron Bar",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 16,
+        "craftingTime": 15,
+        "recipeTarget": "FURNACE",
+        "input": [
+            {
+                "itemId": 10,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "title": "Silver Bar",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 14,
+        "craftingTime": 10,
+        "recipeTarget": "FURNACE",
+        "input": [
+            {
+                "itemId": 11,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "title": "Gold Bar",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 15,
+        "craftingTime": 10,
+        "recipeTarget": "FURNACE",
+        "input": [
+            {
+                "itemId": 12,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Charcoal",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 8,
+        "craftingTime": 5,
+        "recipeTarget": "FURNACE",
         "input": [
             {
                 "itemId": 1,

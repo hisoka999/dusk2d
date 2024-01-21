@@ -12,6 +12,7 @@ public:
     RockEntity();
     ~RockEntity();
     bool onHandleInput(core::Input *input) override;
+    void onClick(int button) override;
     virtual void beginCollision(const core::ecs::Collision &collider);
     virtual void endCollision(const core::ecs::Collision &collider);
     void setMinItemSpawn(int spawn);

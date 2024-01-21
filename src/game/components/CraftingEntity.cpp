@@ -25,24 +25,44 @@ void CraftingEntity::endCollision([[maybe_unused]] const core::ecs::Collision &c
     playerEntity = {};
 }
 
-bool CraftingEntity::onHandleInput([[maybe_unused]] core::Input *input)
+void CraftingEntity::onClick(int button)
 {
-    if (input->isMouseButtonPressed(SDL_BUTTON_LEFT) && playerEntity)
+    if (button == SDL_BUTTON_LEFT)
     {
         auto craftingWindow = getEntity().getScene()->getWindowManager()->findContainer<UI::CraftingWindow>();
         auto playerWindow = getEntity().getScene()->getWindowManager()->findContainer<UI::PlayerWindow>();
         playerWindow->setVisible(true);
         craftingWindow->setVisible(true);
         craftingWindow->setEntity(this->getEntity());
-        craftingWindow->setTitle(_("Campfire"));
-        playerWindow->setPos(craftingWindow->getX() + craftingWindow->getWidth() + 20, craftingWindow->getY());
-        // auto &inventory = playerEntity.findComponent<Inventory>();
-        //  inventory.addItem()
+        switch (recipeTarget)
+        {
+        case RecipeTarget::CAMPFIRE:
+            craftingWindow->setTitle(_("Campfire"));
+            break;
+        case RecipeTarget::FURNACE:
+            craftingWindow->setTitle(_("Furnace"));
+            break;
+        default:
+            break;
+        }
 
-        // this->entity.getScene()->destoryEntity(entity);
+        playerWindow->setPos(craftingWindow->getX() + craftingWindow->getWidth() + 20, craftingWindow->getY());
+    }
+}
+
+bool CraftingEntity::onHandleInput([[maybe_unused]] core::Input *input)
+{
+    if (input->isMouseButtonPressed(SDL_BUTTON_LEFT) && playerEntity)
+    {
+        onClick(SDL_BUTTON_LEFT);
     }
 
     return false;
+}
+
+void CraftingEntity::setRecipeTarget(RecipeTarget target)
+{
+    recipeTarget = target;
 }
 
 bool CraftingEntity::hasFuel()
@@ -105,7 +125,7 @@ void CraftingEntity::onUpdate(size_t delta)
     if (craftingQueue.empty())
     {
         bool added = false;
-        for (auto recipe : services::ItemRecipeService::Instance().findByRecipeTarget(RecipeTarget::CAMPFIRE))
+        for (auto recipe : services::ItemRecipeService::Instance().findByRecipeTarget(recipeTarget))
         {
             if (inventory.canCraftRecipe(recipe))
             {

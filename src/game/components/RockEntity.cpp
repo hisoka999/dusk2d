@@ -14,7 +14,26 @@ RockEntity::RockEntity() : minItemSpawn(0), maxItemSpawn(2)
 RockEntity::~RockEntity()
 {
 }
+void RockEntity::onClick(int button) {
+    if(button == SDL_BUTTON_LEFT) {
+        auto &transform = entity.findComponent<core::ecs::Transform>();
 
+        std::random_device device;
+        std::mt19937 gen(device());
+        std::uniform_real_distribution<double> posDist(0.0, 16.0);
+        std::uniform_int_distribution<int> numItems(minItemSpawn, maxItemSpawn);
+
+        for (int i = 1; i <= numItems(gen); ++i)
+        {
+            auto position = transform.position + utils::Vector2(posDist(gen), posDist(gen));
+            auto itemEntity = entity.getScene()->createEntity("stone");
+
+            prefabs::instantiateFromPrefab(itemEntity, "stone", position);
+        }
+
+        entity.getScene()->destoryEntity(entity);
+    }
+}
 bool RockEntity::onHandleInput(core::Input *input)
 {
     if (input->isKeyDown("INPUT") && playerEntity.compareTag("player"))

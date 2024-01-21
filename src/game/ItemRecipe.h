@@ -8,7 +8,7 @@ enum class RecipeTarget
 {
     INVENTORY,
     CAMPFIRE,
-    FURNANCE,
+    FURNACE,
 };
 
 class ItemRecipe

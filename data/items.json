@@ -85,24 +85,56 @@
         "id": 10,
         "type": "STONE",
         "subType": "ITEM",
-        "name": "Iron",
-        "subTextureName": "iron",
-        "prefab": "iron"
+        "name": "Iron Ore",
+        "subTextureName": "iron_ore",
+        "prefab": "iron_ore"
     },
     {
         "id": 11,
         "type": "STONE",
         "subType": "ITEM",
-        "name": "Silver",
-        "subTextureName": "silver",
-        "prefab": "silver"
+        "name": "Silver Ore",
+        "subTextureName": "silver_ore",
+        "prefab": "silver_ore"
     },
     {
         "id": 12,
         "type": "STONE",
         "subType": "ITEM",
-        "name": "Gold",
-        "subTextureName": "gold",
-        "prefab": "gold"
+        "name": "Gold Ore",
+        "subTextureName": "gold_ore",
+        "prefab": "gold_ore"
+    },
+    {
+        "id": 13,
+        "type": "PLACEABLE",
+        "subType": "ITEM",
+        "name": "Furnace",
+        "subTextureName": "furnace",
+        "prefab": "furnace"
+    },
+    {
+        "id": 14,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Silver Bar",
+        "subTextureName": "silver_bar",
+        "prefab": "silver_bar"
+    },
+    {
+        "id": 15,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Gold Bar",
+        "subTextureName": "gold_bar",
+        "prefab": "gold_bar"
+    },
+    {
+        "id": 16,
+        "type": "STONE",
+        "subType": "ITEM",
+        "name": "Iron Bar",
+        "subTextureName": "iron_bar",
+        "prefab": "iron_bar"
     }
 ]

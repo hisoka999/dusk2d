@@ -269,6 +269,12 @@ namespace scenes
                 if (hit.getEntity().has_value())
                 {
                     APP_LOG_INFO("Entity: " + hit.getEntity()->tagName());
+
+                    auto &list = hit.getEntity()->findComponent<core::ecs::ScriptComponentList>();
+                    for (auto &script : list.components)
+                    {
+                        script.Instance->onClick(SDL_BUTTON_LEFT);
+                    }
                 }
                 else
                 {
@@ -301,16 +307,16 @@ namespace scenes
                         case RockType::Rock:
                             break;
                         case RockType::Iron:
-                            entityName = "iron";
+                            entityName = "iron_ore";
                             break;
                         case RockType::Coal:
                             entityName = "coal";
                             break;
                         case RockType::Gold:
-                            entityName = "gold";
+                            entityName = "gold_ore";
                             break;
                         case RockType::Silver:
-                            entityName = "silver";
+                            entityName = "silver_ore";
                             break;
                         default:
                             break;

@@ -11,6 +11,7 @@ public:
     TreeEntity();
     ~TreeEntity();
     bool onHandleInput(core::Input *input) override;
-    virtual void beginCollision(const core::ecs::Collision &collider);
-    virtual void endCollision(const core::ecs::Collision &collider);
+    virtual void beginCollision(const core::ecs::Collision &collider) override;
+    virtual void endCollision(const core::ecs::Collision &collider) override;
+    void onClick(int button) override;
 };

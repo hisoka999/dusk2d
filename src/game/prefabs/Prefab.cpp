@@ -49,11 +49,50 @@ namespace prefabs
         entity.addComponent<Inventory>();
 
         core::ecs::addScriptComponent<CraftingEntity>(entity);
-        core::ecs::addScriptComponent<ItemEntity>(entity);
 
         auto &itemScript = core::ecs::addScriptComponent<ItemEntity>(entity);
         ((ItemEntity *)itemScript.Instance)->setTypeOfItemDestruction(TypeOfItemDestruction::RightClick);
         auto item = services::ItemService::Instance().getItemByName("Campfire");
+        ((ItemEntity *)itemScript.Instance)->setItem(item);
+    }
+
+    void createFurnace(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+
+        core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
+        transform.position = position;
+        auto &textureMap = graphics::TextureManager::Instance().loadTextureMap("images/furnace.json");
+
+        transform.width = textureMap->getChildTexture("animation1")->getRect().width;
+        transform.height = textureMap->getChildTexture("animation1")->getRect().height;
+        utils::Vector2 startPos = {.0f, .0f};
+        graphics::TextureMapAnimation animation(startPos, textureMap);
+        animation.setRepeating(-1);
+        animation.createFrame<std::string>(startPos, 100, std::string{"animation1"});
+        animation.createFrame<std::string>(startPos, 100, std::string{"animation2"});
+        animation.createFrame<std::string>(startPos, 100, std::string{"animation3"});
+
+        entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Static;
+        rb2d.FixedRotation = true;
+        collider.Density = 1.f;
+        collider.Friction = 0;
+        collider.Restitution = 0.0;
+        collider.RestitutionThreshold = 0.0;
+        collider.Offset = {1.f, 2.0f};
+        collider.Size = {2.f, 1.f};
+
+        entity.addComponent<Inventory>();
+
+        auto &craftingScript = core::ecs::addScriptComponent<CraftingEntity>(entity);
+        static_cast<CraftingEntity *>(craftingScript.Instance)->setRecipeTarget(RecipeTarget::FURNACE);
+
+        auto &itemScript = core::ecs::addScriptComponent<ItemEntity>(entity);
+        ((ItemEntity *)itemScript.Instance)->setTypeOfItemDestruction(TypeOfItemDestruction::RightClick);
+        auto item = services::ItemService::Instance().getItemByName("Furnace");
         ((ItemEntity *)itemScript.Instance)->setItem(item);
     }
 
@@ -174,10 +213,10 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    void createIron(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createIronOre(core::ecs::Entity &entity, utils::Vector2 &position)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
-        auto childTexture = itemTextureMap->getChildTexture("iron");
+        auto childTexture = itemTextureMap->getChildTexture("iron_ore");
         core::ecs::Transform itemTransform;
         itemTransform.position = position;
         itemTransform.width = childTexture->getRect().width;
@@ -194,13 +233,85 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
-        auto item = services::ItemService::Instance().getItemByName("Iron");
+        auto item = services::ItemService::Instance().getItemByName("Iron Ore");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+    void createSilverOre(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture("silver_ore");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = services::ItemService::Instance().getItemByName("Silver Ore");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+    void createGoldOre(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture("gold_ore");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = services::ItemService::Instance().getItemByName("Gold Ore");
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+
+    void createIron(core::ecs::Entity &entity, utils::Vector2 &position)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto item = services::ItemService::Instance().getItemByName("Iron Bar");
+        auto childTexture = itemTextureMap->getChildTexture(item->getSubTextureName());
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+
         ((ItemEntity *)script.Instance)->setItem(item);
     }
     void createSilver(core::ecs::Entity &entity, utils::Vector2 &position)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
-        auto childTexture = itemTextureMap->getChildTexture("silver");
+        auto item = services::ItemService::Instance().getItemByName("Silver Bar");
+        auto childTexture = itemTextureMap->getChildTexture(item->getSubTextureName());
         core::ecs::Transform itemTransform;
         itemTransform.position = position;
         itemTransform.width = childTexture->getRect().width;
@@ -217,13 +328,13 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
-        auto item = services::ItemService::Instance().getItemByName("Silver");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
     void createGold(core::ecs::Entity &entity, utils::Vector2 &position)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
-        auto childTexture = itemTextureMap->getChildTexture("gold");
+        auto item = services::ItemService::Instance().getItemByName("Gold Bar");
+        auto childTexture = itemTextureMap->getChildTexture(item->getSubTextureName());
         core::ecs::Transform itemTransform;
         itemTransform.position = position;
         itemTransform.width = childTexture->getRect().width;
@@ -240,7 +351,7 @@ namespace prefabs
         entity.addComponent<core::ecs::RenderComponent>(childTexture);
 
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
-        auto item = services::ItemService::Instance().getItemByName("Gold");
+
         ((ItemEntity *)script.Instance)->setItem(item);
     }
     void createCoal(core::ecs::Entity &entity, utils::Vector2 &position)
@@ -291,8 +402,12 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
+    // clang-format off
     static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {
-        {"campfire"s, createCampfire}, {"tree"s, createTree}, {"mountain"s, createMountain}, {"rock"s, createRock}, {"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}, {"iron"s, createIron}, {"coal"s, createCoal}, {"silver"s, createSilver}, {"gold"s, createGold}};
+        {"campfire"s, createCampfire}, {"tree"s, createTree}, {"mountain"s, createMountain}, {"rock"s, createRock}
+        ,{"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}, {"coal"s, createCoal}
+        ,{"iron_ore"s, createIronOre}, {"silver_ore"s, createSilverOre}, {"gold_ore"s, createGoldOre}, {"furnace", createFurnace}
+        ,{"iron_bar"s, createIron}, {"silver_bar"s, createSilver}, {"gold_bar"s, createGold}};
 
     void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
     {
@@ -305,4 +420,6 @@ namespace prefabs
             throw std::runtime_error("the prefab with the name " + prefabName + " does not exist!");
         }
     }
+    // clang-format on
+
 } // namespace prefabs
