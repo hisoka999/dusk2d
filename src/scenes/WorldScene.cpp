@@ -18,7 +18,7 @@
 namespace scenes
 {
     WorldScene::WorldScene(core::Renderer *pRenderer)
-        : core::Scene(pRenderer), gameMap(100, 100, std::chrono::system_clock::now().time_since_epoch().count())
+        : core::Scene(pRenderer), gameMap(200, 200, std::chrono::system_clock::now().time_since_epoch().count())
     {
 
         setPixelPerMeter(32.f);
@@ -135,7 +135,7 @@ namespace scenes
             do
             {
                 playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2), yPositionDistribution(gen) * (TILE_SIZE / 2));
-                playerTransform.position = playerSprite->getRect().toVecto2();
+                playerTransform.position = playerSprite->getRect().toVector2();
 
                 auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2), playerTransform.position.getY() / (TILE_SIZE / 2));
                 positionInvalid = tile == 0 || tile == 3;
@@ -215,9 +215,10 @@ namespace scenes
         if (!winMgr->isWindowOpen())
         {
             const int tileSize = TILE_SIZE / 2;
-            auto camera = renderer->getMainCamera()->getPosition();
-            auto cameraOffset = utils::Vector2{camera.getX() - (std::floor(camera.getX() / tileSize) * tileSize), camera.getY() - (std::floor(camera.getY() / tileSize) * tileSize)};
-            graphics::Rect r{std::floor(mousePos.getX() / tileSize) * tileSize - cameraOffset.getX(), std::floor(mousePos.getY() / tileSize) * tileSize - cameraOffset.getY(), tileSize, tileSize};
+            auto pos = (getMouseMapPos() * utils::Vector2(tileSize, tileSize)) - renderer->getMainCamera()->getPosition();
+
+            graphics::Rect r{pos.getX(), pos.getY(), tileSize, tileSize};
+
             renderer->drawRect(r);
         }
     }
@@ -226,8 +227,8 @@ namespace scenes
     {
         const int tileSize = TILE_SIZE / 2;
         auto camera = renderer->getMainCamera()->getPosition();
-        auto cameraOffset = utils::Vector2{(std::floor(camera.getX() / tileSize)), (std::floor(camera.getY() / tileSize))};
-        return {std::floor(mousePos.getX() / tileSize) + cameraOffset.getX(), std::floor(mousePos.getY() / tileSize) + cameraOffset.getY()};
+        auto cameraOffset = utils::Vector2{(std::round(camera.getX() / tileSize)), (std::round(camera.getY() / tileSize))};
+        return {std::round(mousePos.getX() / tileSize) + cameraOffset.getX(), std::round(mousePos.getY() / tileSize) + cameraOffset.getY()};
     }
 
     TileType WorldScene::getTileOnMouse()
@@ -257,7 +258,11 @@ namespace scenes
             APP_LOG_INFO("tile: " + std::to_string(static_cast<int>(getTileOnMouse())));
             const int tileSize = TILE_SIZE / 2;
             auto pos = getMouseMapPos() * utils::Vector2(tileSize, tileSize);
-            auto result = raycast(pos, pos + tileSize);
+            auto endPos = pos + (tileSize);
+            APP_LOG_ERROR("raycast start %.2f,%.2f", pos.getX(), pos.getY());
+            APP_LOG_ERROR("raycast end %.2f,%.2f", endPos.getX(), endPos.getY());
+
+            auto result = raycast(pos - 1, endPos);
             auto playerEntity = findEntityByName("player");
             auto &transform = playerEntity->findComponent<core::ecs::Transform>();
             auto &character = playerEntity->findComponent<Character>();
@@ -345,8 +350,12 @@ namespace scenes
                 auto entity = createEntity(slot.item->getName());
                 auto playerEntity = findEntityByName("player");
                 auto &transform = playerEntity->findComponent<core::ecs::Transform>();
+                const int tileSize = TILE_SIZE / 2;
+
+                auto pos = getMouseMapPos() * utils::Vector2(tileSize, tileSize);
+
                 APP_LOG_ERROR("position for new entity %.2f,%.2f", transform.position.getX(), transform.position.getY());
-                prefabs::instantiateFromPrefab(entity, slot.item->getPrefab(), transform.position);
+                prefabs::instantiateFromPrefab(entity, slot.item->getPrefab(), pos);
                 auto &inventory = playerEntity->findComponent<Inventory>();
                 inventory.removeItemById(slot.item->getId(), slot.amount);
             }

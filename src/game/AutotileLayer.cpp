@@ -92,17 +92,26 @@ constexpr size_t AutotileLayer::getTileId(const size_t x, const size_t y)
 }
 uint8_t AutotileLayer::getTile(size_t x, size_t y)
 {
-    return tiles[getTileId(x, y)];
+    const auto id = getTileId(x, y);
+    if (id >= width * height)
+    {
+        return 0;
+    }
+    return tiles[id];
 }
 void AutotileLayer::setTile(size_t x, size_t y, uint8_t tile)
 {
     const auto id = getTileId(x, y);
     tiles[id] = tile;
     indexes[id] = calculateIndex(x, y, tile);
-    indexes[getTileId(x - 1, y)] = calculateIndex(x - 1, y, getTile(x - 1, y));
-    indexes[getTileId(x + 1, y)] = calculateIndex(x + 1, y, getTile(x + 1, y));
-    indexes[getTileId(x, y - 1)] = calculateIndex(x, y - 1, getTile(x, y - 1));
-    indexes[getTileId(x, y + 1)] = calculateIndex(x, y + 1, getTile(x, y + 1));
+    if (x > 0)
+        indexes[getTileId(x - 1, y)] = calculateIndex(x - 1, y, getTile(x - 1, y));
+    if (x + 1 < width)
+        indexes[getTileId(x + 1, y)] = calculateIndex(x + 1, y, getTile(x + 1, y));
+    if (y > 0)
+        indexes[getTileId(x, y - 1)] = calculateIndex(x, y - 1, getTile(x, y - 1));
+    if (y + 1 < height)
+        indexes[getTileId(x, y + 1)] = calculateIndex(x, y + 1, getTile(x, y + 1));
 }
 
 void AutotileLayer::render(core::Renderer *renderer)
