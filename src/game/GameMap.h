@@ -27,5 +27,5 @@ public:
     TileType getTile(size_t x, size_t y);
     void render(core::Renderer *renderer);
     virtual ~GameMap();
-    std::vector<core::StaticCollisionBlock> generateCollisionMap();
+    std::vector<core::StaticCollisionBlock> generateCollisionMap() const;
 };

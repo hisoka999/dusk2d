@@ -141,7 +141,9 @@ void CraftingEntity::onUpdate(size_t delta)
             isCrafting = false;
             CraftingQueueEntry empty{};
             m_progressCallback(empty, !isCrafting);
-            entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>().animation.stop();
+            auto &component = entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
+            component.animator.currentAnimation().stop();
+            component.animator.setCurrentAnimation("idle");
         }
     }
     else
@@ -168,7 +170,10 @@ void CraftingEntity::startCrafting()
 {
     isCrafting = true;
 
-    entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>().animation.play();
+    auto &component = entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
+    component.animator.currentAnimation().stop();
+    component.animator.setCurrentAnimation("active");
+    component.animator.currentAnimation().play();
 }
 
 CraftingEntity::~CraftingEntity()

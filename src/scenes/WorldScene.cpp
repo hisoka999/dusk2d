@@ -4,8 +4,6 @@
 #include <engine/utils/string.h>
 #include "game/Sprite.h"
 #include "game/components/PlayerComponent.h"
-#include "game/components/TreeEntity.h"
-#include "game/components/RockEntity.h"
 #include <chrono>
 #include <random>
 #include "game/Inventory.h"
@@ -54,7 +52,7 @@ namespace scenes
                 if (tile == 2)
                 {
                     int value = entityDistribution(gen);
-                    std::string type = "";
+                    std::string type;
                     if (value > 5 && value <= 7)
                     {
                         type = "rock";
@@ -71,7 +69,7 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
                         prefabs::instantiateFromPrefab(entity, type, pos);
                     }
                 }
@@ -91,14 +89,14 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
                         prefabs::instantiateFromPrefab(entity, type, pos);
                     }
                 }
                 else if (tile == 3)
                 {
                     auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    auto pos = utils::Vector2{float(x * TILE_SIZE / 2), float(y * TILE_SIZE / 2)};
+                    auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
                     // prefabs::instantiateFromPrefab(entity, "mountain", pos);
                     auto rockPercentage = rockDistribution(gen);
                     if (rockPercentage < 85)
@@ -146,6 +144,7 @@ namespace scenes
             playerTransform = entity.addComponent<core::ecs::Transform>(playerTransform);
             auto textureMap = graphics::TextureManager::Instance().loadTextureMap("images/character.json");
             utils::Vector2 startPos = {0, 0};
+            graphics::TextureMapAnimator animator;
             graphics::TextureMapAnimation animation(startPos, textureMap);
             animation.setRepeating(-1);
             animation.createFrame<std::string>(startPos, 50, std::string{"left1"});
@@ -157,7 +156,9 @@ namespace scenes
             animation.createFrame<std::string>(startPos, 50, std::string{"left7"});
             animation.createFrame<std::string>(startPos, 50, std::string{"left8"});
             animation.createFrame<std::string>(startPos, 50, std::string{"left9"});
-            entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
+            animator.addAnimation("left", animation);
+            animator.setCurrentAnimation("left");
+            entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animator);
             core::ecs::addScriptComponent<PlayerComponent>(entity);
             auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
             auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
@@ -215,7 +216,7 @@ namespace scenes
         if (!winMgr->isWindowOpen())
         {
             const int tileSize = TILE_SIZE / 2;
-            auto pos = (getMouseMapPos() * utils::Vector2(tileSize, tileSize)) - renderer->getMainCamera()->getPosition();
+            const auto pos = (getMouseMapPos() * utils::Vector2(tileSize, tileSize)) - renderer->getMainCamera()->getPosition();
 
             graphics::Rect r{pos.getX(), pos.getY(), tileSize, tileSize};
 
@@ -223,11 +224,11 @@ namespace scenes
         }
     }
 
-    utils::Vector2 WorldScene::getMouseMapPos()
+    utils::Vector2 WorldScene::getMouseMapPos() const
     {
-        const int tileSize = TILE_SIZE / 2;
-        auto camera = renderer->getMainCamera()->getPosition();
-        auto cameraOffset = utils::Vector2{(std::round(camera.getX() / tileSize)), (std::round(camera.getY() / tileSize))};
+        constexpr int tileSize = TILE_SIZE / 2;
+        const auto camera = renderer->getMainCamera()->getPosition();
+        const auto cameraOffset = utils::Vector2{(std::round(camera.getX() / tileSize)), (std::round(camera.getY() / tileSize))};
         return {std::round(mousePos.getX() / tileSize) + cameraOffset.getX(), std::round(mousePos.getY() / tileSize) + cameraOffset.getY()};
     }
 
@@ -297,14 +298,14 @@ namespace scenes
                     }
                     else if (data[0] == "mountain" && data[1] != "0" && selectedHotbarSlot.item && selectedHotbarSlot.item->getItemSubType() == ItemSubType::PICK_AXE)
                     {
-                        int x = std::atoi(data[2].c_str());
-                        int y = std::atoi(data[3].c_str());
+                        size_t x = std::strtol(data[2].c_str(),nullptr,10);
+                        size_t y = std::strtol(data[3].c_str(),nullptr,10);
                         mountainLayer->setTile(x, y, 0);
-                        RockType rockType = static_cast<RockType>(std::atoi(data[1].c_str()));
+                        auto rockType = static_cast<RockType>(std::strtol(data[1].c_str(),nullptr,10));
 
                         std::random_device device;
                         std::mt19937 gen(device());
-                        std::uniform_real_distribution<double> posDist(0.0, 16.0);
+                        std::uniform_real_distribution<float> posDist(0.0, 16.0);
                         std::uniform_int_distribution<int> numItems(2, 5);
                         std::string entityName = "stone";
                         switch (rockType)

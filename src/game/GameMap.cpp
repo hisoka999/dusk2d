@@ -1,8 +1,8 @@
 #include "GameMap.h"
+#include <algorithm>
+#include <cmath>
 #include <engine/graphics/TextureManager.h>
 #include <engine/utils/perlinnoise.h>
-#include <cmath>
-#include <algorithm>
 
 GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width), height(height)
 {
@@ -23,7 +23,7 @@ GameMap::GameMap(size_t width, size_t height, unsigned int seed) : width(width),
     texture = graphics::TextureManager::Instance().loadTexture("images/Tileset.png");
 }
 
-std::vector<core::StaticCollisionBlock> GameMap::generateCollisionMap()
+std::vector<core::StaticCollisionBlock> GameMap::generateCollisionMap() const
 {
     std::vector<core::StaticCollisionBlock> collider;
     for (size_t y = 0; y < height; ++y)
@@ -33,30 +33,23 @@ std::vector<core::StaticCollisionBlock> GameMap::generateCollisionMap()
             auto tile = tiles[(y * width) + x];
             switch (tile)
             {
-            case 0: // water
-                std::string blockData = "tile:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
-                collider.push_back(core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
-                break;
+                case 0: // water
+                    std::string blockData =
+                            "tile:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
+                    collider.push_back(
+                            core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
+                    break;
             }
         }
     }
     return collider;
 }
 
-size_t GameMap::getWidth()
-{
-    return width;
-}
+size_t GameMap::getWidth() { return width; }
 
-size_t GameMap::getHeight()
-{
-    return height;
-}
+size_t GameMap::getHeight() { return height; }
 
-TileType GameMap::getTile(size_t x, size_t y)
-{
-    return tiles[(y * width) + x];
-}
+TileType GameMap::getTile(size_t x, size_t y) { return tiles[(y * width) + x]; }
 
 void GameMap::render(core::Renderer *renderer)
 {
@@ -93,7 +86,4 @@ void GameMap::render(core::Renderer *renderer)
     }
 }
 
-GameMap::~GameMap()
-{
-    delete tiles;
-}
+GameMap::~GameMap() { delete tiles; }

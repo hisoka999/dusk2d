@@ -50,6 +50,14 @@ void PlayerComponent::onCollision(ScriptableEntity *entity)
 }
 void PlayerComponent::setAnimation(const std::string &direction)
 {
+    core::ecs::TextureMapAnimationRenderComponent &component = entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
+
+    if (component.animator.hasAnimation(direction))
+    {
+        component.animator.setCurrentAnimation(direction);
+        return;
+    }
+
     auto &textureMap = graphics::TextureManager::Instance().loadTextureMap("images/character.json");
     utils::Vector2 startPos = {0, 0};
     graphics::TextureMapAnimation animation(startPos, textureMap);
@@ -60,8 +68,8 @@ void PlayerComponent::setAnimation(const std::string &direction)
         animation.createFrame<std::string>(startPos, 50, frame);
     }
 
-    core::ecs::TextureMapAnimationRenderComponent &component = entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
-    component.animation = animation;
+    component.animator.addAnimation(direction, animation);
+    component.animator.setCurrentAnimation(direction);
 }
 bool PlayerComponent::onHandleInput(core::Input *input)
 {
@@ -70,20 +78,20 @@ bool PlayerComponent::onHandleInput(core::Input *input)
     if (input->isKeyDown("MOVE_DOWN"))
     {
         direction.bottom = true;
-        if (!animation.animation.isPlaying())
+        if (!animation.animator.currentAnimation().isPlaying())
         {
             setAnimation("down");
-            animation.animation.play();
+            animation.animator.currentAnimation().play();
         }
         eventHandled = true;
     }
     else if (input->isKeyDown("MOVE_UP"))
     {
         direction.top = true;
-        if (!animation.animation.isPlaying())
+        if (!animation.animator.currentAnimation().isPlaying())
         {
             setAnimation("up");
-            animation.animation.play();
+            animation.animator.currentAnimation().play();
         }
 
         eventHandled = true;
@@ -91,20 +99,20 @@ bool PlayerComponent::onHandleInput(core::Input *input)
 
     if (input->isKeyDown("MOVE_LEFT"))
     {
-        if (!animation.animation.isPlaying())
+        if (!animation.animator.currentAnimation().isPlaying())
         {
             setAnimation("left");
-            animation.animation.play();
+            animation.animator.currentAnimation().play();
         }
         direction.left = true;
         eventHandled = true;
     }
     else if (input->isKeyDown("MOVE_RIGHT"))
     {
-        if (!animation.animation.isPlaying())
+        if (!animation.animator.currentAnimation().isPlaying())
         {
             setAnimation("right");
-            animation.animation.play();
+            animation.animator.currentAnimation().play();
         }
         direction.right = true;
         eventHandled = true;
@@ -112,7 +120,7 @@ bool PlayerComponent::onHandleInput(core::Input *input)
     if (input->isKeyUp("MOVE_RIGHT") || input->isKeyUp("MOVE_LEFT") || input->isKeyUp("MOVE_UP") || input->isKeyUp("MOVE_DOWN"))
     {
         eventHandled = true;
-        animation.animation.stop();
+        animation.animator.currentAnimation().stop();
         direction.right = false;
         direction.left = false;
         direction.top = false;

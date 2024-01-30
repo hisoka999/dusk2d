@@ -23,5 +23,5 @@ public:
     void setTile(size_t x, size_t y, uint8_t tile);
     uint8_t getTile(size_t x, size_t y);
     void render(core::Renderer *renderer);
-    std::vector<core::StaticCollisionBlock> generateCollisionMap();
+    std::vector<core::StaticCollisionBlock> generateCollisionMap() const;
 };

@@ -31,12 +31,12 @@ namespace scenes
         std::unique_ptr<AutotileLayer> mountainLayer;
         utils::Vector2 mousePos;
         std::unique_ptr<UI::PlayerHUD> playerHUD;
-        utils::Vector2 getMouseMapPos();
+        [[nodiscard]] utils::Vector2 getMouseMapPos() const;
         TileType getTileOnMouse();
 
     public:
-        WorldScene(core::Renderer *pRenderer);
-        virtual ~WorldScene();
+        explicit WorldScene(core::Renderer *pRenderer);
+        ~WorldScene() override;
 
         void render() override;
         bool handleEvents(core::Input *pInput) override;

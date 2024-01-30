@@ -26,14 +26,26 @@ namespace prefabs
         transform.width = textureMap->getChildTexture("animation1")->getRect().width * 2;
         transform.height = textureMap->getChildTexture("animation1")->getRect().height * 2;
         utils::Vector2 startPos = {.0f, .0f};
-        graphics::TextureMapAnimation animation(startPos, textureMap);
-        animation.setRepeating(-1);
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation1"});
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation2"});
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation3"});
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation4"});
+        graphics::TextureMapAnimator animator;
+        {
+            graphics::TextureMapAnimation animation(startPos, textureMap);
 
-        entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
+            animation.setRepeating(-1);
+            animation.createFrame<std::string>(startPos, 100, std::string{"animation1"});
+            animation.createFrame<std::string>(startPos, 100, std::string{"animation2"});
+            animation.createFrame<std::string>(startPos, 100, std::string{"animation3"});
+            animation.createFrame<std::string>(startPos, 100, std::string{"animation4"});
+            animator.addAnimation("active", animation);
+        }
+        {
+            graphics::TextureMapAnimation animation(startPos, textureMap);
+
+            animation.setRepeating(-1);
+            animation.createFrame<std::string>(startPos, 100, std::string{"idle"});
+            animator.addAnimation("idle", animation);
+        }
+        animator.setCurrentAnimation("idle");
+        entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animator);
 
         auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
         auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
@@ -43,7 +55,7 @@ namespace prefabs
         collider.Friction = 0;
         collider.Restitution = 0.0;
         collider.RestitutionThreshold = 0.0;
-        collider.Offset = {0.f, 0.5f};
+        collider.Offset = {.5f, 1.5f};
         collider.Size = {1.f, 1.f};
 
         entity.addComponent<Inventory>();
@@ -66,13 +78,25 @@ namespace prefabs
         transform.width = textureMap->getChildTexture("animation1")->getRect().width;
         transform.height = textureMap->getChildTexture("animation1")->getRect().height;
         utils::Vector2 startPos = {.0f, .0f};
-        graphics::TextureMapAnimation animation(startPos, textureMap);
-        animation.setRepeating(-1);
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation1"});
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation2"});
-        animation.createFrame<std::string>(startPos, 100, std::string{"animation3"});
+        graphics::TextureMapAnimator animator;
+        {
+            graphics::TextureMapAnimation animation(startPos, textureMap);
 
-        entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animation);
+            animation.setRepeating(-1);
+            animation.createFrame<std::string>(startPos, 200, std::string{"animation1"});
+            animation.createFrame<std::string>(startPos, 200, std::string{"animation2"});
+            animation.createFrame<std::string>(startPos, 200, std::string{"animation3"});
+            animator.addAnimation("active", animation);
+        }
+        {
+            graphics::TextureMapAnimation animation(startPos, textureMap);
+
+            animation.setRepeating(-1);
+            animation.createFrame<std::string>(startPos, 100, std::string{"idle"});
+            animator.addAnimation("idle", animation);
+        }
+        animator.setCurrentAnimation("idle");
+        entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animator);
 
         auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
         auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();

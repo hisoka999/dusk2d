@@ -1,9 +1,11 @@
 #include "AutotileLayer.h"
-#include <engine/core/renderer.h>
 #include <algorithm>
+#include <engine/core/renderer.h>
 #include "GameMap.h"
 
-AutotileLayer::AutotileLayer(size_t width, size_t height, std::vector<std::shared_ptr<graphics::TextureMap>> &textureMaps) : width(width), height(height), textureMaps(textureMaps)
+AutotileLayer::AutotileLayer(size_t width, size_t height,
+                             std::vector<std::shared_ptr<graphics::TextureMap>> &textureMaps) :
+    width(width), height(height), textureMaps(textureMaps)
 {
     tiles.resize(width * height, 0);
     indexes.resize(width * height, 0);
@@ -86,10 +88,7 @@ size_t AutotileLayer::calculateIndex(size_t x, size_t y, uint8_t tile)
     }
     return hasher("rock");
 }
-constexpr size_t AutotileLayer::getTileId(const size_t x, const size_t y)
-{
-    return (y * width) + x;
-}
+constexpr size_t AutotileLayer::getTileId(const size_t x, const size_t y) { return (y * width) + x; }
 uint8_t AutotileLayer::getTile(size_t x, size_t y)
 {
     const auto id = getTileId(x, y);
@@ -147,7 +146,7 @@ void AutotileLayer::render(core::Renderer *renderer)
     }
 }
 
-std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap()
+std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap() const
 {
     std::vector<core::StaticCollisionBlock> collider;
     for (size_t y = 0; y < height; ++y)
@@ -157,14 +156,16 @@ std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap()
             auto tile = tiles[(y * width) + x];
             switch (tile)
             {
-            case 1: // filled
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                std::string blockData = "mountain:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
-                collider.push_back(core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
-                break;
+                case 1: // filled
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    std::string blockData =
+                            "mountain:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
+                    collider.push_back(
+                            core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
+                    break;
             }
         }
     }
