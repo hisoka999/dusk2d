@@ -1,16 +1,16 @@
 #include "Prefab.h"
-#include <engine/core/ecs/Entity.h>
-#include <engine/graphics/TextureManager.h>
 #include <engine/core/ecs/Component.h>
+#include <engine/core/ecs/Entity.h>
+#include <engine/core/ecs/ScriptComponent.h>
+#include <engine/graphics/TextureManager.h>
 #include <map>
-#include "game/components/CraftingEntity.h"
-#include "game/components/TreeEntity.h"
-#include "game/components/RockEntity.h"
-#include "game/components/ItemEntity.h"
 #include "game/GameMap.h"
 #include "game/Inventory.h"
+#include "game/components/CraftingEntity.h"
+#include "game/components/ItemEntity.h"
+#include "game/components/RockEntity.h"
+#include "game/components/TreeEntity.h"
 #include "game/services/ItemService.h"
-#include <engine/core/ecs/ScriptComponent.h>
 
 namespace prefabs
 {
@@ -83,9 +83,9 @@ namespace prefabs
             graphics::TextureMapAnimation animation(startPos, textureMap);
 
             animation.setRepeating(-1);
-            animation.createFrame<std::string>(startPos, 200, std::string{"animation1"});
-            animation.createFrame<std::string>(startPos, 200, std::string{"animation2"});
-            animation.createFrame<std::string>(startPos, 200, std::string{"animation3"});
+            animation.createFrame<std::string>(startPos, 300, std::string{"animation1"});
+            animation.createFrame<std::string>(startPos, 300, std::string{"animation2"});
+            animation.createFrame<std::string>(startPos, 300, std::string{"animation3"});
             animator.addAnimation("active", animation);
         }
         {

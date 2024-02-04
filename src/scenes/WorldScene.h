@@ -1,17 +1,17 @@
 #pragma once
 
 #include <engine/core/Scene.h>
-#include <engine/core/renderer.h>
 #include <engine/core/SceneManager.h>
-#include <vector>
-#include <memory>
-#include "game/GameMap.h"
-#include "game/AutotileLayer.h"
-#include "ui/windows/PlayerWindow.h"
-#include "ui/windows/CraftingWindow.h"
-#include "ui/Hotbar.h"
+#include <engine/core/renderer.h>
 #include <engine/graphics/texturemap.h>
+#include <memory>
+#include <vector>
+#include "game/AutotileLayer.h"
+#include "game/GameMap.h"
+#include "ui/Hotbar.h"
 #include "ui/PlayerHUD.h"
+#include "ui/windows/CraftingWindow.h"
+#include "ui/windows/PlayerWindow.h"
 
 namespace scenes
 {
@@ -42,7 +42,7 @@ namespace scenes
         bool handleEvents(core::Input *pInput) override;
         void fixedUpdate(uint32_t delta) override;
 
-        virtual void load();
+        void load() override;
     };
 
 } // namespace scenes
