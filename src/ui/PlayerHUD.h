@@ -14,7 +14,9 @@ namespace UI
         std::shared_ptr<UI::ProgressBar> m_hungerProgressBar;
         std::shared_ptr<UI::ProgressBar> m_thirstProgressBar;
         std::shared_ptr<UI::Label> m_levelLabel;
+        std::shared_ptr<UI::Label> m_dateTime;
         int m_characterChangeCallback;
+        int m_timeChangeCallback;
 
         void addHP();
         void addHunger();

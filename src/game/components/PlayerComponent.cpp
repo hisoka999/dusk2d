@@ -2,6 +2,8 @@
 #include <engine/core/ecs/Entity.h>
 #include <engine/graphics/TextureManager.h>
 #include "game/components/Character.h"
+#include "game/messages.h"
+
 void PlayerComponent::onUpdate(size_t delta)
 {
 
@@ -40,7 +42,10 @@ void PlayerComponent::onUpdate(size_t delta)
     rb2d.SetLinearVelocity({moveX, moveY});
 
     cameraComponent.camera->reset();
-    cameraComponent.camera->move(transform.position.getX() - (cameraComponent.camera->getWidth() / 2.0f), transform.position.getY() - (cameraComponent.camera->getHeight() / 2.0f));
+    cameraComponent.camera->move(transform.position.getX() - (cameraComponent.camera->getWidth() / 2.0f),
+                                 transform.position.getY() - (cameraComponent.camera->getHeight() / 2.0f));
+
+    timer.update();
 }
 
 void PlayerComponent::onCollision(ScriptableEntity *entity)
@@ -50,7 +55,8 @@ void PlayerComponent::onCollision(ScriptableEntity *entity)
 }
 void PlayerComponent::setAnimation(const std::string &direction)
 {
-    core::ecs::TextureMapAnimationRenderComponent &component = entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
+    core::ecs::TextureMapAnimationRenderComponent &component =
+            entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
 
     if (component.animator.hasAnimation(direction))
     {
@@ -117,7 +123,8 @@ bool PlayerComponent::onHandleInput(core::Input *input)
         direction.right = true;
         eventHandled = true;
     }
-    if (input->isKeyUp("MOVE_RIGHT") || input->isKeyUp("MOVE_LEFT") || input->isKeyUp("MOVE_UP") || input->isKeyUp("MOVE_DOWN"))
+    if (input->isKeyUp("MOVE_RIGHT") || input->isKeyUp("MOVE_LEFT") || input->isKeyUp("MOVE_UP") ||
+        input->isKeyUp("MOVE_DOWN"))
     {
         eventHandled = true;
         animation.animator.currentAnimation().stop();
@@ -129,10 +136,15 @@ bool PlayerComponent::onHandleInput(core::Input *input)
     return eventHandled;
 }
 
-PlayerComponent::PlayerComponent()
+PlayerComponent::PlayerComponent() : gameTime(2050, 2, 5, 22, 10, 0), timer(250, -1)
 {
+    timer.setCallback(
+            [this]([[maybe_unused]] uint32_t execs)
+            {
+                this->gameTime.addMinutes(1);
+                core::MessageSystem<MessageType>::get().sendMessage(MessageType::TIME_CHANGED, this->gameTime);
+            });
+    timer.start();
 }
 
-PlayerComponent::~PlayerComponent()
-{
-}
+PlayerComponent::~PlayerComponent() {}

@@ -2,21 +2,27 @@
 #include <engine/ui/Label.h>
 #include <engine/ui/ProgressBar.h>
 #include <engine/ui/layout/GridLayout.h>
-#include "game/messages.h"
+#include <engine/utils/time/time.h>
 #include "game/components/Character.h"
+#include "game/messages.h"
 
 namespace UI
 {
 
     PlayerHUD::PlayerHUD(/* args */)
     {
-        m_characterChangeCallback = core::MessageSystem<MessageType>::get().registerForType(MessageType::CHARACTER_UPDATED, [this](Character *character)
-                                                                                            {
-            this->m_hpProgressBar->setCurrentValue(character->getHp().getValue());
-            this->m_hpProgressBar->setMaxValue(character->getHp().getMaxValue());
-            this->m_hungerProgressBar->setCurrentValue(character->getHunger().getValue());
-            this->m_thirstProgressBar->setCurrentValue(character->getThirst().getValue());
-            this->m_levelLabel->setText(std::to_string(character->getLevel())); });
+        m_characterChangeCallback = core::MessageSystem<MessageType>::get().registerForType(
+                MessageType::CHARACTER_UPDATED,
+                [this](Character *character)
+                {
+                    this->m_hpProgressBar->setCurrentValue(character->getHp().getValue());
+                    this->m_hpProgressBar->setMaxValue(character->getHp().getMaxValue());
+                    this->m_hungerProgressBar->setCurrentValue(character->getHunger().getValue());
+                    this->m_thirstProgressBar->setCurrentValue(character->getThirst().getValue());
+                    this->m_levelLabel->setText(std::to_string(character->getLevel()));
+                });
+        m_timeChangeCallback = core::MessageSystem<MessageType>::get().registerForType(
+                MessageType::TIME_CHANGED, [this](utils::time::Time time) { m_dateTime->setText(time.format()); });
 
         addHP();
         addHunger();
@@ -31,16 +37,17 @@ namespace UI
             m_levelLabel->setFont("fonts/arial.ttf", 16);
             m_levelLabel->setText("1");
             addObject(m_levelLabel);
+            m_dateTime = std::make_shared<UI::Label>(nullptr);
+            m_dateTime->setFont("fonts/arial.ttf", 16);
+            m_dateTime->setText("");
+            addObject(m_dateTime);
         }
 
         this->setLayout(std::make_shared<UI::layout::GridLayout>(this, 2));
         needsRefresh();
     }
 
-    PlayerHUD::~PlayerHUD()
-    {
-        core::MessageSystem<MessageType>::get().deregister(m_characterChangeCallback);
-    }
+    PlayerHUD::~PlayerHUD() { core::MessageSystem<MessageType>::get().deregister(m_characterChangeCallback); }
 
     void PlayerHUD::addHP()
     {
@@ -81,8 +88,5 @@ namespace UI
 
         addObject(m_thirstProgressBar);
     }
-    void PlayerHUD::refresh()
-    {
-        endRefresh();
-    }
+    void PlayerHUD::refresh() { endRefresh(); }
 } // namespace UI
