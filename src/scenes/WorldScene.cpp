@@ -1,22 +1,22 @@
 #include "WorldScene.h"
-#include <engine/graphics/TextureManager.h>
-#include <engine/core/ecs/Component.h>
-#include <engine/utils/string.h>
-#include "game/Sprite.h"
-#include "game/components/PlayerComponent.h"
 #include <chrono>
+#include <engine/core/RayCastResult.h>
+#include <engine/core/ecs/Component.h>
+#include <engine/core/ecs/ScriptComponent.h>
+#include <engine/graphics/TextureManager.h>
+#include <engine/utils/string.h>
 #include <random>
 #include "game/Inventory.h"
+#include "game/RockType.h"
+#include "game/Sprite.h"
+#include "game/components/Character.h"
+#include "game/components/PlayerComponent.h"
 #include "game/messages.h"
 #include "game/prefabs/Prefab.h"
-#include <engine/core/ecs/ScriptComponent.h>
-#include "game/components/Character.h"
-#include <engine/core/RayCastResult.h>
-#include "game/RockType.h"
 namespace scenes
 {
-    WorldScene::WorldScene(core::Renderer *pRenderer)
-        : core::Scene(pRenderer), gameMap(200, 200, std::chrono::system_clock::now().time_since_epoch().count())
+    WorldScene::WorldScene(core::Renderer *pRenderer) :
+        core::Scene(pRenderer), gameMap(200, 200, std::chrono::system_clock::now().time_since_epoch().count())
     {
 
         setPixelPerMeter(32.f);
@@ -27,13 +27,13 @@ namespace scenes
         silverTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/silver.json");
         goldTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/gold.json");
         std::vector<std::shared_ptr<graphics::TextureMap>> textureMaps = {
-            mountainTextureMap, coalTextureMap, ironTextureMap, silverTextureMap, goldTextureMap};
+                mountainTextureMap, coalTextureMap, ironTextureMap, silverTextureMap, goldTextureMap};
         mountainLayer = std::make_unique<AutotileLayer>(gameMap.getWidth(), gameMap.getHeight(), textureMaps);
 
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
         std::mt19937 gen(seed);
-        std::uniform_int_distribution<int> entityDistribution(0, 100);
+        std::uniform_int_distribution<int> entityDistribution(0, 1000);
         std::uniform_int_distribution<int> rockDistribution(1, 100);
 
         std::uniform_int_distribution<int> xPositionDistribution(0, gameMap.getWidth());
@@ -53,15 +53,21 @@ namespace scenes
                 {
                     int value = entityDistribution(gen);
                     std::string type;
-                    if (value > 5 && value <= 7)
+                    prefabs::ArgsMap args;
+                    if (value > 70 && value < 80)
+                    {
+                        type = "animal";
+                        args["name"] = "cow";
+                    }
+                    else if (value > 50 && value <= 70)
                     {
                         type = "rock";
                     }
-                    else if (value > 7 && value <= 10)
+                    else if (value > 70 && value <= 100)
                     {
                         type = "wood";
                     }
-                    else if (value <= 3)
+                    else if (value <= 30)
                     {
                         type = "tree";
                     }
@@ -69,19 +75,20 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
-                        prefabs::instantiateFromPrefab(entity, type, pos);
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
+                                                  static_cast<float>(y * TILE_SIZE / 2)};
+                        prefabs::instantiateFromPrefab(entity, type, pos, args);
                     }
                 }
                 else if (tile == 1)
                 {
                     int value = entityDistribution(gen);
                     std::string type = "";
-                    if (value > 5 && value <= 7)
+                    if (value > 50 && value <= 70)
                     {
                         type = "rock";
                     }
-                    else if (value > 7 && value <= 10)
+                    else if (value > 70 && value <= 100)
                     {
                         type = "wood";
                     }
@@ -89,14 +96,16 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
+                                                  static_cast<float>(y * TILE_SIZE / 2)};
                         prefabs::instantiateFromPrefab(entity, type, pos);
                     }
                 }
                 else if (tile == 3)
                 {
                     auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2), static_cast<float>(y * TILE_SIZE / 2)};
+                    auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
+                                              static_cast<float>(y * TILE_SIZE / 2)};
                     // prefabs::instantiateFromPrefab(entity, "mountain", pos);
                     auto rockPercentage = rockDistribution(gen);
                     if (rockPercentage < 85)
@@ -132,12 +141,15 @@ namespace scenes
             bool positionInvalid = true;
             do
             {
-                playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2), yPositionDistribution(gen) * (TILE_SIZE / 2));
+                playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2),
+                                          yPositionDistribution(gen) * (TILE_SIZE / 2));
                 playerTransform.position = playerSprite->getRect().toVector2();
 
-                auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2), playerTransform.position.getY() / (TILE_SIZE / 2));
+                auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2),
+                                            playerTransform.position.getY() / (TILE_SIZE / 2));
                 positionInvalid = tile == 0 || tile == 3;
-            } while (positionInvalid);
+            }
+            while (positionInvalid);
 
             playerTransform.width = playerSprite->getRect().width;
             playerTransform.height = playerSprite->getRect().height;
@@ -192,9 +204,7 @@ namespace scenes
         OnPhysics2DStart();
     }
 
-    WorldScene::~WorldScene()
-    {
-    }
+    WorldScene::~WorldScene() {}
 
     void WorldScene::render()
     {
@@ -208,7 +218,8 @@ namespace scenes
         {
             // render preview
             auto childTexture = itemTextureMap->getChildTexture(slot.item->getSubTextureName());
-            graphics::Rect destRect{mousePos.getX(), mousePos.getY(), childTexture->getRect().width, childTexture->getRect().height};
+            graphics::Rect destRect{mousePos.getX(), mousePos.getY(), childTexture->getRect().width,
+                                    childTexture->getRect().height};
             childTexture->render(destRect, renderer);
         }
 
@@ -216,7 +227,8 @@ namespace scenes
         if (!winMgr->isWindowOpen())
         {
             const int tileSize = TILE_SIZE / 2;
-            const auto pos = (getMouseMapPos() * utils::Vector2(tileSize, tileSize)) - renderer->getMainCamera()->getPosition();
+            const auto pos =
+                    (getMouseMapPos() * utils::Vector2(tileSize, tileSize)) - renderer->getMainCamera()->getPosition();
 
             graphics::Rect r{pos.getX(), pos.getY(), tileSize, tileSize};
 
@@ -228,8 +240,10 @@ namespace scenes
     {
         constexpr int tileSize = TILE_SIZE / 2;
         const auto camera = renderer->getMainCamera()->getPosition();
-        const auto cameraOffset = utils::Vector2{(std::round(camera.getX() / tileSize)), (std::round(camera.getY() / tileSize))};
-        return {std::round(mousePos.getX() / tileSize) + cameraOffset.getX(), std::round(mousePos.getY() / tileSize) + cameraOffset.getY()};
+        const auto cameraOffset =
+                utils::Vector2{(std::round(camera.getX() / tileSize)), (std::round(camera.getY() / tileSize))};
+        return {std::round(mousePos.getX() / tileSize) + cameraOffset.getX(),
+                std::round(mousePos.getY() / tileSize) + cameraOffset.getY()};
     }
 
     TileType WorldScene::getTileOnMouse()
@@ -270,14 +284,14 @@ namespace scenes
             auto &inventory = playerEntity->findComponent<Inventory>();
             auto &selectedHotbarSlot = inventory.getSelectedHotbarSlot();
 
-            for (auto &hit : result.hits)
+            for (auto &hit: result.hits)
             {
                 if (hit.getEntity().has_value())
                 {
                     APP_LOG_INFO("Entity: " + hit.getEntity()->tagName());
 
                     auto &list = hit.getEntity()->findComponent<core::ecs::ScriptComponentList>();
-                    for (auto &script : list.components)
+                    for (auto &script: list.components)
                     {
                         script.Instance->onClick(SDL_BUTTON_LEFT);
                     }
@@ -296,12 +310,13 @@ namespace scenes
                             character.getThirst().addValue(20);
                         }
                     }
-                    else if (data[0] == "mountain" && data[1] != "0" && selectedHotbarSlot.item && selectedHotbarSlot.item->getItemSubType() == ItemSubType::PICK_AXE)
+                    else if (data[0] == "mountain" && data[1] != "0" && selectedHotbarSlot.item &&
+                             selectedHotbarSlot.item->getItemSubType() == ItemSubType::PICK_AXE)
                     {
-                        size_t x = std::strtol(data[2].c_str(),nullptr,10);
-                        size_t y = std::strtol(data[3].c_str(),nullptr,10);
+                        size_t x = std::strtol(data[2].c_str(), nullptr, 10);
+                        size_t y = std::strtol(data[3].c_str(), nullptr, 10);
                         mountainLayer->setTile(x, y, 0);
-                        auto rockType = static_cast<RockType>(std::strtol(data[1].c_str(),nullptr,10));
+                        auto rockType = static_cast<RockType>(std::strtol(data[1].c_str(), nullptr, 10));
 
                         std::random_device device;
                         std::mt19937 gen(device());
@@ -310,22 +325,22 @@ namespace scenes
                         std::string entityName = "stone";
                         switch (rockType)
                         {
-                        case RockType::Rock:
-                            break;
-                        case RockType::Iron:
-                            entityName = "iron_ore";
-                            break;
-                        case RockType::Coal:
-                            entityName = "coal";
-                            break;
-                        case RockType::Gold:
-                            entityName = "gold_ore";
-                            break;
-                        case RockType::Silver:
-                            entityName = "silver_ore";
-                            break;
-                        default:
-                            break;
+                            case RockType::Rock:
+                                break;
+                            case RockType::Iron:
+                                entityName = "iron_ore";
+                                break;
+                            case RockType::Coal:
+                                entityName = "coal";
+                                break;
+                            case RockType::Gold:
+                                entityName = "gold_ore";
+                                break;
+                            case RockType::Silver:
+                                entityName = "silver_ore";
+                                break;
+                            default:
+                                break;
                         }
 
                         for (int i = 1; i <= numItems(gen); ++i)
@@ -355,7 +370,8 @@ namespace scenes
 
                 auto pos = getMouseMapPos() * utils::Vector2(tileSize, tileSize);
 
-                APP_LOG_ERROR("position for new entity %.2f,%.2f", transform.position.getX(), transform.position.getY());
+                APP_LOG_ERROR("position for new entity %.2f,%.2f", transform.position.getX(),
+                              transform.position.getY());
                 prefabs::instantiateFromPrefab(entity, slot.item->getPrefab(), pos);
                 auto &inventory = playerEntity->findComponent<Inventory>();
                 inventory.removeItemById(slot.item->getId(), slot.amount);
@@ -374,7 +390,5 @@ namespace scenes
         core::MessageSystem<MessageType>::get().processMessages();
     }
 
-    void WorldScene::load()
-    {
-    }
-}
+    void WorldScene::load() {}
+} // namespace scenes

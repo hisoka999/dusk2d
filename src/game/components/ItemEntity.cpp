@@ -1,6 +1,6 @@
 #include "ItemEntity.h"
-#include <iostream>
 #include <engine/core/ecs/Entity.h>
+#include <iostream>
 #include "game/Inventory.h"
 
 void ItemEntity::onUpdate([[maybe_unused]] size_t delta)
@@ -19,23 +19,23 @@ void ItemEntity::beginCollision([[maybe_unused]] const core::ecs::Collision &col
         std::cout << "no item defined" << std::endl;
         return;
     }
+    if (tag != "player")
+        return;
+
     activeCollisionEntity = collider.entity;
     Inventory &inventory = activeCollisionEntity.findComponent<Inventory>();
     switch (typeofItemDestruction)
     {
-    case TypeOfItemDestruction::Automatic:
-        inventory.addItem(item, 1);
-        entity.getScene()->destoryEntity(entity);
-        break;
+        case TypeOfItemDestruction::Automatic:
+            inventory.addItem(item, 1);
+            entity.getScene()->destoryEntity(entity);
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
-void ItemEntity::endCollision([[maybe_unused]] const core::ecs::Collision &collider)
-{
-    activeCollisionEntity = {};
-}
+void ItemEntity::endCollision([[maybe_unused]] const core::ecs::Collision &collider) { activeCollisionEntity = {}; }
 
 bool ItemEntity::onHandleInput(core::Input *input)
 {
@@ -46,32 +46,22 @@ bool ItemEntity::onHandleInput(core::Input *input)
 
         switch (typeofItemDestruction)
         {
-        case TypeOfItemDestruction::RightClick:
-            inventory.addItem(item, 1);
-            entity.getScene()->destoryEntity(entity);
+            case TypeOfItemDestruction::RightClick:
+                inventory.addItem(item, 1);
+                entity.getScene()->destoryEntity(entity);
 
-            return true;
+                return true;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
     return false;
 }
 
-ItemEntity::ItemEntity() : core::ecs::ScriptableEntity()
-{
-}
+ItemEntity::ItemEntity() : core::ecs::ScriptableEntity() {}
 
-ItemEntity::~ItemEntity()
-{
-}
-void ItemEntity::setItem(const std::shared_ptr<Item> &item)
-{
-    this->item = item;
-}
+ItemEntity::~ItemEntity() {}
+void ItemEntity::setItem(const std::shared_ptr<Item> &item) { this->item = item; }
 
-void ItemEntity::setTypeOfItemDestruction(TypeOfItemDestruction type)
-{
-    typeofItemDestruction = type;
-}
+void ItemEntity::setTypeOfItemDestruction(TypeOfItemDestruction type) { typeofItemDestruction = type; }

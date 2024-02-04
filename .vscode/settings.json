@@ -98,7 +98,8 @@
         "coroutine": "cpp",
         "csignal": "cpp",
         "unordered_set": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "format": "cpp"
     },
     "cmakeExplorer.buildDir": "build/",
     "cmake.parallelJobs": 12,

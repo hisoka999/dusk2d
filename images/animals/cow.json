@@ -1,0 +1,117 @@
+{
+    "textureName": "images/animals/cow_walk.png",
+    "subTextures": [
+        {
+            "name": "left1",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "left2",
+            "x": 128.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "left3",
+            "x": 256.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "left4",
+            "x": 386.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "right1",
+            "x": 0.0,
+            "y": 386.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "right2",
+            "x": 128.0,
+            "y": 386.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "right3",
+            "x": 256.0,
+            "y": 386.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "right4",
+            "x": 386.0,
+            "y": 386.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "up1",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "up2",
+            "x": 128.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "up3",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "up4",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "down1",
+            "x": 0.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "down2",
+            "x": 128.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "down3",
+            "x": 256.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0
+        },
+        {
+            "name": "down4",
+            "x": 386.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0
+        }
+    ]
+}

@@ -6,6 +6,8 @@
 #include <map>
 #include "game/GameMap.h"
 #include "game/Inventory.h"
+#include "game/components/AnimalComponent.h"
+#include "game/components/Character.h"
 #include "game/components/CraftingEntity.h"
 #include "game/components/ItemEntity.h"
 #include "game/components/RockEntity.h"
@@ -16,7 +18,7 @@ namespace prefabs
 {
     using namespace std::literals;
 
-    void createCampfire(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createCampfire(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
 
         core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
@@ -68,7 +70,7 @@ namespace prefabs
         ((ItemEntity *)itemScript.Instance)->setItem(item);
     }
 
-    void createFurnace(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createFurnace(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
 
         core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
@@ -120,7 +122,7 @@ namespace prefabs
         ((ItemEntity *)itemScript.Instance)->setItem(item);
     }
 
-    void createTree(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createTree(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &treeTexture = graphics::TextureManager::Instance().loadTexture("images/trees/pine_tree.png");
 
@@ -142,7 +144,7 @@ namespace prefabs
         core::ecs::addScriptComponent<TreeEntity>(entity);
     }
 
-    void createMountain(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createMountain(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/mountain.json");
 
@@ -164,7 +166,7 @@ namespace prefabs
         core::ecs::addScriptComponent<RockEntity>(entity);
     }
 
-    void createRock(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createRock(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &rockTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/rocks.json");
 
@@ -188,7 +190,7 @@ namespace prefabs
         component->setMaxItemSpawn(1);
     }
 
-    void createWood(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createWood(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("wood");
@@ -213,7 +215,7 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    void createStone(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createStone(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("stone");
@@ -237,7 +239,7 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    void createIronOre(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createIronOre(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("iron_ore");
@@ -260,7 +262,7 @@ namespace prefabs
         auto item = services::ItemService::Instance().getItemByName("Iron Ore");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
-    void createSilverOre(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createSilverOre(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("silver_ore");
@@ -283,7 +285,7 @@ namespace prefabs
         auto item = services::ItemService::Instance().getItemByName("Silver Ore");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
-    void createGoldOre(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createGoldOre(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("gold_ore");
@@ -307,7 +309,7 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    void createIron(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createIron(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto item = services::ItemService::Instance().getItemByName("Iron Bar");
@@ -331,7 +333,7 @@ namespace prefabs
 
         ((ItemEntity *)script.Instance)->setItem(item);
     }
-    void createSilver(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createSilver(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto item = services::ItemService::Instance().getItemByName("Silver Bar");
@@ -354,7 +356,7 @@ namespace prefabs
         auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
         ((ItemEntity *)script.Instance)->setItem(item);
     }
-    void createGold(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createGold(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto item = services::ItemService::Instance().getItemByName("Gold Bar");
@@ -378,7 +380,7 @@ namespace prefabs
 
         ((ItemEntity *)script.Instance)->setItem(item);
     }
-    void createCoal(core::ecs::Entity &entity, utils::Vector2 &position)
+    void createCoal(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("coal");
@@ -402,7 +404,65 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
-    void createApple(core::ecs::Entity &entity, utils::Vector2 &position)
+
+    void addAnimation(const std::string &direction, core::ecs::TextureMapAnimationRenderComponent &component,
+                      const std::shared_ptr<graphics::TextureMap> textureMap)
+    {
+        if (component.animator.hasAnimation(direction))
+        {
+            component.animator.setCurrentAnimation(direction);
+            return;
+        }
+
+        utils::Vector2 startPos = {0, 0};
+        graphics::TextureMapAnimation animation(startPos, textureMap);
+        animation.setRepeating(-1);
+        for (int i = 1; i <= 4; i++)
+        {
+            std::string frame = direction + std::to_string(i);
+            animation.createFrame<std::string>(startPos, 100, frame);
+        }
+
+        component.animator.addAnimation(direction, animation);
+        component.animator.setCurrentAnimation(direction);
+    }
+
+    void createAnimal(core::ecs::Entity &entity, utils::Vector2 &position, ArgsMap &args)
+    {
+        auto name = args["name"];
+        core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
+        transform.position = position;
+        auto &textureMap = graphics::TextureManager::Instance().loadTextureMap("images/animals/" + name + ".json");
+
+        transform.width = textureMap->getChildTexture("left1")->getRect().width;
+        transform.height = textureMap->getChildTexture("left1")->getRect().height;
+        utils::Vector2 startPos = {.0f, .0f};
+        graphics::TextureMapAnimator animator;
+
+        auto &animatorComponent = entity.addComponent<core::ecs::TextureMapAnimationRenderComponent>(animator);
+        addAnimation("left", animatorComponent, textureMap);
+        addAnimation("right", animatorComponent, textureMap);
+        addAnimation("up", animatorComponent, textureMap);
+        addAnimation("down", animatorComponent, textureMap);
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Dynamic;
+        rb2d.FixedRotation = true;
+        collider.Density = 1.f;
+        collider.Friction = 0;
+        collider.Restitution = 0.0;
+        collider.RestitutionThreshold = 0.0;
+        collider.Offset = {2.f, 2.0f};
+        collider.Size = {1.f, 1.f};
+
+        entity.addComponent<Inventory>();
+        entity.addComponent<Character>();
+
+        core::ecs::addScriptComponent<components::AnimalComponent>(entity);
+    }
+
+    void createApple(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
         auto childTexture = itemTextureMap->getChildTexture("apple");
@@ -427,23 +487,34 @@ namespace prefabs
     }
 
     // clang-format off
-    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &)>> prefabList = {
+    static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &, ArgsMap &)>> prefabList = {
         {"campfire"s, createCampfire}, {"tree"s, createTree}, {"mountain"s, createMountain}, {"rock"s, createRock}
         ,{"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}, {"coal"s, createCoal}
         ,{"iron_ore"s, createIronOre}, {"silver_ore"s, createSilverOre}, {"gold_ore"s, createGoldOre}, {"furnace", createFurnace}
-        ,{"iron_bar"s, createIron}, {"silver_bar"s, createSilver}, {"gold_bar"s, createGold}};
+        ,{"iron_bar"s, createIron}, {"silver_bar"s, createSilver}, {"gold_bar"s, createGold}
+        , {"animal"s, createAnimal}
+        };
 
-    void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
+    // clang-format on
+    void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position,
+                               ArgsMap &args)
     {
         if (prefabList.count(prefabName))
         {
-            prefabList.at(prefabName).operator()(entity, position);
+            prefabList.at(prefabName).operator()(entity, position, args);
         }
         else
         {
             throw std::runtime_error("the prefab with the name " + prefabName + " does not exist!");
         }
     }
-    // clang-format on
+
+
+    void instantiateFromPrefab(core::ecs::Entity &entity, const std::string &prefabName, utils::Vector2 &position)
+    {
+        ArgsMap args;
+        instantiateFromPrefab(entity, prefabName, position, args);
+    }
+
 
 } // namespace prefabs
