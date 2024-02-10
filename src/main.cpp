@@ -1,3 +1,8 @@
+#include <chrono>
+#include <engine/core/SceneManager.h>
+#include <engine/core/gamewindow.h>
+#include <engine/core/input.h>
+#include <iostream>
 #include "config.h"
 #include "engine/core/renderer.h"
 #include "engine/graphics/TextureManager.h"
@@ -8,23 +13,18 @@
 #include "engine/utils/logger.h"
 #include "engine/utils/os.h"
 #include "engine/utils/string.h"
-#include "scenes/MainScene.h"
-#include "scenes/WorldScene.h"
-#include <chrono>
-#include <engine/core/SceneManager.h>
-#include <engine/core/gamewindow.h>
-#include <engine/core/input.h>
-#include <iostream>
 #include "game/services/ItemRecipeService.h"
 #include "game/services/ItemService.h"
+#include "scenes/MainScene.h"
+#include "scenes/WorldScene.h"
 
 #include <magic_enum.hpp>
 
 #ifdef GAME_DEBUG
-template <size_t SIZE>
+template<size_t SIZE>
 void writeEnumArray(std::array<std::string_view, SIZE> names, std::ofstream &stream)
 {
-    for (auto name : names)
+    for (auto name: names)
     {
         stream << "msgid \"" << name << "\"\n";
         stream << "msgstr \"\"\n\n";
@@ -46,14 +46,14 @@ void writeKeyMapPot(core::KeyMap &keyMap, std::string fileName)
     std::ofstream os(fileName, std::ios::trunc | std::ios::out);
 
     std::vector<std::string> keyList;
-    for (auto &[key, value] : keyMap)
+    for (auto &[key, value]: keyMap)
     {
         if (std::find(keyList.begin(), keyList.end(), key) == keyList.end())
         {
             keyList.emplace_back(key);
         }
     }
-    for (auto &key : keyList)
+    for (auto &key: keyList)
     {
         os << "msgid \"" << key << "\"\n";
         os << "msgstr \"\"\n\n";
@@ -116,7 +116,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
         g_appLogger.init(loggingFolder, utils::LogLevel::trace);
         g_sglLogger.init(loggingFolder, utils::LogLevel::trace);
 
-        core::GameWindow win(utils::string_format("Dusk2D %d.%d", GAME_VERSION_MAJOR, GAME_VERSION_MINOR), 1280, 720, "Dusk2D");
+        core::GameWindow win(utils::string_format("Dusk2D %d.%d", GAME_VERSION_MAJOR, GAME_VERSION_MINOR), 1280, 720,
+                             "Dusk2D");
         win.setWindowIcon("logo.png");
 
         auto keyMap = initKeyMap(win.getSettings().get());
@@ -219,12 +220,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
             if (saveScreenshot)
             {
 
-                SDL_Surface *surf = SDL_CreateRGBSurface(0, win.getWidth(), win.getHeight(), 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+                SDL_Surface *surf = SDL_CreateRGBSurface(0, win.getWidth(), win.getHeight(), 32, 0x00ff0000, 0x0000ff00,
+                                                         0x000000ff, 0xff000000);
                 SDL_RenderReadPixels(ren.getRenderer(), NULL, SDL_PIXELFORMAT_ARGB8888, surf->pixels, surf->pitch);
 
                 if (surf != 0)
                 {
-                    std::string fileName = utils::os::get_pref_dir("", "dusk2d") + "screenshot_" + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".png";
+                    std::string fileName = utils::os::get_pref_dir("", "dusk2d") + "screenshot_" +
+                                           std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) +
+                                           ".png";
                     std::cout << "screenshot: " << fileName << std::endl;
                     IMG_SavePNG(surf, fileName.c_str());
                     SDL_FreeSurface(surf);

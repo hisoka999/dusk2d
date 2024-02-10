@@ -54,9 +54,25 @@ namespace scenes
                     int value = entityDistribution(gen);
                     std::string type;
                     prefabs::ArgsMap args;
-                    if (value > 70 && value < 80)
+                    if (value == 73)
                     {
                         type = "animal";
+                        args["offset_x"] = "0.5";
+                        args["offset_y"] = "0.5";
+                        args["name"] = "chicken";
+                    }
+                    else if (value == 72)
+                    {
+                        type = "animal";
+                        args["offset_x"] = "2.0";
+                        args["offset_y"] = "2.0";
+                        args["name"] = "sheep";
+                    }
+                    else if (value == 71)
+                    {
+                        type = "animal";
+                        args["offset_x"] = "2.0";
+                        args["offset_y"] = "2.0";
                         args["name"] = "cow";
                     }
                     else if (value > 50 && value <= 70)

@@ -7,6 +7,9 @@ namespace components
 {
     AnimalComponent::AnimalComponent(/* args */) {}
 
+    static std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+
+
     void AnimalComponent::onClick(int button)
     {
         if (button == SDL_BUTTON_LEFT)
@@ -19,7 +22,6 @@ namespace components
 
         core::ecs::TextureMapAnimationRenderComponent &component =
                 entity.findComponent<core::ecs::TextureMapAnimationRenderComponent>();
-        std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
         std::uniform_int_distribution<int> distribution(0, 8);
 
         std::uniform_int_distribution<int> walkTimeDist(500, 3000);
@@ -59,10 +61,9 @@ namespace components
         else
         {
             walkTime -= delta;
+            auto &rb2d = entity.findComponent<core::ecs::Rigidbody2DComponent>();
             if (component.animator.currentAnimation().isPlaying())
             {
-                auto &rb2d = entity.findComponent<core::ecs::Rigidbody2DComponent>();
-
                 float moveX = 0.f;
                 float moveY = 0.f;
                 float speed = delta / 1000.f * 50.0f;
@@ -84,6 +85,10 @@ namespace components
                 }
 
                 rb2d.SetLinearVelocity({moveX, moveY});
+            }
+            else
+            {
+                rb2d.SetLinearVelocity({.0f, .0f});
             }
         }
     }

@@ -1,4 +1,5 @@
 #include "Prefab.h"
+#include <charconv>
 #include <engine/core/ecs/Component.h>
 #include <engine/core/ecs/Entity.h>
 #include <engine/core/ecs/ScriptComponent.h>
@@ -430,6 +431,14 @@ namespace prefabs
     void createAnimal(core::ecs::Entity &entity, utils::Vector2 &position, ArgsMap &args)
     {
         auto name = args["name"];
+        float offsetX{};
+        float offsetY{};
+        auto x = args["offset_x"];
+        auto y = args["offset_y"];
+        std::from_chars(x.data(), x.data() + x.size(), offsetX);
+        std::from_chars(y.data(), y.data() + y.size(), offsetY);
+
+        auto offset = utils::Vector2(offsetX, offsetY);
         core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
         transform.position = position;
         auto &textureMap = graphics::TextureManager::Instance().loadTextureMap("images/animals/" + name + ".json");
@@ -453,7 +462,7 @@ namespace prefabs
         collider.Friction = 0;
         collider.Restitution = 0.0;
         collider.RestitutionThreshold = 0.0;
-        collider.Offset = {2.f, 2.0f};
+        collider.Offset = offset;
         collider.Size = {1.f, 1.f};
 
         entity.addComponent<Inventory>();

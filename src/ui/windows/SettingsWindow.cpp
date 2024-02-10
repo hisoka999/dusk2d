@@ -1,15 +1,15 @@
 #include "SettingsWindow.h"
-#include "translate.h"
 #include <engine/graphics/TextureManager.h>
-#include <engine/ui/layout/GridLayout.h>
 #include <engine/ui/Label.h>
-#include <engine/utils/logger.h>
 #include <engine/ui/ProgressBar.h>
-#include "magic_enum.hpp"
+#include <engine/ui/layout/GridLayout.h>
+#include <engine/utils/logger.h>
 #include <functional>
+#include "magic_enum.hpp"
+#include "translate.h"
 
-SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::Input *input)
-    : UI::Window(50, 50, 720, 500), m_settings(settings)
+SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::Input *input) :
+    UI::Window(50, 50, 720, 500), m_settings(settings)
 {
     tabBar = std::make_shared<UI::TabBar>(this);
     tabBar->setPos(5, 5);
@@ -52,25 +52,23 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     setTitle(_("Settings"));
     resolutions = std::make_shared<UI::ComboBox<DisplayMode>>(graphicsTab.get());
 
-    resolutions->setElementFunction([](DisplayMode val)
-                                    { return val.toString(); });
+    resolutions->setElementFunction([](DisplayMode val) { return val.toString(); });
     resolutions->setPos(30, 70);
     resolutions->setWidth(200);
 
     constexpr auto &modes = magic_enum::enum_values<core::FullScreenMode>();
 
-    for (auto &value : modes)
+    for (auto &value: modes)
     {
         fullscreen->addElement(value);
     }
     fullscreen->setElementFunction([](core::FullScreenMode val) -> std::string
                                    { return _(std::string(magic_enum::enum_name(val))); });
 
-    fullscreen->setSelectionByText((core::FullScreenMode)settings->getValueI("Base", "Fullscreen"));
+    fullscreen->setSelectionByText(static_cast<core::FullScreenMode>(settings->getValueI("Base", "Fullscreen")));
     vsync->setChecked(settings->getValueB("Base", "VSync"));
     vsync->setHeight(25);
-    cancelButton->connect("buttonClick", [&]()
-                          { closeWindow(); });
+    cancelButton->connect("buttonClick", [&]() { closeWindow(); });
     int screenWidth = settings->getValueI("Base", "Width");
     int screenHeight = settings->getValueI("Base", "Height");
 
@@ -93,7 +91,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
         displayMode.width = mode.w;
         displayMode.height = mode.h;
         bool exists = false;
-        for (auto &t : displayModes)
+        for (auto &t: displayModes)
         {
             if (t.width == displayMode.width && t.height == displayMode.height)
                 exists = true;
@@ -131,7 +129,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
 
     constexpr auto &languages = magic_enum::enum_values<Language>();
 
-    for (auto &value : languages)
+    for (auto &value: languages)
     {
         comboboxLanguage->addElement(value);
     }
@@ -185,22 +183,26 @@ SettingsWindow::SettingsWindow(std::shared_ptr<utils::IniBase> &settings, core::
     layout->updateLayout(bounds);
     soundTabLayout->updateLayout(bounds);
 
-    saveButton->connect(UI::Button::buttonClickCallback(), [this]()
+    saveButton->connect(UI::Button::buttonClickCallback(),
+                        [this]()
                         {
-        this->m_settings->setAttrI("Base", "Fullscreen", int(this->fullscreen->getSelectionText()));
-        //core::GameWindow::Instance().setFullScreen(fullscreen->getSelectionText());
-        this->m_settings->setAttrB("Base", "VSync", this->vsync->isChecked());
-        int i = resolutions->getSelection();
+                            this->m_settings->setAttrI("Base", "Fullscreen", int(this->fullscreen->getSelectionText()));
+                            // core::GameWindow::Instance().setFullScreen(fullscreen->getSelectionText());
+                            this->m_settings->setAttrB("Base", "VSync", this->vsync->isChecked());
+                            int i = resolutions->getSelection();
 
-        this->m_settings->setAttrI("Base", "Height", this->displayModes[i].height);
-        this->m_settings->setAttrI("Base", "Width", this->displayModes[i].width);
-        this->m_settings->setAttr("Base", "Lang", std::string(magic_enum::enum_name(this->comboboxLanguage->getSelectionText())));
+                            this->m_settings->setAttrI("Base", "Height", this->displayModes[i].height);
+                            this->m_settings->setAttrI("Base", "Width", this->displayModes[i].width);
+                            this->m_settings->setAttr(
+                                    "Base", "Lang",
+                                    std::string(magic_enum::enum_name(this->comboboxLanguage->getSelectionText())));
 
-        this->m_settings->setAttrI("Volume", "Music", this->musicVolumeProgress->getCurrentValue());
-        this->m_settings->setAttrI("Volume", "Sound", this->soundVolumeProgress->getCurrentValue());
+                            this->m_settings->setAttrI("Volume", "Music", this->musicVolumeProgress->getCurrentValue());
+                            this->m_settings->setAttrI("Volume", "Sound", this->soundVolumeProgress->getCurrentValue());
 
-        this->m_settings->write();
-        this->closeWindow(); });
+                            this->m_settings->write();
+                            this->closeWindow();
+                        });
 }
 
 SettingsWindow::~SettingsWindow()
@@ -208,7 +210,4 @@ SettingsWindow::~SettingsWindow()
     uiText = nullptr;
     uiIconText = nullptr;
 }
-void SettingsWindow::closeWindow()
-{
-    this->setVisible(false);
-}
+void SettingsWindow::closeWindow() { this->setVisible(false); }

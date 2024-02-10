@@ -99,7 +99,8 @@
         "csignal": "cpp",
         "unordered_set": "cpp",
         "cassert": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "charconv": "cpp"
     },
     "cmakeExplorer.buildDir": "build/",
     "cmake.parallelJobs": 12,
