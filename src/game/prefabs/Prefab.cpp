@@ -431,12 +431,8 @@ namespace prefabs
     void createAnimal(core::ecs::Entity &entity, utils::Vector2 &position, ArgsMap &args)
     {
         auto name = args["name"];
-        float offsetX{};
-        float offsetY{};
-        auto x = args["offset_x"];
-        auto y = args["offset_y"];
-        std::from_chars(x.data(), x.data() + x.size(), offsetX);
-        std::from_chars(y.data(), y.data() + y.size(), offsetY);
+        float offsetX = utils::to_float(args["offset_x"]);
+        float offsetY = utils::to_float(args["offset_y"]);
 
         auto offset = utils::Vector2(offsetX, offsetY);
         core::ecs::Transform &transform = entity.addComponent<core::ecs::Transform>();
