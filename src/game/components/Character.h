@@ -12,7 +12,7 @@ struct EquipmentSlot
     std::shared_ptr<Item> item = nullptr;
     EquipmentType type = EquipmentType::None;
 };
-typedef std::array<EquipmentSlot, 6> EquipmentSlotList;
+using EquipmentSlotList = std::array<EquipmentSlot, 6>;
 class Character
 {
 private:
