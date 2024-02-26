@@ -1,10 +1,11 @@
 #include "PlayerWindow.h"
-#include <engine/ui/TabBar.h>
-#include <engine/ui/Tab.h>
-#include <engine/ui/scrollarea.h>
 #include <engine/ui/Button.h>
-#include "game/services/ItemRecipeService.h"
+#include <engine/ui/Tab.h>
+#include <engine/ui/TabBar.h>
+#include <engine/ui/scrollarea.h>
 #include "game/Inventory.h"
+#include "game/messages.h"
+#include "game/services/ItemRecipeService.h"
 namespace UI
 {
     void PlayerWindow::refresh()
@@ -16,7 +17,7 @@ namespace UI
         int yOffset = 0;
         auto &inventory = m_playerEntity.findComponent<Inventory>();
 
-        for (auto &recipe : services::ItemRecipeService::Instance().findByRecipeTarget(RecipeTarget::INVENTORY))
+        for (auto &recipe: services::ItemRecipeService::Instance().findByRecipeTarget(RecipeTarget::INVENTORY))
         {
 
             auto button = std::make_shared<UI::Button>(scrollArea.get());
@@ -30,19 +31,21 @@ namespace UI
 
             if (!inventory.canCraftRecipe(recipe))
                 button->disable();
-            button->connect(UI::Button::buttonClickCallback(), [this, recipe]()
+            button->connect(UI::Button::buttonClickCallback(),
+                            [this, recipe]()
                             {
                                 auto &_inventory = m_playerEntity.findComponent<Inventory>();
                                 _inventory.craftItem(recipe);
-                                this->needsRefresh(); });
+                                this->needsRefresh();
+                            });
         }
 
         scrollArea->reset();
+        playerStatsTab->needsRefresh();
         endRefresh();
     }
 
-    PlayerWindow::PlayerWindow(core::ecs::Entity &entity)
-        : Window(200, 200, 800, 400), m_playerEntity(entity)
+    PlayerWindow::PlayerWindow(core::ecs::Entity &entity) : Window(200, 200, 800, 400), m_playerEntity(entity)
     {
         setTitle("Player Info");
 
@@ -57,7 +60,7 @@ namespace UI
         addObject(tabBar);
         addObject(inventoryComponent);
 
-        auto playerTab = std::make_shared<UI::Tab>(tabBar.get(), "Character");
+        auto playerTab = std::make_shared<UI::EquipmentTab>(tabBar.get(), m_playerEntity);
         tabBar->addTab(playerTab);
 
         auto craftingTab = std::make_shared<UI::Tab>(tabBar.get(), "Crafting");
@@ -66,11 +69,13 @@ namespace UI
         scrollArea = std::make_shared<UI::ScrollArea>(400, 300, craftingTab.get());
         craftingTab->addObject(scrollArea);
 
-        auto statsTab = std::make_shared<UI::Tab>(tabBar.get(), "Stats");
-        tabBar->addTab(statsTab);
+        playerStatsTab = std::make_shared<UI::PlayerStatsTab>(tabBar.get(), m_playerEntity);
+        tabBar->addTab(playerStatsTab);
+
+        auto &msgSystem = core::MessageSystem<MessageType>::get();
+        inventoryRefreshMsgId = msgSystem.registerForType(
+                MessageType::INVENTORY_UPDATED, [this]([[maybe_unused]] ItemSlot *slot) { this->needsRefresh(); });
     }
 
-    PlayerWindow::~PlayerWindow()
-    {
-    }
-}
+    PlayerWindow::~PlayerWindow() { core::MessageSystem<MessageType>::get().deregister(inventoryRefreshMsgId); }
+} // namespace UI

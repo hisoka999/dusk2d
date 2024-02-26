@@ -11,18 +11,18 @@ namespace UI
     {
         m_characterChangeCallback = core::MessageSystem<MessageType>::get().registerForType(
                 MessageType::CHARACTER_UPDATED, [this](Character *character) { refreshStats(character); });
-
-        this->setLayout(std::make_shared<UI::layout::GridLayout>(this));
+        auto layout = std::make_shared<UI::layout::GridLayout>(this);
+        layout->setPadding({5.f, 5.f});
+        this->setLayout(layout);
     }
 
     PlayerStatsTab::~PlayerStatsTab() { core::MessageSystem<MessageType>::get().deregister(m_characterChangeCallback); }
 
     void PlayerStatsTab::refreshStats(Character *character)
     {
-
-
+        if (!isVisible())
+            return;
         clear();
-
 
         for (auto [key, value]: character->displayAttributes())
         {
@@ -35,6 +35,7 @@ namespace UI
             addObject(labelValue);
         }
         updateLayout();
+        endRefresh();
     }
 
     void PlayerStatsTab::refresh()

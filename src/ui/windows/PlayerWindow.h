@@ -1,8 +1,11 @@
 #pragma once
 
-#include <engine/ui/Window.h>
 #include <engine/core/ecs/Entity.h>
+#include <engine/ui/Window.h>
+#include "ui/EquipmentTab.h"
 #include "ui/InventoryComponent.h"
+#include "ui/PlayerStatsTab.h"
+
 namespace UI
 {
     class ScrollArea;
@@ -12,7 +15,10 @@ namespace UI
     private:
         std::shared_ptr<InventoryComponent> inventoryComponent;
         std::shared_ptr<UI::ScrollArea> scrollArea;
+        std::shared_ptr<UI::PlayerStatsTab> playerStatsTab;
+        std::shared_ptr<UI::EquipmentTab> equipmentTab;
         core::ecs::Entity m_playerEntity;
+        int inventoryRefreshMsgId;
 
     protected:
         void refresh() override;

@@ -19,9 +19,13 @@
     {
         "id": 3,
         "type": "EQUIPMENT",
+        "equipType": "Weapon",
         "subType": "AXE",
         "name": "Stone Axe",
-        "subTextureName": "stone_axe"
+        "subTextureName": "stone_axe",
+        "data": {
+            "damage": "5"
+        }
     },
     {
         "id": 4,
@@ -37,8 +41,12 @@
         "id": 5,
         "type": "EQUIPMENT",
         "subType": "PICK_AXE",
+        "equipType": "Weapon",
         "name": "Stone Pick Axe",
-        "subTextureName": "stone_pick_axe"
+        "subTextureName": "stone_pick_axe",
+        "data": {
+            "damage": "5"
+        }
     },
     {
         "id": 6,
@@ -136,5 +144,16 @@
         "name": "Iron Bar",
         "subTextureName": "iron_bar",
         "prefab": "iron_bar"
+    },
+    {
+        "id": 17,
+        "type": "EQUIPMENT",
+        "subType": "ITEM",
+        "equipType": "Weapon",
+        "name": "Iron Short Sword",
+        "subTextureName": "iron_short_sword",
+        "data": {
+            "damage": "15"
+        }
     }
 ]

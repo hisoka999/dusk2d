@@ -17,3 +17,13 @@ enum class ItemSubType : uint8_t
     PICK_AXE,
     FUEL
 };
+
+enum class EquipmentType
+{
+    None,
+    Weapon,
+    Armor,
+    Boots,
+    Pants,
+    Helmet
+};

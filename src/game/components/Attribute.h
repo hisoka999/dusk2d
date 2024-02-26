@@ -1,16 +1,20 @@
 #pragma once
 
+#include <functional>
+
+typedef std::function<int()> ModifierFunction;
+
 class Attribute
 {
 private:
-    int currentValue;
-    int maxValue;
+    int baseValue;
+    std::vector<ModifierFunction> modifiers;
 
 public:
-    Attribute(int current, int max);
+    Attribute(int baseValue);
     ~Attribute();
 
-    void addValue(int val);
-    int getValue();
-    int getMaxValue();
+    [[nodiscard]] int getValue();
+    [[nodiscard]] int getBaseValue();
+    void addModifier(ModifierFunction &func);
 };

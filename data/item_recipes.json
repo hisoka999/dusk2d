@@ -147,7 +147,7 @@
         ]
     },
     {
-        "id": 6,
+        "id": 11,
         "title": "Charcoal",
         "description": "TODO",
         "amount": 1,
@@ -158,6 +158,25 @@
             {
                 "itemId": 1,
                 "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "title": "Iron Short Sword",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 17,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
+        "input": [
+            {
+                "itemId": 16,
+                "amount": 2
+            },
+            {
+                "itemId": 1,
+                "amount": 1
             }
         ]
     }
