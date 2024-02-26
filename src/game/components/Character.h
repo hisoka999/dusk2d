@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <engine/core/Timer.h>
 #include "Attribute.h"
