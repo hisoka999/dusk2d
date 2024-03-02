@@ -20,13 +20,14 @@ namespace services
                 (object->hasAttribute("equipType")) ? object->getStringValue("equipType") : "None";
         EquipmentType equipmentType =
                 magic_enum::enum_cast<EquipmentType>(std::string_view(equipmentTypeString)).value();
-        std::map<std::string, std::string> values;
+        std::map<ItemProperty, std::string> values;
         if (object->hasAttribute("data"))
         {
             auto properties = object->getObjectValue("data");
             for (auto key: properties->getAttributes())
             {
-                values[key] = properties->getStringValue(key);
+                auto propName = magic_enum::enum_cast<ItemProperty>(key).value();
+                values[propName] = properties->getStringValue(key);
             }
         }
 

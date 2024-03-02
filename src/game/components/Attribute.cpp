@@ -17,4 +17,6 @@ int Attribute::getValue()
 
 int Attribute::getBaseValue() { return baseValue; }
 
-void Attribute::addModifier(ModifierFunction &func) { modifiers.emplace_back(func); }
+void Attribute::addModifier(const ModifierFunction &func) { modifiers.emplace_back(func); }
+
+void Attribute::clearModifier() { modifiers.clear(); }

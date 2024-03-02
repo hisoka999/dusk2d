@@ -1,16 +1,14 @@
 #include "CraftingEntity.h"
-#include "game/Inventory.h"
-#include <engine/core/input.h>
+#include <chrono>
 #include <engine/core/ecs/Entity.h>
+#include <engine/core/input.h>
+#include "game/Inventory.h"
+#include "game/services/ItemRecipeService.h"
+#include "translate.h"
 #include "ui/windows/CraftingWindow.h"
 #include "ui/windows/PlayerWindow.h"
-#include "translate.h"
-#include "game/services/ItemRecipeService.h"
-#include <chrono>
 
-CraftingEntity::CraftingEntity()
-{
-}
+CraftingEntity::CraftingEntity() {}
 
 void CraftingEntity::beginCollision([[maybe_unused]] const core::ecs::Collision &collider)
 {
@@ -20,10 +18,7 @@ void CraftingEntity::beginCollision([[maybe_unused]] const core::ecs::Collision 
     }
 }
 
-void CraftingEntity::endCollision([[maybe_unused]] const core::ecs::Collision &collider)
-{
-    playerEntity = {};
-}
+void CraftingEntity::endCollision([[maybe_unused]] const core::ecs::Collision &collider) { playerEntity = {}; }
 
 void CraftingEntity::onClick(int button)
 {
@@ -36,14 +31,14 @@ void CraftingEntity::onClick(int button)
         craftingWindow->setEntity(this->getEntity());
         switch (recipeTarget)
         {
-        case RecipeTarget::CAMPFIRE:
-            craftingWindow->setTitle(_("Campfire"));
-            break;
-        case RecipeTarget::FURNACE:
-            craftingWindow->setTitle(_("Furnace"));
-            break;
-        default:
-            break;
+            case RecipeTarget::CAMPFIRE:
+                craftingWindow->setTitle(_("Campfire"));
+                break;
+            case RecipeTarget::FURNACE:
+                craftingWindow->setTitle(_("Furnace"));
+                break;
+            default:
+                break;
         }
 
         playerWindow->setPos(craftingWindow->getX() + craftingWindow->getWidth() + 20, craftingWindow->getY());
@@ -60,10 +55,7 @@ bool CraftingEntity::onHandleInput([[maybe_unused]] core::Input *input)
     return false;
 }
 
-void CraftingEntity::setRecipeTarget(RecipeTarget target)
-{
-    recipeTarget = target;
-}
+void CraftingEntity::setRecipeTarget(RecipeTarget target) { recipeTarget = target; }
 
 bool CraftingEntity::hasFuel()
 {
@@ -100,7 +92,7 @@ void CraftingEntity::onUpdate(size_t delta)
                 auto &itemSlot = slots.at(i);
                 if (itemSlot.item && itemSlot.item->getItemSubType() == ItemSubType::FUEL && itemSlot.amount > 0)
                 {
-                    remainingFuel += std::atoi(itemSlot.item->getProperty("fuel").c_str());
+                    remainingFuel += std::atoi(itemSlot.item->getProperty(ItemProperty::fuel).c_str());
                     itemSlot.amount--;
                     if (itemSlot.amount == 0)
                         itemSlot.item = nullptr;
@@ -125,7 +117,7 @@ void CraftingEntity::onUpdate(size_t delta)
     if (craftingQueue.empty())
     {
         bool added = false;
-        for (auto recipe : services::ItemRecipeService::Instance().findByRecipeTarget(recipeTarget))
+        for (auto recipe: services::ItemRecipeService::Instance().findByRecipeTarget(recipeTarget))
         {
             if (inventory.canCraftRecipe(recipe))
             {
@@ -176,6 +168,4 @@ void CraftingEntity::startCrafting()
     component.animator.currentAnimation().play();
 }
 
-CraftingEntity::~CraftingEntity()
-{
-}
+CraftingEntity::~CraftingEntity() {}

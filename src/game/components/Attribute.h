@@ -16,5 +16,6 @@ public:
 
     [[nodiscard]] int getValue();
     [[nodiscard]] int getBaseValue();
-    void addModifier(ModifierFunction &func);
+    void addModifier(const ModifierFunction &func);
+    void clearModifier();
 };

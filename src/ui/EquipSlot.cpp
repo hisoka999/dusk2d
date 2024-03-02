@@ -139,5 +139,7 @@ namespace UI
         {
             slot.item = item;
         }
+        auto &character = entity.findComponent<Character>();
+        character.updateEquipment(slot);
     }
 } // namespace UI

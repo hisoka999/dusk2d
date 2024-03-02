@@ -4,20 +4,16 @@
 #include "game/components/Character.h"
 namespace actions
 {
-    ConsumeItemAction::ConsumeItemAction()
-    {
-    }
-    ConsumeItemAction::~ConsumeItemAction()
-    {
-    }
+    ConsumeItemAction::ConsumeItemAction() {}
+    ConsumeItemAction::~ConsumeItemAction() {}
 
     bool ConsumeItemAction::execute(std::shared_ptr<Item> &item, core::ecs::Entity &entity)
     {
         if (item->getType() != ItemType::FOOD)
             return false;
 
-        auto hunger = std::stoi(item->getProperty("hunger"));
-        auto thirst = std::stoi(item->getProperty("thirst"));
+        auto hunger = std::stoi(item->getProperty(ItemProperty::hunger));
+        auto thirst = std::stoi(item->getProperty(ItemProperty::thirst));
 
         auto &inventory = entity.findComponent<Inventory>();
         auto &character = entity.findComponent<Character>();

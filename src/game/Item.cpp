@@ -9,7 +9,7 @@ Item::Item(size_t id, ItemType itemType, ItemSubType itemSubType, EquipmentType 
 }
 
 Item::Item(size_t id, ItemType itemType, ItemSubType itemSubType, EquipmentType equipmentType, std::string name,
-           std::string subTextureName, std::string prefab, std::map<std::string, std::string> &data) :
+           std::string subTextureName, std::string prefab, std::map<ItemProperty, std::string> &data) :
     m_id(id),
     m_itemType(itemType), m_itemSubType(itemSubType), m_equipmentType(equipmentType), m_name(name),
     m_subTextureName(subTextureName), m_prefab(prefab), m_properties(data)
@@ -31,8 +31,10 @@ ItemSubType Item::getItemSubType() { return m_itemSubType; }
 bool Item::operator==(const Item &other) { return this->m_id == other.m_id; }
 std::string &Item::getPrefab() { return m_prefab; }
 
-std::string Item::getProperty(const std::string &property) { return m_properties.at(property); }
+std::string Item::getProperty(const ItemProperty property) { return m_properties.at(property); }
 
-const std::string Item::getProperty(const std::string &property) const { return m_properties.at(property); }
+const std::string Item::getProperty(const ItemProperty property) const { return m_properties.at(property); }
 
 EquipmentType Item::getEquipmentType() { return m_equipmentType; }
+
+bool Item::hasProperty(const ItemProperty property) const { return m_properties.count(property) > 0; }

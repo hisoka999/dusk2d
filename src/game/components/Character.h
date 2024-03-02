@@ -12,6 +12,7 @@ struct EquipmentSlot
 {
     std::shared_ptr<Item> item = nullptr;
     EquipmentType type = EquipmentType::None;
+    size_t slotId = 0;
 };
 using EquipmentSlotList = std::array<EquipmentSlot, 6>;
 class Character
@@ -41,6 +42,7 @@ public:
     Attribute &getAttack();
     Attribute &getDefence();
     EquipmentSlotList &getEquipment();
+    void updateEquipment(const EquipmentSlot &slot);
 
     std::vector<std::pair<std::string, std::string>> displayAttributes();
 };

@@ -1,5 +1,7 @@
 #include "Character.h"
+#include <string>
 #include "game/messages.h"
+
 Character::Character() :
     hunger(100, 100), thirst(100, 100), hp(20, 20), level(1), timer(2000, -1), attack(10), defence(5)
 {
@@ -18,6 +20,24 @@ Character::Character() :
     equipment[3].type = EquipmentType::Armor;
     equipment[4].type = EquipmentType::Pants;
     equipment[5].type = EquipmentType::Boots;
+
+
+    for (size_t index = 0; index < equipment.size(); ++index)
+    {
+        equipment[index].slotId = index;
+        attack.addModifier(
+                [this, index]() -> int
+                {
+                    auto equip = equipment[index];
+                    if (equip.item == nullptr)
+                        return 0;
+                    if (equip.item->hasProperty(ItemProperty::damage))
+                    {
+                        return std::stoi(equip.item->getProperty(ItemProperty::damage));
+                    }
+                    return 0;
+                });
+    }
 }
 
 Character::~Character() {}
@@ -41,6 +61,7 @@ void Character::updateAttributes([[maybe_unused]] size_t delta) { timer.update()
 
 EquipmentSlotList &Character::getEquipment() { return equipment; }
 
+void Character::updateEquipment(const EquipmentSlot &slot) { equipment[slot.slotId] = slot; }
 
 std::vector<std::pair<std::string, std::string>> Character::displayAttributes()
 {
