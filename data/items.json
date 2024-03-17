@@ -155,5 +155,16 @@
         "data": {
             "damage": "15"
         }
+    },
+    {
+        "id": 18,
+        "type": "EQUIPMENT",
+        "subType": "ITEM",
+        "equipType": "Weapon",
+        "name": "Iron Sword",
+        "subTextureName": "iron_sword",
+        "data": {
+            "damage": "20"
+        }
     }
 ]

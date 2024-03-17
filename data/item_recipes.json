@@ -179,5 +179,24 @@
                 "amount": 1
             }
         ]
+    },
+    {
+        "id": 12,
+        "title": "Iron Sword",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 18,
+        "craftingTime": 0,
+        "recipeTarget": "INVENTORY",
+        "input": [
+            {
+                "itemId": 16,
+                "amount": 4
+            },
+            {
+                "itemId": 1,
+                "amount": 1
+            }
+        ]
     }
 ]
