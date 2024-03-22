@@ -5,9 +5,10 @@
 
 AutotileLayer::AutotileLayer(size_t width, size_t height,
                              std::vector<std::shared_ptr<graphics::TextureMap>> &textureMaps) :
-    width(width), height(height), textureMaps(textureMaps)
+    width(width),
+    height(height), textureMaps(textureMaps)
 {
-    tiles.resize(width * height, 0);
+    tiles.resize(width * height, LayerData{});
     indexes.resize(width * height, 0);
 }
 
@@ -26,9 +27,45 @@ size_t AutotileLayer::calculateIndex(size_t x, size_t y, uint8_t tile)
     auto right = getTile(x + 1, y);
     auto up = getTile(x, y - 1);
     auto down = getTile(x, y + 1);
+    auto leftUp = getTile(x - 1, y - 1);
+    auto rightUp = getTile(x + 1, y - 1);
+    auto leftDown = getTile(x - 1, y + 1);
+    auto rightDown = getTile(x + 1, y + 1);
     if (left && right && up && down)
     {
-        return hasher("center");
+        if (!rightDown && leftUp && rightUp && leftDown)
+        {
+            return hasher("right_down_corner");
+        }
+        else if (!leftDown && rightDown && rightUp && leftUp)
+        {
+            return hasher("left_down_corner");
+        }
+        else if (!leftUp && rightUp && rightDown && leftDown)
+        {
+            return hasher("left_up_corner");
+        }
+        else if (!rightUp && leftUp && rightDown && leftDown)
+        {
+            return hasher("right_up_corner");
+        }
+        else
+        {
+            switch (tiles[getTileId(x, y)].data)
+            {
+                case 0:
+                    return hasher("center");
+                case 1:
+                    return hasher("center1");
+                case 2:
+                    return hasher("center2");
+                case 3:
+                    return hasher("center3");
+                default:
+                    return hasher("center");
+                    break;
+            }
+        }
     }
     else if (!left && !up && down && right)
     {
@@ -88,6 +125,27 @@ size_t AutotileLayer::calculateIndex(size_t x, size_t y, uint8_t tile)
     }
     return hasher("rock");
 }
+
+void AutotileLayer::updateIndices()
+{
+    for (size_t y = 0; y < height; ++y)
+    {
+        for (size_t x = 0; x < width; ++x)
+        {
+            const auto id = getTileId(x, y);
+            uint8_t tile = tiles[id].tile;
+            indexes[id] = calculateIndex(x, y, tile);
+            if (x > 0)
+                indexes[getTileId(x - 1, y)] = calculateIndex(x - 1, y, getTile(x - 1, y));
+            if (x + 1 < width)
+                indexes[getTileId(x + 1, y)] = calculateIndex(x + 1, y, getTile(x + 1, y));
+            if (y > 0)
+                indexes[getTileId(x, y - 1)] = calculateIndex(x, y - 1, getTile(x, y - 1));
+            if (y + 1 < height)
+                indexes[getTileId(x, y + 1)] = calculateIndex(x, y + 1, getTile(x, y + 1));
+        }
+    }
+}
 constexpr size_t AutotileLayer::getTileId(const size_t x, const size_t y) { return (y * width) + x; }
 uint8_t AutotileLayer::getTile(size_t x, size_t y)
 {
@@ -96,12 +154,12 @@ uint8_t AutotileLayer::getTile(size_t x, size_t y)
     {
         return 0;
     }
-    return tiles[id];
+    return tiles[id].tile;
 }
 void AutotileLayer::setTile(size_t x, size_t y, uint8_t tile)
 {
     const auto id = getTileId(x, y);
-    tiles[id] = tile;
+    tiles[id].tile = tile;
     indexes[id] = calculateIndex(x, y, tile);
     if (x > 0)
         indexes[getTileId(x - 1, y)] = calculateIndex(x - 1, y, getTile(x - 1, y));
@@ -111,6 +169,12 @@ void AutotileLayer::setTile(size_t x, size_t y, uint8_t tile)
         indexes[getTileId(x, y - 1)] = calculateIndex(x, y - 1, getTile(x, y - 1));
     if (y + 1 < height)
         indexes[getTileId(x, y + 1)] = calculateIndex(x, y + 1, getTile(x, y + 1));
+}
+
+void AutotileLayer::setTileData(size_t x, size_t y, uint8_t tileData)
+{
+    const auto id = getTileId(x, y);
+    tiles[id].data = tileData;
 }
 
 void AutotileLayer::render(core::Renderer *renderer)
@@ -129,8 +193,8 @@ void AutotileLayer::render(core::Renderer *renderer)
 
             targetRect.width = TILE_SIZE / 2;
             targetRect.height = TILE_SIZE / 2;
-            const auto tileId = tiles[(y * width) + x];
-            if (tiles[(y * width) + x] == 0)
+            const auto tileId = tiles[(y * width) + x].tile;
+            if (tiles[(y * width) + x].tile == 0)
                 continue;
 
             const auto tileIndice = indexes[(y * width) + x];
@@ -154,7 +218,7 @@ std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap() co
         for (size_t x = 0; x < width; ++x)
         {
             auto tile = tiles[(y * width) + x];
-            switch (tile)
+            switch (tile.tile)
             {
                 case 1: // filled
                 case 2:
@@ -162,7 +226,7 @@ std::vector<core::StaticCollisionBlock> AutotileLayer::generateCollisionMap() co
                 case 4:
                 case 5:
                     std::string blockData =
-                            "mountain:" + std::to_string(tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
+                            "mountain:" + std::to_string(tile.tile) + ":" + std::to_string(x) + ":" + std::to_string(y);
                     collider.push_back(
                             core::StaticCollisionBlock{.rect = {float(x), float(y), 1, 1}, .blockData = blockData});
                     break;

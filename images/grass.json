@@ -1,0 +1,166 @@
+{
+    "textureName": "images/grass_base.png",
+    "subTextures": [
+        {
+            "name": "rock",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "center",
+            "x": 32.0,
+            "y": 96.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "left",
+            "x": 0.0,
+            "y": 96.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "left_up",
+            "x": 0.0,
+            "y": 64.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "left_down",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "right",
+            "x": 64.0,
+            "y": 92.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "up",
+            "x": 32.0,
+            "y": 64.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "up_border",
+            "x": 192.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "down",
+            "x": 32.0,
+            "y": 128.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "down_border",
+            "x": 192.0,
+            "y": 64.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left_right_border",
+            "x": 192.0,
+            "y": 96.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "up_down_border",
+            "x": 64.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right_border",
+            "x": 0.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "left_border",
+            "x": 128.0,
+            "y": 192.0,
+            "width": 64.0,
+            "height": 64.0
+        },
+        {
+            "name": "right_up",
+            "x": 64.0,
+            "y": 64.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "right_down",
+            "x": 64.0,
+            "y": 128.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "right_down_corner",
+            "x": 32.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "left_down_corner",
+            "x": 64.0,
+            "y": 0.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "right_up_corner",
+            "x": 32.0,
+            "y": 32.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "left_up_corner",
+            "x": 64.0,
+            "y": 32.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "center1",
+            "x": 0.0,
+            "y": 160.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "center2",
+            "x": 32.0,
+            "y": 160.0,
+            "width": 32.0,
+            "height": 32.0
+        },
+        {
+            "name": "center3",
+            "x": 64.0,
+            "y": 160.0,
+            "width": 32.0,
+            "height": 32.0
+        }
+    ]
+}

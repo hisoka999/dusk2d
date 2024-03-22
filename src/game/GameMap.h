@@ -1,11 +1,13 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
+#include <engine/core/StaticCollisionBlock.h>
 #include <engine/core/renderer.h>
 #include <engine/graphics/texture.h>
 #include <vector>
-#include <engine/core/StaticCollisionBlock.h>
+#include "AutotileLayer.h"
 
 typedef uint32_t TileType;
 
@@ -19,6 +21,7 @@ private:
     size_t width;
     size_t height;
     std::shared_ptr<graphics::Texture> texture;
+    std::array<std::unique_ptr<AutotileLayer>, NUMBER_OF_TILES> autoTileLayers;
 
 public:
     GameMap(size_t width, size_t height, unsigned int seed);
