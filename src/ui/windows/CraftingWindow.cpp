@@ -1,11 +1,12 @@
 #include "CraftingWindow.h"
-#include "game/Inventory.h"
-#include "translate.h"
+#include <engine/core/ecs/ScriptComponent.h>
 #include <engine/graphics/TextureManager.h>
+#include "game/Inventory.h"
+#include "game/components/CraftingEntity.h"
+#include "game/messages.h"
 #include "game/services/ItemRecipeService.h"
 #include "game/services/ItemService.h"
-#include "game/components/CraftingEntity.h"
-#include <engine/core/ecs/ScriptComponent.h>
+#include "translate.h"
 
 namespace UI
 {
@@ -41,19 +42,25 @@ namespace UI
         m_craftingButton->setPos(20, 260);
 
         addObject(m_craftingButton);
+        inventoryRefreshMsgId = core::MessageSystem<MessageType>::get().registerForType(
+                MessageType::INVENTORY_UPDATED, [this]([[maybe_unused]] ItemSlot *slot) { this->needsRefresh(); });
+
         auto craftingCallback = [this](CraftingQueueEntry &entry, bool finished)
         {
-
-            m_outputProgress->setCurrentValue(float(entry.endTime -  entry.currentTime )/ float(entry.endTime - entry.startTime) *100.f); 
+            m_outputProgress->setCurrentValue(float(entry.endTime - entry.currentTime) /
+                                              float(entry.endTime - entry.startTime) * 100.f);
             this->needsRefresh();
-            if(finished)
-                m_craftingButton->enable(); };
-        m_craftingButton->connect(UI::Button::buttonClickCallback(), [this, craftingCallback]()
+            if (finished)
+                m_craftingButton->enable();
+        };
+        m_craftingButton->connect(UI::Button::buttonClickCallback(),
+                                  [this, craftingCallback]()
                                   {
-            auto crafting = core::ecs::findScriptComponent<CraftingEntity>(m_entity);
-            crafting->startCrafting();
-            m_craftingButton->disable();
-            crafting->progressCallBack(craftingCallback); });
+                                      auto crafting = core::ecs::findScriptComponent<CraftingEntity>(m_entity);
+                                      crafting->startCrafting();
+                                      m_craftingButton->disable();
+                                      crafting->progressCallBack(craftingCallback);
+                                  });
     }
 
     void CraftingWindow::setEntity(core::ecs::Entity entity)
@@ -62,9 +69,7 @@ namespace UI
         needsRefresh();
     }
 
-    CraftingWindow::~CraftingWindow()
-    {
-    }
+    CraftingWindow::~CraftingWindow() { core::MessageSystem<MessageType>::get().deregister(inventoryRefreshMsgId); }
 
     void CraftingWindow::refresh()
     {
@@ -80,20 +85,20 @@ namespace UI
             m_input[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, m_entity);
             switch (pos)
             {
-            case 0:
-                m_input[pos]->setPos(20, 40);
-                break;
-            case 1:
-                m_input[pos]->setPos(80, 40);
-                break;
-            case 2:
-                m_input[pos]->setPos(20, 100);
-                break;
-            case 3:
-                m_input[pos]->setPos(80, 100);
-                break;
-            default:
-                break;
+                case 0:
+                    m_input[pos]->setPos(20, 40);
+                    break;
+                case 1:
+                    m_input[pos]->setPos(80, 40);
+                    break;
+                case 2:
+                    m_input[pos]->setPos(20, 100);
+                    break;
+                case 3:
+                    m_input[pos]->setPos(80, 100);
+                    break;
+                default:
+                    break;
             }
 
             addObject(m_input[pos]);
@@ -118,14 +123,14 @@ namespace UI
             m_fuel[pos] = std::make_shared<UI::InventorySlot>(this, itemSlot, m_entity);
             switch (pos)
             {
-            case 0:
-                m_fuel[pos]->setPos(20, 180);
-                break;
-            case 1:
-                m_fuel[pos]->setPos(80, 180);
-                break;
-            default:
-                break;
+                case 0:
+                    m_fuel[pos]->setPos(20, 180);
+                    break;
+                case 1:
+                    m_fuel[pos]->setPos(80, 180);
+                    break;
+                default:
+                    break;
             }
             m_fuel[pos]->setDropCallBack(dropCallback);
 

@@ -1,7 +1,11 @@
 #include "AnimalComponent.h"
 #include <SDL2/SDL.h>
 #include <chrono>
+#include <iostream>
 #include <random>
+#include "Character.h"
+#include "game/Inventory.h"
+#include "game/prefabs/Prefab.h"
 
 namespace components
 {
@@ -14,6 +18,43 @@ namespace components
     {
         if (button == SDL_BUTTON_LEFT)
         {
+            std::cout << "attack animal" << std::endl;
+            auto &character = entity.findComponent<Character>();
+
+            auto player = entity.getScene()->findEntityByName("player");
+            auto &playerCharacter = player->findComponent<Character>();
+
+            if (character.doAttack(playerCharacter))
+            {
+                if (entity.HasComponent<Inventory>())
+                {
+                    std::random_device device;
+                    std::mt19937 gen(device());
+                    std::uniform_real_distribution<double> posDist(-16.0, 16.0);
+
+                    auto &inventory = entity.findComponent<Inventory>();
+                    auto &transform = entity.findComponent<core::ecs::Transform>();
+                    for (auto &slot: inventory.getItemSlots())
+                    {
+                        if (!slot.item)
+                            continue;
+
+
+                        std::uniform_int_distribution<size_t> amountDist(0, slot.amount + 1);
+
+                        for (size_t i = 0; i < amountDist(gen); ++i)
+                        {
+                            auto position = transform.position +
+                                            utils::Vector2{transform.width / 2.0f, float(transform.height)} +
+                                            utils::Vector2(posDist(gen), posDist(gen));
+                            auto itemEntity = entity.getScene()->createEntity(slot.item->getPrefab());
+                            prefabs::instantiateFromPrefab(itemEntity, slot.item->getPrefab(), position);
+                        }
+                    }
+                }
+
+                entity.getScene()->destoryEntity(entity);
+            }
         }
     }
 

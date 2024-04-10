@@ -7,6 +7,7 @@ enum class ItemType : uint8_t
     EQUIPMENT,
     PLACEABLE,
     FOOD,
+    OTHER,
     NONE
 };
 

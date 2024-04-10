@@ -10,7 +10,7 @@ Character::Character() :
             [this]([[maybe_unused]] uint32_t execs)
             {
                 hunger.addValue(-1);
-                thirst.addValue(-1);
+                thirst.addValue(-2);
                 update();
             });
     timer.start();
@@ -75,4 +75,17 @@ std::vector<std::pair<std::string, std::string>> Character::displayAttributes()
     attributes.push_back(std::make_pair("Attack", std::to_string(attack.getValue())));
     attributes.push_back(std::make_pair("Defence", std::to_string(defence.getValue())));
     return attributes;
+}
+
+
+bool Character::doAttack(Character &other)
+{
+
+    int damage = getDefence().getValue() - other.getAttack().getValue();
+    if (damage < 0)
+    {
+        getHp().addValue(damage);
+    }
+
+    return getHp().getValue() == 0;
 }

@@ -461,7 +461,18 @@ namespace prefabs
         collider.Offset = offset;
         collider.Size = {1.f, 1.f};
 
-        entity.addComponent<Inventory>();
+        auto &inventory = entity.addComponent<Inventory>();
+        for (auto item_str: utils::split(args["items"], ","))
+        {
+            auto helper = utils::split(item_str, ":");
+            auto item = services::ItemService::Instance().getItemByPrefab(helper[0]);
+            if (item)
+            {
+                int amount = std::stoi(helper[1].c_str());
+                inventory.addItem(item, SlotTarget::INVENTORY, amount);
+            }
+        }
+
         entity.addComponent<Character>();
 
         core::ecs::addScriptComponent<components::AnimalComponent>(entity);
@@ -491,6 +502,29 @@ namespace prefabs
         ((ItemEntity *)script.Instance)->setItem(item);
     }
 
+    void instantiateByItem(core::ecs::Entity &entity, utils::Vector2 &position, const std::shared_ptr<Item> &item)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
+        auto childTexture = itemTextureMap->getChildTexture(item->getSubTextureName());
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
+
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.25f, 0.25f};
+        collider.Size = {0.25, 0.25};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        ((ItemEntity *)script.Instance)->setItem(item);
+    }
+
     // clang-format off
     static std::map<std::string, std::function<void(core::ecs::Entity &, utils::Vector2 &, ArgsMap &)>> prefabList = {
         {"campfire"s, createCampfire}, {"tree"s, createTree}, {"mountain"s, createMountain}, {"rock"s, createRock}
@@ -507,6 +541,11 @@ namespace prefabs
         if (prefabList.count(prefabName))
         {
             prefabList.at(prefabName).operator()(entity, position, args);
+        }
+        else if (services::ItemService::Instance().hasItemForPrefab(prefabName))
+        {
+            auto item = services::ItemService::Instance().getItemByPrefab(prefabName);
+            instantiateByItem(entity, position, item);
         }
         else
         {

@@ -198,5 +198,65 @@
                 "amount": 1
             }
         ]
+    },
+    {
+        "id": 13,
+        "title": "Fried egg",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 24,
+        "craftingTime": 3,
+        "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 22,
+                "amount": 2
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "title": "Charred Steak",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 25,
+        "craftingTime": 15,
+        "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 21,
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "title": "Charred Drumstick",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 26,
+        "craftingTime": 15,
+        "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 19,
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "title": "Charred Steak",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 25,
+        "craftingTime": 15,
+        "recipeTarget": "CAMPFIRE",
+        "input": [
+            {
+                "itemId": 20,
+                "amount": 1
+            }
+        ]
     }
 ]

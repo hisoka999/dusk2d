@@ -40,7 +40,7 @@ namespace UI
 
     void PlayerStatsTab::refresh()
     {
-        auto character = m_playerEntity.findComponent<Character>();
+        auto &character = m_playerEntity.findComponent<Character>();
         refreshStats(&character);
         endRefresh();
     }

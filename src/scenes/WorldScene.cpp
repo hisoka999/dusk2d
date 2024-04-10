@@ -60,6 +60,7 @@ namespace scenes
                         args["offset_x"] = "0.5";
                         args["offset_y"] = "0.5";
                         args["name"] = "chicken";
+                        args["items"] = "drumstick:2,egg:2";
                     }
                     else if (value == 72)
                     {
@@ -67,6 +68,7 @@ namespace scenes
                         args["offset_x"] = "2.0";
                         args["offset_y"] = "2.0";
                         args["name"] = "sheep";
+                        args["items"] = "whool:3,sheep_steak:2";
                     }
                     else if (value == 71)
                     {
@@ -74,6 +76,7 @@ namespace scenes
                         args["offset_x"] = "2.0";
                         args["offset_y"] = "2.0";
                         args["name"] = "cow";
+                        args["items"] = "raw_steak:5,leather:3";
                     }
                     else if (value > 50 && value <= 70)
                     {

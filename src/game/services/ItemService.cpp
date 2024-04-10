@@ -53,4 +53,24 @@ namespace services
         return nullptr;
     }
 
+    bool ItemService::hasItemForPrefab(const std::string &name)
+    {
+        for (auto &item: getData())
+        {
+            if (item->getPrefab() == name)
+                return true;
+        }
+        return false;
+    }
+
+    std::shared_ptr<Item> ItemService::getItemByPrefab(const std::string &name)
+    {
+        for (auto &item: getData())
+        {
+            if (item->getPrefab() == name)
+                return item;
+        }
+        return nullptr;
+    }
+
 } // namespace services

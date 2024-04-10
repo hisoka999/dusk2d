@@ -27,6 +27,8 @@ namespace services
 
         std::shared_ptr<Item> &getItemById(size_t id);
         std::shared_ptr<Item> getItemByName(const std::string &name);
+        bool hasItemForPrefab(const std::string &name);
+        std::shared_ptr<Item> getItemByPrefab(const std::string &name);
     };
 
 } // namespace services

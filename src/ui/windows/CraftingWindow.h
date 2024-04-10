@@ -1,9 +1,9 @@
 #pragma once
 
-#include <engine/ui/Window.h>
-#include <engine/ui/scrollarea.h>
 #include <engine/ui/Button.h>
 #include <engine/ui/ProgressBar.h>
+#include <engine/ui/Window.h>
+#include <engine/ui/scrollarea.h>
 #include "ui/InventorySlot.h"
 
 namespace UI
@@ -18,6 +18,7 @@ namespace UI
         std::shared_ptr<UI::ProgressBar> m_outputProgress;
         core::ecs::Entity m_entity;
         std::shared_ptr<UI::Button> m_craftingButton;
+        int inventoryRefreshMsgId;
 
     public:
         CraftingWindow(int x, int y, const std::string &title);
@@ -27,4 +28,4 @@ namespace UI
         void refresh() override;
     };
 
-}
+} // namespace UI

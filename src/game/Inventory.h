@@ -1,8 +1,8 @@
 #pragma once
-#include <engine/core/ecs/Component.h>
 #include <array>
-#include "game/Item.h"
+#include <engine/core/ecs/Component.h>
 #include "ItemRecipe.h"
+#include "game/Item.h"
 
 inline constexpr bool isItemTypeStackable(const ItemType itemType);
 
@@ -35,6 +35,10 @@ private:
 public:
     Inventory();
     ~Inventory();
+    Inventory(Inventory &) = delete;
+    Inventory(Inventory &&) = delete;
+    Inventory &operator=(Inventory &other) = delete;
+
     void addItem(const std::shared_ptr<Item> &item, int amount);
     void addItem(const std::shared_ptr<Item> &item, SlotTarget slotTarget, int amount);
     void removeItemById(size_t itemId, int amount);

@@ -19,6 +19,8 @@ namespace actions
         auto &character = entity.findComponent<Character>();
         character.getThirst().addValue(thirst);
         character.getHunger().addValue(hunger);
+        character.update();
+
 
         inventory.removeItemById(item->getId(), 1);
         return true;

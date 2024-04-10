@@ -166,5 +166,97 @@
         "data": {
             "damage": "20"
         }
+    },
+    {
+        "id": 19,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Drumstick",
+        "subTextureName": "drumstick",
+        "prefab": "drumstick",
+        "data": {
+            "hunger": "10",
+            "thirst": "-10"
+        }
+    },
+    {
+        "id": 20,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Sheep steak",
+        "subTextureName": "sheep_steak",
+        "prefab": "sheep_steak",
+        "data": {
+            "hunger": "10",
+            "thirst": "-10"
+        }
+    },
+    {
+        "id": 21,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Raw steak",
+        "subTextureName": "raw_steak",
+        "prefab": "raw_steak",
+        "data": {
+            "hunger": "10",
+            "thirst": "-10"
+        }
+    },
+    {
+        "id": 22,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Egg",
+        "subTextureName": "egg",
+        "prefab": "egg",
+        "data": {
+            "hunger": "5",
+            "thirst": "-5"
+        }
+    },
+    {
+        "id": 23,
+        "type": "OTHER",
+        "subType": "ITEM",
+        "name": "Whool",
+        "subTextureName": "whool",
+        "prefab": "whool"
+    },
+    {
+        "id": 24,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Fried egg",
+        "subTextureName": "fried_egg",
+        "prefab": "fried_egg",
+        "data": {
+            "hunger": "20",
+            "thirst": "-5"
+        }
+    },
+    {
+        "id": 25,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Charred Steak",
+        "subTextureName": "charred_steak",
+        "prefab": "charred_steak",
+        "data": {
+            "hunger": "25",
+            "thirst": "-10"
+        }
+    },
+    {
+        "id": 26,
+        "type": "FOOD",
+        "subType": "ITEM",
+        "name": "Charred Drumstick",
+        "subTextureName": "charred_drumstick",
+        "prefab": "charred_drumstick",
+        "data": {
+            "hunger": "20",
+            "thirst": "-5"
+        }
     }
 ]

@@ -1,20 +1,16 @@
 #include "TreeEntity.h"
-#include <engine/graphics/TextureManager.h>
-#include "ItemEntity.h"
-#include <engine/core/input.h>
 #include <engine/core/ecs/Entity.h>
 #include <engine/core/ecs/ScriptComponent.h>
-#include "game/prefabs/Prefab.h"
+#include <engine/core/input.h>
+#include <engine/graphics/TextureManager.h>
 #include <random>
+#include "ItemEntity.h"
 #include "game/Inventory.h"
+#include "game/prefabs/Prefab.h"
 
-TreeEntity::TreeEntity()
-{
-}
+TreeEntity::TreeEntity() {}
 
-TreeEntity::~TreeEntity()
-{
-}
+TreeEntity::~TreeEntity() {}
 
 void TreeEntity::onClick(int button)
 {
@@ -30,12 +26,13 @@ void TreeEntity::onClick(int button)
             std::random_device device;
             std::mt19937 gen(device());
             std::uniform_real_distribution<double> posDist(-16.0, 16.0);
-            std::uniform_int_distribution<int> numItems(1, 5);
+            std::uniform_int_distribution<int> numItems(1, 10);
 
             std::uniform_int_distribution<int> itemChance(1, 100);
             for (int i = 1; i <= numItems(gen); ++i)
             {
-                auto position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)} + utils::Vector2(posDist(gen), posDist(gen));
+                auto position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)} +
+                                utils::Vector2(posDist(gen), posDist(gen));
                 int chance = itemChance(gen);
                 if (chance > 15)
                 {
@@ -73,7 +70,8 @@ bool TreeEntity::onHandleInput(core::Input *input)
             std::uniform_int_distribution<int> itemChance(1, 100);
             for (int i = 1; i <= numItems(gen); ++i)
             {
-                auto position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)} + utils::Vector2(posDist(gen), posDist(gen));
+                auto position = transform.position + utils::Vector2{transform.width / 2.0f, float(transform.height)} +
+                                utils::Vector2(posDist(gen), posDist(gen));
                 int chance = itemChance(gen);
                 if (chance > 15)
                 {

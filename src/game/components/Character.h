@@ -28,12 +28,15 @@ private:
     Attribute attack;
     Attribute defence;
 
-    void update();
-
 public:
     Character(/* args */);
     ~Character();
     void updateAttributes(size_t delta);
+    void update();
+
+    Character(Character &) = delete;
+    Character(Character &&) = delete;
+    Character &operator=(Character &other) = delete;
 
     Stat &getHunger();
     Stat &getThirst();
@@ -43,6 +46,7 @@ public:
     Attribute &getDefence();
     EquipmentSlotList &getEquipment();
     void updateEquipment(const EquipmentSlot &slot);
+    bool doAttack(Character &other);
 
     std::vector<std::pair<std::string, std::string>> displayAttributes();
 };
