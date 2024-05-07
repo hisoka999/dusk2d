@@ -258,5 +258,20 @@
                 "amount": 1
             }
         ]
+    },
+    {
+        "id": 17,
+        "title": "Chest",
+        "description": "TODO",
+        "amount": 1,
+        "outputId": 27,
+        "craftingTime": 5,
+        "recipeTarget": "INVENTORY",
+        "input": [
+            {
+                "itemId": 4,
+                "amount": 4
+            }
+        ]
     }
 ]

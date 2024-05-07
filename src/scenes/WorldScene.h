@@ -10,6 +10,7 @@
 #include "game/GameMap.h"
 #include "ui/Hotbar.h"
 #include "ui/PlayerHUD.h"
+#include "ui/windows/ChestWindow.h"
 #include "ui/windows/CraftingWindow.h"
 #include "ui/windows/PlayerWindow.h"
 
@@ -21,6 +22,7 @@ namespace scenes
         GameMap gameMap;
         std::shared_ptr<UI::PlayerWindow> playerWindow;
         std::unique_ptr<UI::CraftingWindow> craftingWindow;
+        std::unique_ptr<UI::ChestWindow> chestWindow;
         std::unique_ptr<UI::Hotbar> hotBar;
         std::shared_ptr<graphics::TextureMap> itemTextureMap;
         std::shared_ptr<graphics::TextureMap> mountainTextureMap;

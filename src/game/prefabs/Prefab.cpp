@@ -9,6 +9,7 @@
 #include "game/Inventory.h"
 #include "game/components/AnimalComponent.h"
 #include "game/components/Character.h"
+#include "game/components/ChestComponent.h"
 #include "game/components/CraftingEntity.h"
 #include "game/components/ItemEntity.h"
 #include "game/components/RockEntity.h"
@@ -501,7 +502,32 @@ namespace prefabs
         auto item = services::ItemService::Instance().getItemByName("Apple");
         ((ItemEntity *)script.Instance)->setItem(item);
     }
+    void createChest(core::ecs::Entity &entity, utils::Vector2 &position, [[maybe_unused]] ArgsMap &args)
+    {
+        auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/chest.json");
+        auto childTexture = itemTextureMap->getChildTexture("closed");
+        core::ecs::Transform itemTransform;
+        itemTransform.position = position;
+        itemTransform.width = childTexture->getRect().width;
+        itemTransform.height = childTexture->getRect().height;
+        entity.addComponent<core::ecs::Transform>(itemTransform);
+        auto &rb2d = entity.addComponent<core::ecs::Rigidbody2DComponent>();
+        rb2d.Type = core::ecs::Rigidbody2DComponent::BodyType::Kinematic;
 
+        auto &collider = entity.addComponent<core::ecs::BoxCollider2DComponent>();
+        collider.Offset = {0.5f, 0.5f};
+        collider.Size = {1.0f, 1.0f};
+        collider.Density = 0.5;
+
+        entity.addComponent<core::ecs::RenderComponent>(childTexture);
+        entity.addComponent<Inventory>();
+        core::ecs::addScriptComponent<ChestComponent>(entity);
+
+        auto &script = core::ecs::addScriptComponent<ItemEntity>(entity);
+        auto item = services::ItemService::Instance().getItemByName("Chest");
+        ((ItemEntity *)script.Instance)->setItem(item);
+        ((ItemEntity *)script.Instance)->setTypeOfItemDestruction(TypeOfItemDestruction::RightClick);
+    }
     void instantiateByItem(core::ecs::Entity &entity, utils::Vector2 &position, const std::shared_ptr<Item> &item)
     {
         auto &itemTextureMap = graphics::TextureManager::Instance().loadTextureMap("images/items.json");
@@ -531,7 +557,7 @@ namespace prefabs
         ,{"wood"s, createWood}, {"stone"s, createStone}, {"apple"s, createApple}, {"coal"s, createCoal}
         ,{"iron_ore"s, createIronOre}, {"silver_ore"s, createSilverOre}, {"gold_ore"s, createGoldOre}, {"furnace", createFurnace}
         ,{"iron_bar"s, createIron}, {"silver_bar"s, createSilver}, {"gold_bar"s, createGold}
-        , {"animal"s, createAnimal}
+        , {"animal"s, createAnimal}, {"chest"s,createChest}
         };
 
     // clang-format on

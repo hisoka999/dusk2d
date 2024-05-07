@@ -258,5 +258,13 @@
             "hunger": "20",
             "thirst": "-5"
         }
+    },
+    {
+        "id": 27,
+        "type": "PLACEABLE",
+        "subType": "ITEM",
+        "name": "Chest",
+        "subTextureName": "chest",
+        "prefab": "chest"
     }
 ]

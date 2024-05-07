@@ -217,6 +217,9 @@ namespace scenes
         craftingWindow = std::make_unique<UI::CraftingWindow>(10, 200, "Crafting Window");
         winMgr->addWindow(craftingWindow.get());
 
+        chestWindow = std::make_unique<UI::ChestWindow>(10, 200);
+        winMgr->addWindow(chestWindow.get());
+
         addStaticBlockCollider(gameMap.generateCollisionMap());
         addStaticBlockCollider(mountainLayer->generateCollisionMap());
 
