@@ -94,8 +94,8 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
-                                                  static_cast<float>(y * TILE_SIZE / 2)};
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2.f),
+                                                  static_cast<float>(y * TILE_SIZE / 2.f)};
                         prefabs::instantiateFromPrefab(entity, type, pos, args);
                     }
                 }
@@ -115,16 +115,16 @@ namespace scenes
                     if (!type.empty())
                     {
                         auto entity = createEntity(type + std::to_string(x) + "_" + "" + std::to_string(y));
-                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
-                                                  static_cast<float>(y * TILE_SIZE / 2)};
+                        auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2.f),
+                                                  static_cast<float>(y * TILE_SIZE / 2.f)};
                         prefabs::instantiateFromPrefab(entity, type, pos);
                     }
                 }
                 else if (tile == 3)
                 {
                     auto entity = createEntity("mountain_" + std::to_string(x) + "_" + "" + std::to_string(y));
-                    auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2),
-                                              static_cast<float>(y * TILE_SIZE / 2)};
+                    auto pos = utils::Vector2{static_cast<float>(x * TILE_SIZE / 2.f),
+                                              static_cast<float>(y * TILE_SIZE / 2.f)};
                     // prefabs::instantiateFromPrefab(entity, "mountain", pos);
                     auto rockPercentage = rockDistribution(gen);
                     if (rockPercentage < 85)
@@ -160,12 +160,12 @@ namespace scenes
             bool positionInvalid = true;
             do
             {
-                playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2),
-                                          yPositionDistribution(gen) * (TILE_SIZE / 2));
+                playerSprite->setPosition(xPositionDistribution(gen) * (TILE_SIZE / 2.f),
+                                          yPositionDistribution(gen) * (TILE_SIZE / 2.f));
                 playerTransform.position = playerSprite->getRect().toVector2();
 
-                auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2),
-                                            playerTransform.position.getY() / (TILE_SIZE / 2));
+                auto tile = gameMap.getTile(playerTransform.position.getX() / (TILE_SIZE / 2.f),
+                                            playerTransform.position.getY() / (TILE_SIZE / 2.f));
                 positionInvalid = tile == 0 || tile == 3;
             }
             while (positionInvalid);
